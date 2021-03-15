@@ -14,4 +14,8 @@ class Linea extends Model
     public function productos() {
         return $this->hasMany('App\Models\Producto');
     }
+
+    public function tallajes() {
+        return $this->hasMany('App\Models\Tallaje');
+    }
 }

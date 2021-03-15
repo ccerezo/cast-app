@@ -4,12 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Bodega;
 use App\Models\Producto;
-use App\Models\Categoria;
-use App\Models\Color;
-use App\Models\Linea;
-use App\Models\Marca;
-use App\Models\Modelo;
-use App\Models\Talla;
 use Illuminate\Http\Request;
 
 class ProductoController extends Controller
@@ -31,14 +25,7 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        $lineas = Linea::pluck('nombre','id');
-        $categorias = Categoria::pluck('nombre','id');
-        $tallas = Talla::all();
-        $bodegas = Bodega::pluck('nombre','id');
-        $marcas = Marca::pluck('nombre','id');
-        $modelos = Modelo::pluck('nombre','id');
-        $colores = Color::all();
-        return view('productos.create', compact('lineas','categorias','tallas','bodegas','marcas','modelos','colores'));
+        return view('productos.create');
     }
 
     /**
@@ -85,9 +72,9 @@ class ProductoController extends Controller
                         'linea_id' => $productos['linea_id'],
                         'categoria_id' => $productos['categoria_id'],
                         'descripcion' => 'descripcion',
-                        'precio_produccion' => 10,
-                        'precio_mayorista' => 15,
-                        'precio_venta_publico' => 20,
+                        'precio_produccion' => $productos['precio_produccion'],
+                        'precio_mayorista' => $productos['precio_mayorista'],
+                        'precio_venta_publico' => $productos['precio_venta_publico'],
                         'descuento' => 0,
                         'stock' => $valor_color[0],
                         'talla_id' => $key_talla,
@@ -145,8 +132,10 @@ class ProductoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Producto $producto)
     {
-        //
+        $producto->delete();
+
+        return redirect()->route('productos.index')->with('info', 'El registro se Eliminó con éxito');
     }
 }

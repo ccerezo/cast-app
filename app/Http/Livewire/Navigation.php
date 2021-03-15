@@ -37,6 +37,7 @@ class Navigation extends Component
             ['name' => 'Marca', 'route' => route('marcas.index'), 'active' => request()->routeIs('marcas.index')],
             ['name' => 'Modelo', 'route' => route('modelos.index'), 'active' => request()->routeIs('modelos.index')],
             ['name' => 'Tallas', 'route' => route('tallas.index'), 'active' => request()->routeIs('tallas.index')],
+            ['name' => 'Tallaje', 'route' => route('tallajes.index'), 'active' => request()->routeIs('tallajes.index')],
             /*[
                 'name' => 'Productos', 'route' => route('productos.index'), 'active' => request()->routeIs('productos.index')
             ]*/

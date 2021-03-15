@@ -41,7 +41,7 @@ class BodegaController extends Controller
         ]);
         $bodega = Bodega::create($request->all());
 
-        return redirect()->route('bodegas.edit', compact('bodega'))->with('info', 'La Bodega se creó con éxito.');;
+        return redirect()->route('bodegas.edit', compact('bodega'))->with('info', 'La Bodega se creó con éxito.');
     }
 
     /**

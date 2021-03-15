@@ -8,6 +8,7 @@ use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\ModeloController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\TallaController;
+use App\Http\Controllers\TallajeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,5 +43,7 @@ Route::resource('marcas', MarcaController::class)->names('marcas')->middleware('
 Route::resource('modelos', ModeloController::class)->names('modelos')->middleware('auth');
 
 Route::resource('tallas', TallaController::class)->names('tallas')->middleware('auth');
+
+Route::resource('tallajes', TallajeController::class)->names('tallajes')->middleware('auth');
 
 Route::resource('productos', ProductoController::class)->names('productos')->middleware('auth');

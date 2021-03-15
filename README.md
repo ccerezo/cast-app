@@ -81,6 +81,7 @@ php artisan make:model Talla -m
 php artisan make:model Marca -m
 php artisan make:model Color -m
 php artisan make:model Producto -m
+php artisan make:model Tallaje -m
 
 ## Luego vuelvo a generar las migraciones
 php artisan migrate
@@ -99,6 +100,7 @@ php artisan make:controller MarcaController -r
 php artisan make:controller ModeloController -r
 php artisan make:controller TallaController -r
 php artisan make:controller ProductoController -r
+php artisan make:controller TallajeController -r
 
 ## laravel Collective para los formularios
 composer require laravelcollective/html
