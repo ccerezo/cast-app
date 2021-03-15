@@ -114,6 +114,8 @@ php artisan make:livewire marca\MarcaIndex
 php artisan make:livewire modelo\ModeloIndex
 php artisan make:livewire talla\TallaIndex
 php artisan make:livewire producto\ProductoIndex
+php artisan make:livewire producto\ProductoCreate
+php artisan make:livewire producto\ProductoEdit
 
 ## para instalar codigo de barras
 composer require milon/barcode

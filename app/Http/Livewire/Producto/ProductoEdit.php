@@ -8,70 +8,57 @@ use App\Models\Modelo;
 use App\Models\Producto;
 use App\Models\Talla;
 use Livewire\Component;
-use Livewire\WithPagination;
 
-class ProductoIndex extends Component
+class ProductoEdit extends Component
 {
-    use WithPagination;
     public $search;
     public $searchCategoria;
     public $searchLinea;
     public $searchTalla;
     public $searchModelo;
     public $condiciones = array();
+    public $bandera = false;
 
     public function render()
     {
         $this->condiciones = array();
+        $this->bandera = false;
+        $productos = array();
         $categorias = Categoria::all();
         $lineas = Linea::all();
         $tallas = Talla::all();
         $modelos = Modelo::all();
-        $producto_tmp = Producto::pluck('id')->first();
-        array_push($this->condiciones, ['codigo', 'LIKE', '%' . $this->search . '%']);
-        array_push($this->condiciones, ['descripcion', 'LIKE', '%' . $this->search . '%']);
+
+        //array_push($this->condiciones, ['codigo', 'LIKE', '%' . $this->search . '%']);
 
         if(isset($this->searchLinea) && $this->searchLinea > 0){
             array_push($this->condiciones, ['linea_id', '=', $this->searchLinea]);
+            $this->bandera = true;
         }
 
         if(isset($this->searchCategoria) && $this->searchCategoria > 0){
             array_push($this->condiciones, ['categoria_id', '=', $this->searchCategoria]);
+            $this->bandera = true;
         }
 
         if(isset($this->searchModelo) && $this->searchModelo > 0){
             array_push($this->condiciones, ['modelo_id', '=', $this->searchModelo]);
+            $this->bandera = true;
         }
 
         if(isset($this->searchTalla) && $this->searchTalla > 0){
             array_push($this->condiciones, ['talla_id', '=', $this->searchTalla]);
+            $this->bandera = true;
+        }
+        if($this->bandera) {
+            $productos = Producto::where($this->condiciones)
+                            ->paginate(10);
+        } else {
+            $productos = Producto::where('id', '=', '0')
+                            ->paginate(10);
         }
 
-        $productos = Producto::where($this->condiciones)
-                            ->paginate(9);
 
-        return view('livewire.producto.producto-index',
-                    compact('productos','categorias','lineas','tallas','modelos','producto_tmp'));
-    }
-
-    public function updatingSearch()
-    {
-        $this->resetPage();
-    }
-    public function updatingSearchCategoria()
-    {
-        $this->resetPage();
-    }
-    public function updatingSearchLinea()
-    {
-        $this->resetPage();
-    }
-    public function updatingSearchTalla()
-    {
-        $this->resetPage();
-    }
-    public function updatingSearchModelo()
-    {
-        $this->resetPage();
+        return view('livewire.producto.producto-edit', compact('productos','categorias','lineas','tallas','modelos'));
     }
 }

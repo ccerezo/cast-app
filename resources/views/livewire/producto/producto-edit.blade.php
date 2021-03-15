@@ -1,15 +1,9 @@
 <div>
     <div class="flex justify-between mb-2">
-        <p class="inline-flex mt-4 pl-5 text-lg text-gray-700">Listado de Productos</p>
-        <div>
-            <a href="{{route('productos.edit', $producto_tmp)}}" class="inline-flex items-center mt-4 mr-5 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-gray-700 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                Actualizar Productos
-            </a>
-            <a href="{{route('productos.create')}}" class="inline-flex items-center mt-4 mr-5 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                Agregar Nuevos Producto
-            </a>
-        </div>
-
+        <p class="inline-flex mt-4 pl-5 text-lg text-gray-700">Buscar Productos para Actualizar</p>
+        <a href="{{route('productos.create')}}" class="inline-flex items-center mt-4 mr-5 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Actualizar Productos
+        </a>
     </div>
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -90,7 +84,7 @@
                                         Producción
                                     </dt>
                                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        ${{ number_format($producto->precio_produccion,2) }}
+                                        {!! Form::text('precio_produccion', number_format($producto->precio_produccion,2), ['class' => 'p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
                                     </dd>
                                     </div>
                                     <div class="bg-gray-50 px-2 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -98,7 +92,7 @@
                                         Mayoritas
                                     </dt>
                                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        ${{ number_format($producto->precio_mayorista,2) }}
+                                        {!! Form::text('stock', number_format($producto->precio_mayorista,2), ['class' => 'p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
                                     </dd>
                                     </div>
                                     <div class="bg-white px-2 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -106,7 +100,7 @@
                                             PVP
                                         </dt>
                                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                            ${{ number_format($producto->precio_venta_publico,2) }}
+                                            {!! Form::text('stock', number_format($producto->precio_venta_publico,2), ['class' => 'p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
                                         </dd>
                                     </div>
 
@@ -132,9 +126,10 @@
                                             Stock
                                         </dt>
                                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                            <div class="rounded-full h-7 w-7 bg-gray-900 text-gray-100 flex items-center justify-center">
-                                                {{ $producto->stock }}
-                                            </div>
+                                            {!! Form::text('stock', $producto->stock, ['class' => 'p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
+                                            @error('stock')
+                                                <span class="mt-2 text-sm text-red-500">{{$message}}</span>
+                                            @enderror
                                         </dd>
                                     </div>
 
@@ -147,7 +142,7 @@
                             {{ $productos->links() }}
                         </div>
                     @else
-                        <p class="bg-gray-100 px-6 py-2 border-t border-gray-200">No hay registro.</p>
+                        <p class="bg-gray-100 px-6 py-2 border-t border-gray-200">Buscar los productos que desea Actualizar</p>
                     @endif
                 </div>
             </div>
