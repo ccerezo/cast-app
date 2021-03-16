@@ -18,9 +18,10 @@ class ProductoEdit extends Component
     public $searchModelo;
     public $condiciones = array();
     public $bandera = false;
+    public $producto_tmp = array();
 
-    public $selected_id;
-    public $stock = array();
+    public $produccion;
+    public $stock;
 
     public function render()
     {
@@ -64,10 +65,20 @@ class ProductoEdit extends Component
         return view('livewire.producto.producto-edit', compact('productos','categorias','lineas','tallas','modelos'));
     }
 
-    public function update($id) {
+    public function update(Producto $producto) {
+
+        $record = Producto::find($producto->id);
+        $record->update([
+            'precio_mayorista' => $producto->precio_mayorista
+        ]);
+    }
+
+
+    public function update333($id) {
 
         $record = Producto::find($id);
         $record->update([
+            'precio_produccion' => $this->produccion[$id],
             'stock' => ($this->stock[$id] + $record->stock)
         ]);
     }
