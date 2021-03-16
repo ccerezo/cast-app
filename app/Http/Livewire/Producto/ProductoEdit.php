@@ -19,6 +19,9 @@ class ProductoEdit extends Component
     public $condiciones = array();
     public $bandera = false;
 
+    public $selected_id;
+    public $stock = array();
+
     public function render()
     {
         $this->condiciones = array();
@@ -58,7 +61,15 @@ class ProductoEdit extends Component
                             ->paginate(10);
         }
 
-
         return view('livewire.producto.producto-edit', compact('productos','categorias','lineas','tallas','modelos'));
     }
+
+    public function update($id) {
+
+        $record = Producto::find($id);
+        $record->update([
+            'stock' => ($this->stock[$id] + $record->stock)
+        ]);
+    }
+
 }

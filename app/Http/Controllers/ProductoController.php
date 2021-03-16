@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bodega;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 
@@ -103,9 +102,11 @@ class ProductoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Producto $producto)
     {
-        //
+        $producto->update($request->all());
+
+        return redirect()->route('productos.edit', $producto)->with('info', 'Los datos se actualizaron con éxito');
     }
 
     /**

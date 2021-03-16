@@ -48,19 +48,10 @@
                         <div class="grid gap-2 grid-cols-3 pl-5 pr-5 divide-y divide-gray-200">
                             <!-- This example requires Tailwind CSS v2.0+ -->
                             @foreach ($productos as $producto)
+                            {!! Form::model($producto, ['route' => ['productos.update', $producto], 'method' => 'put']) !!}
                             <div class="relative bg-white shadow overflow-hidden border border-gray-300 sm:rounded-lg">
-                                <div class="absolute right-0 top-1">
-                                    <form action="{{route('productos.destroy', $producto)}}" method="POST">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit" class="w-5 h-5 text-red-400 hover:text-red-500">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    </form>
-                                </div>
 
+                                <input type="hidden" wire:model="selected_id" value="{{$producto->id}}">
                                 <div class="px-1 py-1 sm:px-3">
                                 <h3 class="text-md leading-6 font-medium text-gray-900">
                                     {{ $producto->linea->nombre }} {{ $producto->categoria->nombre }} {{ $producto->modelo->nombre }}
@@ -84,7 +75,7 @@
                                         Producción
                                     </dt>
                                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        {!! Form::text('precio_produccion', number_format($producto->precio_produccion,2), ['class' => 'p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
+                                        {!! Form::text('precio_produccion',  $producto->precio_produccion, ['class' => 'p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
                                     </dd>
                                     </div>
                                     <div class="bg-gray-50 px-2 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -92,7 +83,7 @@
                                         Mayoritas
                                     </dt>
                                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                        {!! Form::text('stock', number_format($producto->precio_mayorista,2), ['class' => 'p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
+                                        {!! Form::text('precio_mayorista', null, ['class' => 'p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
                                     </dd>
                                     </div>
                                     <div class="bg-white px-2 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -100,7 +91,7 @@
                                             PVP
                                         </dt>
                                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                            {!! Form::text('stock', number_format($producto->precio_venta_publico,2), ['class' => 'p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
+                                            {!! Form::text('precio_venta_publico', null, ['class' => 'p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
                                         </dd>
                                     </div>
 
@@ -123,19 +114,24 @@
                                     </div>
                                     <div class="bg-gray-50 px-2 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                         <dt class="text-sm font-medium text-gray-500">
-                                            Stock
+                                            Stock: {{ $producto->stock }}
                                         </dt>
                                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                            {!! Form::text('stock', $producto->stock, ['class' => 'p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
-                                            @error('stock')
-                                                <span class="mt-2 text-sm text-red-500">{{$message}}</span>
-                                            @enderror
+                                            <input type="text" wire:model="stock[{{$producto->id}}]" class="p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" >
                                         </dd>
                                     </div>
 
                                 </dl>
                                 </div>
+                                <button wire:click="update({{$producto}})" class="inline-flex items-center mt-4 mr-5 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                      </svg>
+                                    Actualizar
+                                </button>
                             </div>
+                            {!! Form::close() !!}
                             @endforeach
                         </div>
                         <div class="bg-gray-100 px-6 py-2 border-t border-gray-200">
