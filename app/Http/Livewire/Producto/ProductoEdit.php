@@ -18,10 +18,12 @@ class ProductoEdit extends Component
     public $searchModelo;
     public $condiciones = array();
     public $bandera = false;
-    public $producto_tmp = array();
 
     public $produccion;
+    public $mayorista;
+    public $publico;
     public $stock;
+
 
     public function render()
     {
@@ -56,7 +58,7 @@ class ProductoEdit extends Component
         }
         if($this->bandera) {
             $productos = Producto::where($this->condiciones)
-                            ->paginate(10);
+                            ->paginate(20);
         } else {
             $productos = Producto::where('id', '=', '0')
                             ->paginate(10);
@@ -65,20 +67,27 @@ class ProductoEdit extends Component
         return view('livewire.producto.producto-edit', compact('productos','categorias','lineas','tallas','modelos'));
     }
 
-    public function update(Producto $producto) {
+    public function mount()
+    {
+        $productos = Producto::where($this->condiciones)->get();
 
-        $record = Producto::find($producto->id);
-        $record->update([
-            'precio_mayorista' => $producto->precio_mayorista
-        ]);
+        foreach($productos as $producto){
+
+            $this->produccion[$producto->id] = $producto->precio_produccion;
+            $this->mayorista[$producto->id] = $producto->precio_mayorista;
+            $this->publico[$producto->id] = $producto->precio_venta_publico;
+            $this->stock[$producto->id] = $producto->stock;
+        }
+
     }
 
-
-    public function update333($id) {
+    public function update($id) {
 
         $record = Producto::find($id);
         $record->update([
             'precio_produccion' => $this->produccion[$id],
+            'precio_mayorista' => $this->mayorista[$id],
+            'precio_venta_publico' => $this->publico[$id],
             'stock' => ($this->stock[$id] + $record->stock)
         ]);
     }
