@@ -119,3 +119,7 @@ php artisan make:livewire producto\ProductoEdit
 
 ## para instalar codigo de barras
 composer require milon/barcode
+
+## para atributos campos a la tabla
+php artisan make:migration add_codigo_to_categorias_table
+php artisan migrate

@@ -34,6 +34,13 @@
                                 @enderror
                             </div>
                             <div class="col-span-6 sm:col-span-3">
+                                {!! Form::label('name', 'Código', ['class' => 'block text-sm font-medium text-gray-700']) !!}
+                                {!! Form::text('codigo', null, ['class' => 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
+                                @error('codigo')
+                                    <span class="mt-2 text-sm text-red-500">{{$message}}</span>
+                                @enderror
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
                                 {!! Form::label('estado', 'Estado', ['class' => 'block text-sm font-medium text-gray-700']) !!}
                                 {!! Form::select('activo',
                                                 ['si' => 'Activo', 'no' => 'Inactivo'], null,

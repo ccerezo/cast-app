@@ -54,7 +54,13 @@
                                     {{ $producto->linea->nombre }} {{ $producto->categoria->nombre }} {{ $producto->modelo->nombre }}
                                 </h3>
                                 <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                                    {{ $producto->codigo }}
+                                    @php
+                                        $codigo_id = '00000';
+                                        $digitos = (strlen($producto->id)) * (-1);
+                                        $codigo_tmp = substr($codigo_id,0,$digitos);
+                                        $codigo_barras = $codigo_tmp.$producto->id;
+                                    @endphp
+                                    {{ $producto->linea->codigo }}-{{ $producto->categoria->codigo }}-{{ $producto->modelo->codigo }}-{{ $codigo_barras }}
                                 </p>
                                 </div>
                                 <div class="border-t border-gray-300">
