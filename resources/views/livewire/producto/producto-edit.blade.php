@@ -60,7 +60,7 @@
                                         $codigo_tmp = substr($codigo_id,0,$digitos);
                                         $codigo_barras = $codigo_tmp.$producto->id;
                                     @endphp
-                                    {{ $producto->linea->codigo }}-{{ $producto->categoria->codigo }}-{{ $producto->modelo->codigo }}-{{ $codigo_barras }}
+                                    {{ $producto->codigo_barras }}
                                 </p>
                                 </div>
                                 <div class="border-t border-gray-300">

@@ -18,7 +18,9 @@ class ProductoIndex extends Component
     public $searchLinea;
     public $searchTalla;
     public $searchModelo;
+    public $searchCodigoBarras;
     public $condiciones = array();
+    public $productoTMP;
 
     public function render()
     {
@@ -28,8 +30,8 @@ class ProductoIndex extends Component
         $tallas = Talla::all();
         $modelos = Modelo::all();
         $producto_tmp = Producto::pluck('id')->first();
-        array_push($this->condiciones, ['codigo', 'LIKE', '%' . $this->search . '%']);
-        array_push($this->condiciones, ['descripcion', 'LIKE', '%' . $this->search . '%']);
+        $this->productoTMP = Producto::where('id', '=', 1)->first();
+        array_push($this->condiciones, ['codigo_barras', 'LIKE', '%' . $this->searchCodigoBarras . '%']);
 
         if(isset($this->searchLinea) && $this->searchLinea > 0){
             array_push($this->condiciones, ['linea_id', '=', $this->searchLinea]);
@@ -48,12 +50,15 @@ class ProductoIndex extends Component
         }
 
         $productos = Producto::where($this->condiciones)
-                            ->paginate(9);
+                            ->paginate(12);
 
         return view('livewire.producto.producto-index',
                     compact('productos','categorias','lineas','tallas','modelos','producto_tmp'));
     }
 
+    public function generateCodeBar($id) {
+        $this->productoTMP = Producto::where('id', '=', $id)->first();
+    }
     public function updatingSearch()
     {
         $this->resetPage();

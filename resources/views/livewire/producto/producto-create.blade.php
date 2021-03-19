@@ -10,7 +10,9 @@
                         Agregue las características del producto.
                         <div class="col-span-6 sm:col-span-3">
                             <label class="block text-sm font-medium text-gray-700">Codigo Barras</label>
-                            {!!DNS1D::getBarcodeHTML('123456', 'C128',3,38)!!}
+                            {!!DNS1D::getBarcodeHTML('001001001349', 'C128',2,40)!!}
+                            <p>Linea Mujer</p>
+                            {{-- {!!DNS1D::getBarcodeHTML('001-001-001-00002', 'C128',2,30, '#f20202')!!} --}}
                         </div>
                     </p>
                 </div>
@@ -45,15 +47,16 @@
                                                 ['class' => 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm']) !!}
                             </div>
                             <div class="col-span-4 sm:col-span-4">
-                                {!! Form::label('modelo', 'Modelo', ['class' => 'block text-sm font-medium text-gray-700']) !!}
-                                {!! Form::select('modelo_id', $modelos, null,
-                                                ['class' => 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm']) !!}
-                            </div>
-                            <div class="col-span-4 sm:col-span-4">
                                 {!! Form::label('linea', 'Linea', ['class' => 'block text-sm font-medium text-gray-700']) !!}
                                 {!! Form::select('linea_id', $lineas, null,
                                                 ['wire:model' => 'lineaSelected', 'class' => 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm']) !!}
                             </div>
+                            <div class="col-span-4 sm:col-span-4">
+                                {!! Form::label('modelo', 'Modelo', ['class' => 'block text-sm font-medium text-gray-700']) !!}
+                                {!! Form::select('modelo_id', $modelos, null,
+                                                ['class' => 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm']) !!}
+                            </div>
+
                             <div class="col-span-4 sm:col-span-4">
                                 {!! Form::label('categoria', 'Categoría', ['class' => 'block text-sm font-medium text-gray-700']) !!}
                                 {!! Form::select('categoria_id', $categorias, null,

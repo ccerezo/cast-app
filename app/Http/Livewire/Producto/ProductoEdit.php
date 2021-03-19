@@ -23,7 +23,7 @@ class ProductoEdit extends Component
     public $mayorista;
     public $publico;
     public $stock;
-
+    public $producto;
 
     public function render()
     {
@@ -67,8 +67,12 @@ class ProductoEdit extends Component
         return view('livewire.producto.producto-edit', compact('productos','categorias','lineas','tallas','modelos'));
     }
 
-    public function mount()
+    public function mount(Producto $producto)
     {
+        $this->producto = $producto;
+        $this->searchLinea = $producto->linea_id;
+        $this->searchCategoria = $producto->categoria_id;
+        $this->searchModelo = $producto->modelo_id;
         $productos = Producto::where($this->condiciones)->get();
 
         foreach($productos as $producto){

@@ -14,7 +14,15 @@
         {{-- <link rel="stylesheet" href="{{ mix('css/app.css') }}"> --}}
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         @livewireStyles
-
+        <style>
+            .modal {
+              transition: opacity 0.25s ease;
+            }
+            body.modal-active {
+              overflow-x: hidden;
+              overflow-y: visible !important;
+            }
+          </style>
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>

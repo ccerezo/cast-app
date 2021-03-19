@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
+use App\Models\Color;
+use App\Models\Linea;
+use App\Models\Modelo;
 use App\Models\Producto;
+use App\Models\Talla;
 use Illuminate\Http\Request;
 
 class ProductoController extends Controller
@@ -36,34 +41,52 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'codigo' => 'required'
+            'codigo' => 'required',
+            'precio_produccion' => 'required',
+            'precio_mayorista' => 'required',
+            'precio_venta_publico' => 'required'
         ]);
         $productos = $request->all();
         //return $productos;
-
+        $existe_producto = array();
         foreach($productos['stock'] as $key_talla => $valor_talla) {
             $lista = array();
             foreach($valor_talla as $key_color => $valor_color) {
                 if(!(is_null($valor_color[0]))){
 
-                    $producto = Producto::create(
-                        [
-                        '_token' => 'cqy9VqXla958HBd438JeZEnMrcGlqsQ8xdaMckZR',
-                        'codigo' => $productos['codigo'],
-                        'bodega_id' => $productos['bodega_id'],
-                        'marca_id' => $productos['marca_id'],
-                        'modelo_id' => $productos['modelo_id'],
-                        'linea_id' => $productos['linea_id'],
-                        'categoria_id' => $productos['categoria_id'],
-                        'descripcion' => 'descripcion',
-                        'precio_produccion' => $productos['precio_produccion'],
-                        'precio_mayorista' => $productos['precio_mayorista'],
-                        'precio_venta_publico' => $productos['precio_venta_publico'],
-                        'descuento' => 0,
-                        'stock' => $valor_color[0],
-                        'talla_id' => $key_talla,
-                        'color_id' => $key_color
-                    ]);
+                    $linea = Linea::find($productos['linea_id']);
+                    $categoria = Categoria::find($productos['categoria_id']);
+                    $modelo = Modelo::find($productos['modelo_id']);
+                    $talla = Talla::find($key_talla);
+                    $color = Color::find($key_color);
+
+                    $codigo_barras = $linea->codigo.$categoria->codigo.$modelo->codigo.$talla->numero1.$color->descripcion;
+                    //return $codigo_barras;
+                    $existe_producto = Producto::where('codigo_barras', '=', $codigo_barras)->get();
+                    //return $existe_producto;
+                    if(count($existe_producto)==0){
+                        $producto = Producto::create(
+                            [
+                            '_token' => $productos['_token'],
+                            'codigo' => $productos['codigo'],
+                            'codigo_barras' => $codigo_barras,
+                            'bodega_id' => $productos['bodega_id'],
+                            'marca_id' => $productos['marca_id'],
+                            'modelo_id' => $productos['modelo_id'],
+                            'linea_id' => $productos['linea_id'],
+                            'categoria_id' => $productos['categoria_id'],
+                            'descripcion' => 'descripcion',
+                            'precio_produccion' => $productos['precio_produccion'],
+                            'precio_mayorista' => $productos['precio_mayorista'],
+                            'precio_venta_publico' => $productos['precio_venta_publico'],
+                            'descuento' => 0,
+                            'stock' => $valor_color[0],
+                            'talla_id' => $key_talla,
+                            'color_id' => $key_color
+                        ]);
+                    } else {
+                        $producto = Producto::where('codigo_barras', '=', $codigo_barras)->first();
+                    }
 
                 }
             }
