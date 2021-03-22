@@ -119,13 +119,16 @@
                                             </div>
                                         </dd>
                                     </div>
-                                    <div class="text-center mt-2">
-                                        <button wire:click.self="generateCodeBar({{$producto->id}})" class="modal-open bg-transparent w-5 h-5 text-blue-400 hover:text-blue-500">
+                                    <div class="text-center mt-2 grid grid-cols-2">
+                                        <div>
+                                        {{ $message }}
+                                        <button wire:click="$set('message', '{{$producto}}')">Say Hi</button>
+                                        <button wire:click="$set('productoTMP', '{{$producto}}')" class="modal-open bg-transparent w-5 h-5 text-blue-400 hover:text-blue-500">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                 <path d="M2 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V4zM8 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H9a1 1 0 01-1-1V4zM15 3a1 1 0 00-1 1v12a1 1 0 001 1h2a1 1 0 001-1V4a1 1 0 00-1-1h-2z" />
                                               </svg>
                                         </button>
-
+                                        </div>
                                         <form action="{{route('productos.destroy', $producto)}}" method="POST">
                                             @csrf
                                             @method('delete')
@@ -152,8 +155,7 @@
         </div>
         </div>
     </div>
-
-    <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
+    <div wire:ignore.self class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
         <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
 
         <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
@@ -178,59 +180,22 @@
             </div>
 
             <!--Body-->
-            <p>{{$productoTMP->codigo}} {{$productoTMP->modelo->nombre}}</p>
-            {!!DNS1D::getBarcodeHTML($productoTMP->codigo_barras, 'C128',2,40)!!}
-            <p>{{$productoTMP->codigo_barras}}</p>
+
+            @if($productoTMP)
+                <p>{{$productoTMP->codigo}} {{$productoTMP->modelo->nombre}}</p>
+                {!!DNS1D::getBarcodeHTML($productoTMP->codigo_barras, 'C128',2,40)!!}
+                <p>{{$productoTMP->codigo_barras}}</p>
+            @endif
 
             <!--Footer-->
             <div class="flex justify-end pt-2">
-              {{-- <button class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2">Action</button> --}}
+              <button class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2">Action</button>
               <button class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400">Cerrar</button>
             </div>
 
           </div>
         </div>
-      </div>
-
-      <script>
-        var openmodal = document.querySelectorAll('.modal-open')
-        for (var i = 0; i < openmodal.length; i++) {
-          openmodal[i].addEventListener('click', function(event){
-            event.preventDefault()
-            toggleModal()
-          })
-        }
-
-        const overlay = document.querySelector('.modal-overlay')
-        overlay.addEventListener('click', toggleModal)
-
-        var closemodal = document.querySelectorAll('.modal-close')
-        for (var i = 0; i < closemodal.length; i++) {
-          closemodal[i].addEventListener('click', toggleModal)
-        }
-
-        document.onkeydown = function(evt) {
-          evt = evt || window.event
-          var isEscape = false
-          if ("key" in evt) {
-            isEscape = (evt.key === "Escape" || evt.key === "Esc")
-          } else {
-            isEscape = (evt.keyCode === 27)
-          }
-          if (isEscape && document.body.classList.contains('modal-active')) {
-            toggleModal()
-          }
-        };
-
-
-        function toggleModal () {
-          const body = document.querySelector('body')
-          const modal = document.querySelector('.modal')
-          modal.classList.toggle('opacity-0')
-          modal.classList.toggle('pointer-events-none')
-          body.classList.toggle('modal-active')
-        }
-
-
-      </script>
+    </div>
 </div>
+
+

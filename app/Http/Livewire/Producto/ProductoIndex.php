@@ -21,6 +21,12 @@ class ProductoIndex extends Component
     public $searchCodigoBarras;
     public $condiciones = array();
     public $productoTMP;
+    public $message;
+    public $confirmingItemDeletion = false;
+
+    // public function generateCodeBar($id) {
+    //     $this->productoTMP = Producto::where('id', '=', $id)->first();
+    // }
 
     public function render()
     {
@@ -30,7 +36,7 @@ class ProductoIndex extends Component
         $tallas = Talla::all();
         $modelos = Modelo::all();
         $producto_tmp = Producto::pluck('id')->first();
-        $this->productoTMP = Producto::where('id', '=', 1)->first();
+        //$this->productoTMP = Producto::where('id', '=', 1)->first();
         array_push($this->condiciones, ['codigo_barras', 'LIKE', '%' . $this->searchCodigoBarras . '%']);
 
         if(isset($this->searchLinea) && $this->searchLinea > 0){
@@ -56,9 +62,6 @@ class ProductoIndex extends Component
                     compact('productos','categorias','lineas','tallas','modelos','producto_tmp'));
     }
 
-    public function generateCodeBar($id) {
-        $this->productoTMP = Producto::where('id', '=', $id)->first();
-    }
     public function updatingSearch()
     {
         $this->resetPage();

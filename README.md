@@ -156,3 +156,6 @@ echo DNS1D::getBarcodeHTML('4445645656', 'CODABAR');
 echo DNS1D::getBarcodeHTML('4445645656', 'CODE11');
 echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA');
 echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA2T');
+
+
+ALTER TABLE table_name AUTO_INCREMENT = 1;
