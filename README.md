@@ -82,6 +82,8 @@ php artisan make:model Marca -m
 php artisan make:model Color -m
 php artisan make:model Producto -m
 php artisan make:model Tallaje -m
+php artisan make:model TipoCliente -m
+php artisan make:model Cliente -m
 
 ## Luego vuelvo a generar las migraciones
 php artisan migrate
@@ -101,6 +103,8 @@ php artisan make:controller ModeloController -r
 php artisan make:controller TallaController -r
 php artisan make:controller ProductoController -r
 php artisan make:controller TallajeController -r
+php artisan make:controller TipoClienteController -r
+php artisan make:controller ClienteController -r
 
 ## laravel Collective para los formularios
 composer require laravelcollective/html
@@ -116,6 +120,8 @@ php artisan make:livewire talla\TallaIndex
 php artisan make:livewire producto\ProductoIndex
 php artisan make:livewire producto\ProductoCreate
 php artisan make:livewire producto\ProductoEdit
+php artisan make:livewire tipoCliente\TipoClienteIndex
+php artisan make:livewire cliente\ClienteIndex
 
 ## para instalar codigo de barras
 composer require milon/barcode

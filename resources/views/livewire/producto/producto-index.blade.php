@@ -45,6 +45,12 @@
                             <option value="{{$modelo->id}}">{{ $modelo->nombre }}</option>
                         @endforeach
                     </select>
+                    <select wire:model="searchColor" class="mt-2 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option>Seleccione Color</option>
+                        @foreach ($colors as $color)
+                            <option value="{{$color->id}}">{{ $color->nombre }}</option>
+                        @endforeach
+                    </select>
                     <select wire:model="searchTalla" class="mt-2 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <option>Seleccione Talla</option>
                         @foreach ($tallas as $talla)
@@ -76,7 +82,7 @@
                                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-1">
                                             {{ $producto->codigo_barras }}
                                         </dd>
-                                        </div>
+                                    </div>
                                     <div class="bg-gray-50 px-2 py-0.5 sm:grid sm:grid-cols-2 sm:gap-2 sm:px-4">
                                         <dt class="text-sm font-medium text-gray-500">
                                             Código
@@ -120,14 +126,13 @@
                                         </dd>
                                     </div>
                                     <div class="text-center mt-2 grid grid-cols-2">
+
                                         <div>
-                                        {{ $message }}
-                                        <button wire:click="$set('message', '{{$producto}}')">Say Hi</button>
-                                        <button wire:click="$set('productoTMP', '{{$producto}}')" class="modal-open bg-transparent w-5 h-5 text-blue-400 hover:text-blue-500">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                <path d="M2 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V4zM8 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H9a1 1 0 01-1-1V4zM15 3a1 1 0 00-1 1v12a1 1 0 001 1h2a1 1 0 001-1V4a1 1 0 00-1-1h-2z" />
-                                              </svg>
-                                        </button>
+                                            <button wire:click="generateCodeBar({{$producto->id}})" class="modal-open bg-transparent w-5 h-5 text-blue-400 hover:text-blue-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path d="M2 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V4zM8 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H9a1 1 0 01-1-1V4zM15 3a1 1 0 00-1 1v12a1 1 0 001 1h2a1 1 0 001-1V4a1 1 0 00-1-1h-2z" />
+                                                </svg>
+                                            </button>
                                         </div>
                                         <form action="{{route('productos.destroy', $producto)}}" method="POST">
                                             @csrf
@@ -155,47 +160,27 @@
         </div>
         </div>
     </div>
-    <div wire:ignore.self class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
-        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
 
-        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+    <x-jet-dialog-modal wire:model="openModal">
+        <x-slot name="title">
+            Información del Producto
+        </x-slot>
 
-          <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
-            <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-              <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-            </svg>
-            <span class="text-sm">(Esc)</span>
-          </div>
-
-          <!-- Add margin if you want to see some of the overlay behind the modal-->
-          <div class="modal-content py-4 text-left px-6">
-            <!--Title-->
-            <div class="flex justify-between items-center pb-3">
-              <p class="text-2xl font-bold">Código de Barras</p>
-              <div class="modal-close cursor-pointer z-50">
-                <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                  <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-                </svg>
-              </div>
-            </div>
-
-            <!--Body-->
-
+        <x-slot name="content">
             @if($productoTMP)
                 <p>{{$productoTMP->codigo}} {{$productoTMP->modelo->nombre}}</p>
                 {!!DNS1D::getBarcodeHTML($productoTMP->codigo_barras, 'C128',2,40)!!}
                 <p>{{$productoTMP->codigo_barras}}</p>
             @endif
+        </x-slot>
 
-            <!--Footer-->
-            <div class="flex justify-end pt-2">
-              <button class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2">Action</button>
-              <button class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400">Cerrar</button>
-            </div>
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$set('openModal', false)" wire:loading.attr="disabled">
+                {{ __('Cerrar') }}
+            </x-jet-secondary-button>
+        </x-slot>
+    </x-jet-dialog-modal>
 
-          </div>
-        </div>
-    </div>
 </div>
 
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BodegaController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\LineaController;
 use App\Http\Controllers\MarcaController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\ModeloController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\TallaController;
 use App\Http\Controllers\TallajeController;
+use App\Http\Controllers\TipoClienteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,3 +49,7 @@ Route::resource('tallas', TallaController::class)->names('tallas')->middleware('
 Route::resource('tallajes', TallajeController::class)->names('tallajes')->middleware('auth');
 
 Route::resource('productos', ProductoController::class)->names('productos')->middleware('auth');
+
+Route::resource('tipoClientes', TipoClienteController::class)->names('tipoClientes')->middleware('auth');
+
+Route::resource('clientes', ClienteController::class)->names('clientes')->middleware('auth');

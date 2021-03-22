@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCodigoBarrasToProductosTable extends Migration
+class CreateTipoClientesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddCodigoBarrasToProductosTable extends Migration
      */
     public function up()
     {
-        Schema::table('productos', function (Blueprint $table) {
-            $table->string('codigo_barras')->nullable()->after('codigo');
+        Schema::create('tipo_clientes', function (Blueprint $table) {
+            $table->id();
+            $table->string('tipo', 30);
+            $table->enum('activo',['si','no'])->default('si');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddCodigoBarrasToProductosTable extends Migration
      */
     public function down()
     {
-        Schema::table('productos', function (Blueprint $table) {
-            $table->dropColumn('codigo_barras');
-        });
+        Schema::dropIfExists('tipo_clientes');
     }
 }

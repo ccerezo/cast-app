@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Producto;
 
 use App\Models\Categoria;
+use App\Models\Color;
 use App\Models\Linea;
 use App\Models\Modelo;
 use App\Models\Producto;
@@ -18,15 +19,17 @@ class ProductoIndex extends Component
     public $searchLinea;
     public $searchTalla;
     public $searchModelo;
+    public $searchColor;
     public $searchCodigoBarras;
     public $condiciones = array();
     public $productoTMP;
-    public $message;
-    public $confirmingItemDeletion = false;
 
-    // public function generateCodeBar($id) {
-    //     $this->productoTMP = Producto::where('id', '=', $id)->first();
-    // }
+    public $openModal = false;
+
+    public function generateCodeBar($id) {
+        $this->openModal = $id;
+        $this->productoTMP = Producto::where('id', '=', $id)->first();
+    }
 
     public function render()
     {
@@ -35,6 +38,7 @@ class ProductoIndex extends Component
         $lineas = Linea::all();
         $tallas = Talla::all();
         $modelos = Modelo::all();
+        $colors = Color::all();
         $producto_tmp = Producto::pluck('id')->first();
         //$this->productoTMP = Producto::where('id', '=', 1)->first();
         array_push($this->condiciones, ['codigo_barras', 'LIKE', '%' . $this->searchCodigoBarras . '%']);
@@ -55,11 +59,15 @@ class ProductoIndex extends Component
             array_push($this->condiciones, ['talla_id', '=', $this->searchTalla]);
         }
 
+        if(isset($this->searchColor) && $this->searchColor > 0){
+            array_push($this->condiciones, ['color_id', '=', $this->searchColor]);
+        }
+
         $productos = Producto::where($this->condiciones)
                             ->paginate(12);
 
         return view('livewire.producto.producto-index',
-                    compact('productos','categorias','lineas','tallas','modelos','producto_tmp'));
+                    compact('productos','categorias','lineas','tallas','modelos', 'colors','producto_tmp'));
     }
 
     public function updatingSearch()
@@ -79,6 +87,10 @@ class ProductoIndex extends Component
         $this->resetPage();
     }
     public function updatingSearchModelo()
+    {
+        $this->resetPage();
+    }
+    public function updatingSearchColor()
     {
         $this->resetPage();
     }

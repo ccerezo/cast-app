@@ -60,7 +60,7 @@ class ProductoController extends Controller
                     $talla = Talla::find($key_talla);
                     $color = Color::find($key_color);
 
-                    $codigo_barras = $linea->codigo.$categoria->codigo.$modelo->codigo.$talla->numero1.$color->descripcion;
+                    $codigo_barras = $linea->codigo.$categoria->codigo.$modelo->codigo.$color->descripcion.$talla->numero1;
                     //return $codigo_barras;
                     $existe_producto = Producto::where('codigo_barras', '=', $codigo_barras)->get();
                     //return $existe_producto;

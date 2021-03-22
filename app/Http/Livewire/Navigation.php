@@ -10,12 +10,9 @@ class Navigation extends Component
     {
         $menus = [
             //['name' => 'Dashboard', 'route' => route('dashboard'), 'active' => request()->routeIs('dashboard') ],
-            ['name' => 'Productos', 'route' => route('productos.index'), 'active' => request()->routeIs('productos.index')]
-            /*['name' => 'Categoría', 'route' => route('categorias.index'), 'active' => request()->routeIs('categorias.index')],
+            ['name' => 'Productos', 'route' => route('productos.index'), 'active' => request()->routeIs('productos.index')],
+            ['name' => 'Clientes', 'route' => route('clientes.index'), 'active' => request()->routeIs('clientes.index')],
             /*[
-                'name' => 'Colores', 'route' => route('colors.index'), 'active' => request()->routeIs('colors.index')
-            ],
-            [
                 'name' => 'Linea', 'route' => route('lineas.index'), 'active' => request()->routeIs('lineas.index')
             ],
             [
@@ -38,6 +35,7 @@ class Navigation extends Component
             ['name' => 'Modelo', 'route' => route('modelos.index'), 'active' => request()->routeIs('modelos.index')],
             ['name' => 'Tallas', 'route' => route('tallas.index'), 'active' => request()->routeIs('tallas.index')],
             ['name' => 'Tallaje', 'route' => route('tallajes.index'), 'active' => request()->routeIs('tallajes.index')],
+            ['name' => 'Tipo Clientes', 'route' => route('tipoClientes.index'), 'active' => request()->routeIs('tipoClientes.index')],
             /*[
                 'name' => 'Productos', 'route' => route('productos.index'), 'active' => request()->routeIs('productos.index')
             ]*/
