@@ -4,6 +4,7 @@ use App\Http\Controllers\BodegaController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\EstadoFacturaController;
 use App\Http\Controllers\LineaController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\ModeloController;
@@ -53,3 +54,5 @@ Route::resource('productos', ProductoController::class)->names('productos')->mid
 Route::resource('tipoClientes', TipoClienteController::class)->names('tipoClientes')->middleware('auth');
 
 Route::resource('clientes', ClienteController::class)->names('clientes')->middleware('auth');
+
+Route::resource('estadoFacturas', EstadoFacturaController::class)->names('estadoFacturas')->middleware('auth');

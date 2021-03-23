@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
+use App\Models\TipoCliente;
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller
@@ -23,7 +25,8 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        //
+        $tipos = TipoCliente::pluck('tipo','id');
+        return view('clientes.create', compact('tipos'));
     }
 
     /**
@@ -34,7 +37,13 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'identificacion' => 'required',
+            'nombre' => 'required',
+        ]);
+        $cliente = Cliente::create($request->all());
+
+        return redirect()->route('clientes.edit', compact('cliente'))->with('info', 'El registro se creó con éxito.');;
     }
 
     /**
@@ -54,9 +63,10 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Cliente $cliente)
     {
-        //
+        $tipos = TipoCliente::pluck('tipo','id');
+        return view('clientes.edit', compact('cliente','tipos'));
     }
 
     /**
@@ -66,9 +76,16 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Cliente $cliente)
     {
-        //
+        $request->validate([
+            'identificacion' => 'required',
+            'nombre' => 'required',
+        ]);
+
+        $cliente->update($request->all());
+
+        return redirect()->route('clientes.edit', $cliente)->with('info', 'Los datos se actualizaron con éxito');
     }
 
     /**
@@ -77,7 +94,7 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Cliente $cliente)
     {
         //
     }

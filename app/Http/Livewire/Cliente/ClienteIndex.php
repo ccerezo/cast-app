@@ -13,10 +13,10 @@ class ClienteIndex extends Component
 
     public function render()
     {
-        $tipos = Cliente::where('nombre', 'LIKE', '%' . $this->search . '%')
+        $clientes = Cliente::where('nombre', 'LIKE', '%' . $this->search . '%')
                             ->orWhere('identificacion', 'LIKE', '%' . $this->search . '%')
                             ->paginate(10);
-        return view('livewire.cliente.cliente-index');
+        return view('livewire.cliente.cliente-index', compact('clientes'));
     }
     public function updatingSearch()
     {

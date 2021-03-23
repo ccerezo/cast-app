@@ -84,6 +84,9 @@ php artisan make:model Producto -m
 php artisan make:model Tallaje -m
 php artisan make:model TipoCliente -m
 php artisan make:model Cliente -m
+php artisan make:model EstadoFactura -m
+php artisan make:model Vendedor -m
+php artisan make:model MetodoPago -m
 
 ## Luego vuelvo a generar las migraciones
 php artisan migrate
@@ -105,6 +108,9 @@ php artisan make:controller ProductoController -r
 php artisan make:controller TallajeController -r
 php artisan make:controller TipoClienteController -r
 php artisan make:controller ClienteController -r
+php artisan make:controller EstadoFacturaController -r
+php artisan make:controller VendedorController -r
+php artisan make:controller MetodoPagoController -r
 
 ## laravel Collective para los formularios
 composer require laravelcollective/html
@@ -122,6 +128,9 @@ php artisan make:livewire producto\ProductoCreate
 php artisan make:livewire producto\ProductoEdit
 php artisan make:livewire tipoCliente\TipoClienteIndex
 php artisan make:livewire cliente\ClienteIndex
+php artisan make:livewire estadoFactura\EstadoFacturaIndex
+php artisan make:livewire vendedor\VendedorIndex
+php artisan make:livewire metodoPago\MetodoPagoIndex
 
 ## para instalar codigo de barras
 composer require milon/barcode
@@ -165,3 +174,8 @@ echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA2T');
 
 
 ALTER TABLE table_name AUTO_INCREMENT = 1;
+
+php artisan make:seeder ClienteSeeder
+php artisan make:factory ClienteFactory
+
+php artisan db:seed --class=ClienteSeeder

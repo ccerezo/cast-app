@@ -1,8 +1,8 @@
-<x-app-layout>
-    <div class="flex justify-between mb-2">
-        <p class="inline-flex mt-4 pl-5 text-lg text-gray-700">Tallaje</p>
-        <a href="{{route('tallajes.create')}}" class="inline-flex items-center mt-4 mr-5 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-            Agregar Tallaje
+<div>
+    <div class="flex justify-between">
+        <p class="inline-flex mt-4 pl-5 text-lg text-gray-700">Estados de una Factura</p>
+        <a href="{{route('estadoFacturas.create')}}" class="inline-flex items-center mt-4 mr-5 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Agregar Estado
         </a>
     </div>
     <div class="flex flex-col">
@@ -16,60 +16,54 @@
             @endif
 
             <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                @if($tallajes->count())
+                <div class="grid grid-cols-1 gap-2 pl-5 pr-5 mb-2">
+                    <input wire:model="search" type="text" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Buscar">
+                </div>
+                @if($estados->count())
                 <div class="min-w-full divide-y divide-gray-200">
                     <table class="min-w-full">
                         <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Linea
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Estado Factura
                             </th>
-                            <th scope="col" class="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Talla
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Código
                             </th>
-                            <th scope="col" class="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Descripción
-                            </th>
-                            <th scope="col" class="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Estado
                             </th>
                             <th scope="col" class="relative px-6 py-3">
-                            <span class="sr-only">Edit</span>
+                                <span class="sr-only">Edit</span>
+                            </th>
+                            <th scope="col" class="relative px-6 py-3">
+                                <span class="sr-only">Eliminar</span>
                             </th>
                         </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach ($tallajes as $tallaje)
+                        @foreach ($estados as $estado)
                             <tr>
-                            <td class="px-6 py-2 whitespace-nowrap">
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900">
-                                            {{$tallaje->linea->nombre}}
+                                            {{$estado->nombre}}
                                         </div>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-2 whitespace-nowrap">
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900">
-                                            {{$tallaje->talla->numero1}}
+                                            {{$estado->codigo}}
                                         </div>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-2 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">
-                                            {{$tallaje->descripcion}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-2 whitespace-nowrap">
-                                @if ($tallaje->activo == 'si')
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if ($estado->activo == 'si')
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                         Active
                                     </span>
@@ -79,11 +73,11 @@
                                     </span>
                                 @endif
                             </td>
-                            <td class="px-6 py-2 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="{{route('tallajes.edit', $tallaje)}}" class="mr-3 text-indigo-600 hover:text-indigo-800">Editar</a>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <a href="{{route('estadoFacturas.edit', $estado)}}" class="mr-3 text-indigo-600 hover:text-indigo-800">Editar</a>
                             </td>
                             <td>
-                                <form action="{{route('tallajes.destroy', $tallaje)}}" method="POST">
+                                <form action="{{route('estadoFacturas.destroy', $estado)}}" method="POST">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="text-red-600 hover:text-red-800">Eliminar</button>
@@ -94,6 +88,9 @@
                         <!-- More items... -->
                         </tbody>
                     </table>
+                    <div class="bg-gray-100 px-6 py-2 border-t border-gray-200">
+                        {{ $estados->links() }}
+                    </div>
                 </div>
                 @else
                     <p class="bg-gray-100 px-6 py-2 border-t border-gray-200">No hay registro.</p>
@@ -102,4 +99,5 @@
         </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+

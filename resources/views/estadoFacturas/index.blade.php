@@ -1,4 +1,4 @@
 <x-app-layout>
     <!--<x-jet-welcome />-->
-    @livewire('cliente.cliente-index')
+    @livewire('estado-factura.estado-factura-index')
 </x-app-layout>

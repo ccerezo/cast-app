@@ -16,12 +16,14 @@ class CreateProductosTable extends Migration
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
             $table->string('codigo',30);
+            $table->string('codigo_barras',30);
             $table->string('descripcion',100);
             $table->decimal('precio_produccion',$precision = 10, $scale = 4);
             $table->decimal('precio_mayorista',$precision = 10, $scale = 4);
             $table->decimal('precio_venta_publico',$precision = 10, $scale = 4);
             $table->integer('stock');
             $table->integer('descuento');
+            $table->enum('iva',['si','no'])->default('si');
             $table->string('image',200)->nullable();
             $table->enum('activo',['si','no'])->default('si');
 

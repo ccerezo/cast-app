@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TipoCliente;
+use App\Models\EstadoFactura;
 use Illuminate\Http\Request;
 
-class TipoClienteController extends Controller
+class EstadoFacturaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class TipoClienteController extends Controller
      */
     public function index()
     {
-        return view('tipoClientes.index');
+        return view('estadoFacturas.index');
     }
 
     /**
@@ -24,7 +24,7 @@ class TipoClienteController extends Controller
      */
     public function create()
     {
-        return view('tipoClientes.create');
+        return view('estadoFacturas.create');
     }
 
     /**
@@ -36,11 +36,11 @@ class TipoClienteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tipo' => 'required'
+            'nombre' => 'required'
         ]);
-        $tipoCliente = TipoCliente::create($request->all());
+        $estadoFactura = EstadoFactura::create($request->all());
 
-        return redirect()->route('tipoClientes.edit', compact('tipoCliente'))->with('info', 'El registro se creó con éxito.');
+        return redirect()->route('estadoFacturas.edit', compact('estadoFactura'))->with('info', 'El registro se creó con éxito.');;
     }
 
     /**
@@ -60,9 +60,9 @@ class TipoClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(TipoCliente $tipoCliente)
+    public function edit(EstadoFactura $estadoFactura)
     {
-        return view('tipoClientes.edit', compact('tipoCliente'));
+        return view('estadoFacturas.edit', compact('estadoFactura'));
     }
 
     /**
@@ -72,14 +72,14 @@ class TipoClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TipoCliente $tipoCliente)
+    public function update(Request $request, EstadoFactura $estadoFactura)
     {
         $request->validate([
-            'tipo' => 'required'
+            'nombre' => 'required'
         ]);
-        $tipoCliente->update($request->all());
+        $estadoFactura->update($request->all());
 
-        return redirect()->route('tipoClientes.edit', compact('tipoCliente'))->with('info', 'Los datos se actualizaron con éxito.');
+        return redirect()->route('estadoFacturas.edit', compact('estadoFactura'))->with('info', 'Los datos se actualizaron con éxito.');;
     }
 
     /**
@@ -88,10 +88,10 @@ class TipoClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TipoCliente $tipoCliente)
+    public function destroy(EstadoFactura $estadoFactura)
     {
-        $tipoCliente->delete();
+        $estadoFactura->delete();
 
-        return redirect()->route('tipoClientes.index')->with('info', 'El registro se Eliminó con éxito');
+        return redirect()->route('estadoFacturas.index')->with('info', 'El registro se Eliminó con éxito');
     }
 }

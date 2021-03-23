@@ -36,9 +36,8 @@ class Navigation extends Component
             ['name' => 'Tallas', 'route' => route('tallas.index'), 'active' => request()->routeIs('tallas.index')],
             ['name' => 'Tallaje', 'route' => route('tallajes.index'), 'active' => request()->routeIs('tallajes.index')],
             ['name' => 'Tipo Clientes', 'route' => route('tipoClientes.index'), 'active' => request()->routeIs('tipoClientes.index')],
-            /*[
-                'name' => 'Productos', 'route' => route('productos.index'), 'active' => request()->routeIs('productos.index')
-            ]*/
+            ['name' => 'Estados Factura', 'route' => route('estadoFacturas.index'), 'active' => request()->routeIs('estadoFacturas.index')],
+
         ];
         return view('livewire.navigation', compact('menus', 'configuraciones'));
     }
