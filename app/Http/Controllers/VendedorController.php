@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Vendedor;
 use Illuminate\Http\Request;
 
 class VendedorController extends Controller
@@ -13,7 +14,7 @@ class VendedorController extends Controller
      */
     public function index()
     {
-        //
+        return view('vendedors.index');
     }
 
     /**
@@ -23,7 +24,7 @@ class VendedorController extends Controller
      */
     public function create()
     {
-        //
+        return view('vendedors.create');
     }
 
     /**
@@ -34,7 +35,15 @@ class VendedorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'identificacion' => 'required',
+            'nombre' => 'required',
+            'cupo_aprobado' => 'required|numeric|max:99999',
+            'cupo_disponible' => 'required|numeric|max:99999',
+        ]);
+        $vendedor = Vendedor::create($request->all());
+
+        return redirect()->route('vendedors.edit', compact('vendedor'))->with('info', 'El registro se creó con éxito.');;
     }
 
     /**
@@ -54,9 +63,9 @@ class VendedorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Vendedor $vendedor)
     {
-        //
+        return view('vendedors.edit', compact('vendedor'));
     }
 
     /**
@@ -66,9 +75,17 @@ class VendedorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Vendedor $vendedor)
     {
-        //
+        $request->validate([
+            'identificacion' => 'required',
+            'nombre' => 'required',
+            'cupo_aprobado' => 'required',
+        ]);
+
+        $vendedor->update($request->all());
+
+        return redirect()->route('vendedors.edit', $vendedor)->with('info', 'Los datos se actualizaron con éxito');
     }
 
     /**
@@ -77,8 +94,10 @@ class VendedorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Vendedor $vendedor)
     {
-        //
+        $vendedor->delete();
+
+        return redirect()->route('vendedors.index')->with('info', 'El registro se Eliminó con éxito');
     }
 }

@@ -43,7 +43,7 @@ class ClienteController extends Controller
         ]);
         $cliente = Cliente::create($request->all());
 
-        return redirect()->route('clientes.edit', compact('cliente'))->with('info', 'El registro se creó con éxito.');;
+        return redirect()->route('clientes.edit', compact('cliente'))->with('info', 'El registro se creó con éxito.');
     }
 
     /**
@@ -96,6 +96,8 @@ class ClienteController extends Controller
      */
     public function destroy(Cliente $cliente)
     {
-        //
+        $cliente->delete();
+
+        return redirect()->route('clientes.index')->with('info', 'El registro se Eliminó con éxito');
     }
 }
