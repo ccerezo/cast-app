@@ -87,6 +87,7 @@ php artisan make:model Cliente -m
 php artisan make:model EstadoFactura -m
 php artisan make:model Vendedor -m
 php artisan make:model MetodoPago -m
+php artisan make:model Inventario -m
 
 ## Luego vuelvo a generar las migraciones
 php artisan migrate
@@ -111,6 +112,7 @@ php artisan make:controller ClienteController -r
 php artisan make:controller EstadoFacturaController -r
 php artisan make:controller VendedorController -r
 php artisan make:controller MetodoPagoController -r
+php artisan make:controller InventarioController -r
 
 ## laravel Collective para los formularios
 composer require laravelcollective/html
@@ -131,6 +133,7 @@ php artisan make:livewire cliente\ClienteIndex
 php artisan make:livewire estadoFactura\EstadoFacturaIndex
 php artisan make:livewire vendedor\VendedorIndex
 php artisan make:livewire metodoPago\MetodoPagoIndex
+php artisan make:livewire inventario\InventarioIndex
 
 ## para instalar codigo de barras
 composer require milon/barcode
@@ -179,3 +182,10 @@ php artisan make:seeder ClienteSeeder
 php artisan make:factory ClienteFactory
 
 php artisan db:seed --class=ClienteSeeder
+
+BEGIN
+    IF NEW.id > 0 THEN
+	    INSERT INTO inventarios(entradas, ultima_entrada, salidas, stock, producto_id, created_at)
+        VALUES(NEW.stock, NEW.created_at, 0,NEW.stock,NEW.id,NEW.created_at);
+    END IF ;
+END

@@ -10,7 +10,7 @@ class Producto extends Model
     use HasFactory;
 
     protected $fillable = ['codigo','codigo_barras','descripcion', 'precio_produccion','precio_mayorista','precio_venta_publico',
-                            'stock','descuento','image','activo','bodega_id','marca_id','categoria_id',
+                            'stock','descuento','iva','image','activo','bodega_id','marca_id','categoria_id',
                             'modelo_id', 'linea_id', 'talla_id','color_id'];
 
     public function bodega() {
@@ -39,5 +39,8 @@ class Producto extends Model
 
     public function talla() {
         return $this->belongsTo('App\Models\Talla');
+    }
+    public function inventario() {
+        return $this->hasMany('App\Models\Inventario');
     }
 }
