@@ -170,7 +170,7 @@
             @if($productoTMP)
                 <p>{{$productoTMP->codigo}} {{$productoTMP->modelo->nombre}}</p>
                 {!!DNS1D::getBarcodeHTML($productoTMP->codigo_barras, 'C128',2,40)!!}
-                <p>{{$productoTMP->codigo_barras}}</p>
+                <p>Color: {{$productoTMP->color->nombre}} - Talla: {{$productoTMP->talla->numero1}}</p>
             @endif
         </x-slot>
 

@@ -12,10 +12,9 @@ class Navigation extends Component
             //['name' => 'Dashboard', 'route' => route('dashboard'), 'active' => request()->routeIs('dashboard') ],
             ['name' => 'Productos', 'route' => route('productos.index'), 'active' => request()->routeIs('productos.index')],
             ['name' => 'Clientes', 'route' => route('clientes.index'), 'active' => request()->routeIs('clientes.index')],
-            /*[
-                'name' => 'Linea', 'route' => route('lineas.index'), 'active' => request()->routeIs('lineas.index')
+            ['name' => 'Inventario', 'route' => route('inventarios.index'), 'active' => request()->routeIs('inventarios.index')
             ],
-            [
+            /*[
                 'name' => 'Marca', 'route' => route('marcas.index'), 'active' => request()->routeIs('marcas.index')
             ],
             [

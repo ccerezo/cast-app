@@ -176,7 +176,7 @@ echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA');
 echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA2T');
 
 
-ALTER TABLE table_name AUTO_INCREMENT = 1;
+ALTER TABLE productos AUTO_INCREMENT = 1;
 
 php artisan make:seeder ClienteSeeder
 php artisan make:factory ClienteFactory
