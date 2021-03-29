@@ -137,6 +137,8 @@ php artisan make:livewire metodoPago\MetodoPagoIndex
 php artisan make:livewire inventario\InventarioIndex
 php artisan make:livewire factura\FacturaIndex
 php artisan make:livewire factura\FacturaCreate
+php artisan make:livewire shared\ClienteSearch
+php artisan make:livewire shared\ProductoSearch
 
 ## para instalar codigo de barras
 composer require milon/barcode
@@ -186,9 +188,35 @@ php artisan make:factory ClienteFactory
 
 php artisan db:seed --class=ClienteSeeder
 
+addInventario
+productos
+after
+insert
 BEGIN
     IF NEW.id > 0 THEN
 	    INSERT INTO inventarios(entradas, ultima_entrada, salidas, stock, producto_id, created_at)
         VALUES(NEW.stock, NEW.created_at, 0,NEW.stock,NEW.id,NEW.created_at);
     END IF ;
 END
+
+actualizarInventario
+productos
+after
+update
+BEGIN
+    UPDATE inventarios 
+    SET entradas = (entradas + (NEW.stock-OLD.stock)), stock = (stock + (NEW.stock-OLD.stock)), ultima_entrada = NEW.updated_at
+    WHERE id = NEW.id;
+END
+
+eliminarInventario
+productos
+before
+delete
+BEGIN
+    IF OLD.id > 0 THEN
+	    DELETE from inventarios WHERE id = OLD.id;
+    END IF ;
+END
+
+

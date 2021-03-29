@@ -1,5 +1,8 @@
 <div>
-    <div class="mt-10 p-5 sm:mt-0">
+    <div class="flex justify-between border-b border-gray-300">
+        <p class="inline-flex mt-4 pl-5 text-lg text-gray-700">Factura</p>
+    </div>
+    <div class="mt-10 sm:mt-0">
         <div class="md:grid md:grid-cols-6 md:gap-3">
             <div class="mt-5 md:mt-0 md:col-span-6">
                 @if (session('info'))
@@ -11,58 +14,67 @@
                 {!! Form::open(['route' => 'facturas.store']) !!}
 
                 <div class="shadow overflow-hidden sm:rounded-md">
-                    <div class="px-4 py-5 bg-white sm:p-6">
-                        <div class="grid grid-cols-12 gap-6">
-                            <div class="col-span-4 sm:col-span-4">
-                                {!! Form::label('name', 'Número', ['class' => 'block text-sm font-medium text-gray-700']) !!}
-                                {!! Form::text('numero', null, ['class' => 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
-                                @error('numero')
-                                    <span class="mt-2 text-sm text-red-500">{{$message}}</span>
-                                @enderror
-                            </div>
-                            <div class="col-span-4 sm:col-span-4">
-                                {!! Form::label('name', 'Fecha', ['class' => 'block text-sm font-medium text-gray-700']) !!}
-                                {!! Form::date('fecha', \Carbon\Carbon::now(), ['class' => 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
-                                @error('fecha')
-                                    <span class="mt-2 text-sm text-red-500">{{$message}}</span>
-                                @enderror
-                            </div>
-                            <div class="col-span-4 sm:col-span-4">
-                                {!! Form::label('vendedor', 'Vendedor', ['class' => 'block text-sm font-medium text-gray-700']) !!}
-                                {!! Form::select('vendedor_id', $vendedors, null,
-                                                ['class' => 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm']) !!}
-                            </div>
-                            <div class="col-span-4 sm:col-span-4">
-                                {!! Form::label('cliente', 'Cliente', ['class' => 'block text-sm font-medium text-gray-700']) !!}
-                                {!! Form::select('clientes_id', $clientes, null,
-                                                ['class' => 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm']) !!}
-                            </div>
-                            <div class="col-span-4 sm:col-span-4 pt-7">
-                                {!! Form::radio('forma_pago', 'CONTADO', null, ['class' => 'py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm']) !!} Contado
-                                {!! Form::radio('forma_pago', 'CRÉDITO', null,['class' => 'ml-5 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm']) !!} Crédito
-                            </div>
-                        </div>
+                    <div class="px-4 py-2 bg-white">
                         <div class="grid grid-cols-12 gap-3">
+                            <div class="flex-1 col-start-1 col-span-8">
 
+                                {{-- {!! Form::text('producto_id', null, ['class' => 'focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300 rounded', 'placeholder' => 'Buscar Producto']) !!} --}}
+                                @livewire('shared.producto-search')
+
+                            </div>
+                            <div class="col-start-9 col-span-4">
+                                <div class="grid grid-cols-12 gap-0">
+                                    <div class="col-start-1 col-span-12">
+                                        {!! Form::label('resumen', 'Datos de Factura', ['class' => 'bg-gray-100 p-2 border-b border-t block text-xs text-gray-700']) !!}
+                                    </div>
+                                    <div class="col-start-1 col-span-5 shadow border-t border-b border-l border-gray-200">
+                                        {!! Form::label('numero', 'Número:', ['class' => 'px-2 py-1 border-b border-t block text-xs text-gray-700']) !!}
+                                        {!! Form::label('fecha', 'Fecha:', ['class' => 'px-2 py-1 border-b border-t block text-xs text-gray-700']) !!}
+                                    </div>
+                                    <div class="col-start-6 col-span-12 shadow border-t border-gray-200">
+                                        {!! Form::text('numero', null, ['class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
+                                        {!! Form::date('fecha', \Carbon\Carbon::now(), ['class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
+                                    </div>
+
+                                    <div class="col-start-1 col-span-5 shadow border-t border-b border-l border-gray-200">
+                                        {!! Form::label('vendedor', 'Vendedor:', ['class' => 'px-2 py-1 border-b border-t block text-xs text-gray-700']) !!}
+                                        {!! Form::label('cupo', 'Cupo Disponible:', ['class' => 'px-2 py-1 border-b border-t block text-xs text-gray-700']) !!}
+                                    </div>
+                                    <div class="col-start-6 col-span-12 shadow border-t border-gray-200">
+                                        {!! Form::select('vendedor_id', $vendedors, null,
+                                                        ['class' => 'block w-full py-1 px-3 border-1 border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs']) !!}
+                                        {!! Form::text('cupo', null, ['class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
+                                    </div>
+                                    <div class="col-start-1 col-span-5 shadow border-t border-b border-l border-gray-200">
+                                        {!! Form::label('cliente', 'Cliente:', ['class' => 'px-2 py-1 border-b border-t block text-xs text-gray-700']) !!}
+                                        {!! Form::label('pago', 'Forma de Pago:', ['class' => 'px-2 py-1 border-b border-t block text-xs text-gray-700']) !!}
+                                    </div>
+                                    <div class="col-start-6 col-span-12 shadow border-t border-gray-200 text-xs">
+                                        {!! Form::select('clientes_id', $clientes, null,
+                                                        ['class' => 'block w-full px-2 py-1 border-1 border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs']) !!}
+                                        <div class="px-1 py-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border border-gray-300">
+                                            {!! Form::radio('forma_pago', 'CONTADO', null, ['class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Contado
+                                            {!! Form::radio('forma_pago', 'CRÉDITO', null,['class' => 'ml-4 py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Crédito
+                                        </div>
+                                    </div>
+                                    <div class="mt-5 col-start-1 col-span-5 shadow border-t border-b border-l border-gray-200">
+                                        {!! Form::label('resumen', 'Resumen', ['class' => 'bg-gray-100 p-2 border-b border-t block text-xs text-gray-700']) !!}
+                                        {!! Form::label('subtotal', 'Subtotal', ['class' => 'p-2 border-b border-t block text-xs text-gray-700']) !!}
+                                        {!! Form::label('name', 'IVA', ['class' => 'p-2 border-b border-t block text-xs text-gray-700']) !!}
+                                        {!! Form::label('name', 'Descuento', ['class' => 'p-2 border-b border-t block text-xs text-gray-700']) !!}
+                                        {!! Form::label('name', 'Total', ['class' => 'p-2 block border-t text-xs text-gray-700']) !!}
+                                    </div>
+                                    <div class="mt-5 col-start-6 col-span-12 shadow border-t border-gray-200">
+                                        {!! Form::label('valores', 'VALORES', ['class' => 'bg-gray-100 p-2 border block text-xs text-gray-700']) !!}
+                                        {!! Form::text('subtotal', null, ['class' => 'text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
+                                        {!! Form::text('iva', null, ['class' => 'text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
+                                        {!! Form::text('descuento', null, ['class' => 'text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
+                                        {!! Form::text('total', null, ['class' => 'text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="grid grid-cols-12 gap-0">
-                            <div class="col-start-9 col-span-2 shadow border-t border-b border-l border-gray-200">
-                                {!! Form::label('resumen', 'Resumen', ['class' => 'bg-gray-100 p-2 border-b border-t block text-xs text-gray-700']) !!}
-                                {!! Form::label('subtotal', 'Subtotal', ['class' => 'p-2 border-b border-t block text-xs text-gray-700']) !!}
-                                {!! Form::label('name', 'IVA', ['class' => 'p-2 border-b border-t block text-xs text-gray-700']) !!}
-                                {!! Form::label('name', 'Descuento', ['class' => 'p-2 border-b border-t block text-xs text-gray-700']) !!}
-                                {!! Form::label('name', 'Total', ['class' => 'p-2 block border-t text-xs text-gray-700']) !!}
-                            </div>
-                            <div class="col-start-11 col-span-2 shadow border-t border-gray-200">
-                                {!! Form::label('valores', 'VALORES', ['class' => 'bg-gray-100 p-2 border block text-xs text-gray-700']) !!}
-                                {!! Form::text('subtotal', null, ['class' => 'focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
-                                {!! Form::text('iva', null, ['class' => 'focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
-                                {!! Form::text('descuento', null, ['class' => 'focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
-                                {!! Form::text('total', null, ['class' => 'focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
-                            </div>
-
-                        </div>
 
 
                     </div>

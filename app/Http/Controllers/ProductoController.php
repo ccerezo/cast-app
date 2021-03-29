@@ -61,6 +61,7 @@ class ProductoController extends Controller
                     $color = Color::find($key_color);
 
                     $codigo_barras = $linea->codigo.$categoria->codigo.$modelo->codigo.$color->descripcion.$talla->numero1;
+                    $descripcion = $linea->nombre.' '.$categoria->nombre.' '.$modelo->nombre.' - Color:'.$color->nombre.' - T.'.$talla->numero1;
                     //return $codigo_barras;
                     $existe_producto = Producto::where('codigo_barras', '=', $codigo_barras)->get();
                     //return $existe_producto;
@@ -75,7 +76,7 @@ class ProductoController extends Controller
                             'modelo_id' => $productos['modelo_id'],
                             'linea_id' => $productos['linea_id'],
                             'categoria_id' => $productos['categoria_id'],
-                            'descripcion' => 'descripcion',
+                            'descripcion' => $descripcion,
                             'precio_produccion' => $productos['precio_produccion'],
                             'precio_mayorista' => $productos['precio_mayorista'],
                             'precio_venta_publico' => $productos['precio_venta_publico'],

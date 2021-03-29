@@ -42,6 +42,7 @@ class ProductoIndex extends Component
         $producto_tmp = Producto::pluck('id')->first();
         //$this->productoTMP = Producto::where('id', '=', 1)->first();
         array_push($this->condiciones, ['codigo_barras', 'LIKE', '%' . $this->searchCodigoBarras . '%']);
+        //array_push($this->condiciones, ['descripcion', 'LIKE', '%' . $this->searchCodigoBarras . '%']);
 
         if(isset($this->searchLinea) && $this->searchLinea > 0){
             array_push($this->condiciones, ['linea_id', '=', $this->searchLinea]);
