@@ -9,4 +9,8 @@ class EstadoFactura extends Model
 {
     use HasFactory;
     protected $fillable = ['nombre','codigo','activo'];
+
+    public function facturas() {
+        return $this->hasMany('App\Models\Factura');
+    }
 }

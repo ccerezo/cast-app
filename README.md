@@ -88,7 +88,7 @@ php artisan make:model EstadoFactura -m
 php artisan make:model Vendedor -m
 php artisan make:model MetodoPago -m
 php artisan make:model Inventario -m
-
+php artisan make:model Factura -m
 ## Luego vuelvo a generar las migraciones
 php artisan migrate
 
@@ -113,6 +113,7 @@ php artisan make:controller EstadoFacturaController -r
 php artisan make:controller VendedorController -r
 php artisan make:controller MetodoPagoController -r
 php artisan make:controller InventarioController -r
+php artisan make:controller FacturaController -r
 
 ## laravel Collective para los formularios
 composer require laravelcollective/html
@@ -134,6 +135,8 @@ php artisan make:livewire estadoFactura\EstadoFacturaIndex
 php artisan make:livewire vendedor\VendedorIndex
 php artisan make:livewire metodoPago\MetodoPagoIndex
 php artisan make:livewire inventario\InventarioIndex
+php artisan make:livewire factura\FacturaIndex
+php artisan make:livewire factura\FacturaCreate
 
 ## para instalar codigo de barras
 composer require milon/barcode

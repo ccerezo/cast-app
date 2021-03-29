@@ -15,4 +15,8 @@ class Cliente extends Model
         return $this->belongsTo('App\Models\TipoCliente');
     }
 
+    public function facturas() {
+        return $this->hasMany('App\Models\Factura');
+    }
+
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\EstadoFacturaController;
+use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\LineaController;
 use App\Http\Controllers\MarcaController;
@@ -62,3 +63,5 @@ Route::resource('estadoFacturas', EstadoFacturaController::class)->names('estado
 Route::resource('vendedors', VendedorController::class)->names('vendedors')->middleware('auth');
 
 Route::resource('inventarios', InventarioController::class)->names('inventarios')->middleware('auth');
+
+Route::resource('facturas', FacturaController::class)->names('facturas')->middleware('auth');

@@ -9,4 +9,8 @@ class Vendedor extends Model
 {
     use HasFactory;
     protected $fillable = ['identificacion', 'nombre', 'cupo_aprobado', 'cupo_disponible', 'codigo', 'correo', 'telefono', 'activo'];
+
+    public function facturas() {
+        return $this->hasMany('App\Models\Factura');
+    }
 }
