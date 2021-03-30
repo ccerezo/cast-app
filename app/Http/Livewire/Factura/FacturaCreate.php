@@ -10,25 +10,30 @@ use Livewire\Component;
 class FacturaCreate extends Component
 {
     public $detalle;
-    public $seleccionados = [];
+    public $seleccionados;
+    public $total;
     protected $listeners = ['updateDetalle'];
 
     public function mount()
     {
-        //$this->detalle = Producto::where('id', '=', 1)->get();
-        $this->seleccionados = Producto::where('id', '=', 0)->get();
-        //$this->updateDetalle(20);
+        $this->detalle = Producto::where('id', '=', 0)->get();
+        $this->seleccionados = array();
+        $this->total = 0;
     }
     public function updateDetalle($id)
     {
-        //sleep(5);
-        $this->detalle = Producto::where('id', '=', $id)->get();
-        if(count($this->seleccionados) > 0)
-            array_push($this->seleccionados, $this->detalle);
-        else
-            $this->seleccionados = $this->detalle;
-        //$this->detalle = Producto::find($id);
-        //array_push($this->seleccionados, '1');
+        array_push($this->seleccionados, $id);
+        //array_push($this->seleccionados, ['id', '=', $id]);
+        $this->detalle = Producto::whereIn('id', $this->seleccionados)->get();
+        $this->valores();
+    }
+    public function valores()
+    {
+        $tmp_total = 0;
+        foreach($this->detalle as $item){
+            $tmp_total = $tmp_total + $item->precio_venta_publico;
+        }
+        $this->total = $tmp_total;
     }
     public function render()
     {

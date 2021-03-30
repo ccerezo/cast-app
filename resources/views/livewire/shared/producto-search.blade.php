@@ -7,7 +7,7 @@
             wire:keydown.tab="resetear"
             wire:keydown.arrow-up="decrementHighlight"
             wire:keydown.arrow-down="incrementHighlight"
-            wire:keydown.enter="selectProducto"
+            wire:keydown.enter.prevent="selectProducto"
     />
     <div class="absolute z-10 list-group bg-white w-full rounded-t-none shadow-lg" wire:loading>
         <div class="list-item">Buscando...</div>
@@ -19,7 +19,7 @@
 
                     @foreach ($productos as $i => $p)
                     <a
-                        wire:click.prevent="selectProducto" href="#"
+                        wire:click.prevent="selectProductoClick({{$i}})" href="#"
                         class="block hover:bg-indigo-600 flex items-center transition ease-in-out duration-150 px-3 py-1 {{ $highlightIndex === $i ? 'bg-indigo-800 text-white' : '' }}">
                             {{ $p['descripcion'] }}
                     </a>

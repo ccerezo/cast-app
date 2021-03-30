@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Factura;
 use Illuminate\Http\Request;
 
 class FacturaController extends Controller
@@ -34,7 +35,14 @@ class FacturaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'numero' => 'required',
+            'forma_pago' => 'required'
+        ]);
+        return $request->all();
+        //$factura = Factura::create($request->all());
+
+        //return redirect()->route('colors.edit', compact('color'))->with('info', 'El registro se creó con éxito.');
     }
 
     /**

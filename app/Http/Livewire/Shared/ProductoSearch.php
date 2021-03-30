@@ -50,7 +50,21 @@ class ProductoSearch extends Component
             //$this->redirect(route('show-contact', $producto['id']));
             $this->query = $producto['descripcion'];
             //array_push($this->productosSeleccionados,$producto);
-            $this->emit('updateDetalle', ['producto_id' => $producto['id']]);
+            $this->emit('updateDetalle',  $producto['id']);
+            $this->resetear();
+        }
+    }
+
+    public function selectProductoClick($i)
+    {
+        $this->highlightIndex = $i;
+        $producto = $this->productos[$this->highlightIndex] ?? null;
+        if ($producto) {
+            //$this->redirect(route('show-contact', $producto['id']));
+            $this->query = $producto['descripcion'];
+            //array_push($this->productosSeleccionados,$producto);
+            $this->emit('updateDetalle',  $producto['id']);
+            $this->resetear();
         }
     }
 
