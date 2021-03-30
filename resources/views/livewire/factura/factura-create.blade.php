@@ -20,6 +20,14 @@
 
                                 {{-- {!! Form::text('producto_id', null, ['class' => 'focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300 rounded', 'placeholder' => 'Buscar Producto']) !!} --}}
                                 @livewire('shared.producto-search')
+                                {{-- @foreach ($detalle as $p)
+                                    {{ $p->descripcion }}
+                                @endforeach --}}
+                                {{-- {{$seleccionados}} --}}
+                                {{-- @foreach ($seleccionados as $i => $p)
+                                    {{ $p->descripcion }}
+                                @endforeach --}}
+                                {{$seleccionados}}
 
                             </div>
                             <div class="col-start-9 col-span-4">

@@ -9,6 +9,7 @@ class ProductoSearch extends Component
 {
     public $query;
     public $productos;
+    public $productosSeleccionados;
     public $highlightIndex;
 
     public function mount()
@@ -20,6 +21,7 @@ class ProductoSearch extends Component
     {
         $this->query = '';
         $this->productos = [];
+        $this->productosSeleccionados = array();
         $this->highlightIndex = 0;
     }
 
@@ -45,7 +47,10 @@ class ProductoSearch extends Component
     {
         $producto = $this->productos[$this->highlightIndex] ?? null;
         if ($producto) {
-            $this->redirect(route('show-contact', $producto['id']));
+            //$this->redirect(route('show-contact', $producto['id']));
+            $this->query = $producto['descripcion'];
+            //array_push($this->productosSeleccionados,$producto);
+            $this->emit('updateDetalle', ['producto_id' => $producto['id']]);
         }
     }
 
