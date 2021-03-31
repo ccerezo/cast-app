@@ -60,7 +60,8 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
+ULAICJGARCIAH
+HNJS94oe4*
 ## INSTALACION
 laravel new cast-app --jet
 
@@ -218,5 +219,6 @@ BEGIN
 	    DELETE from inventarios WHERE id = OLD.id;
     END IF ;
 END
+
 
 

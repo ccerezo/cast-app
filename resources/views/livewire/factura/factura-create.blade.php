@@ -14,13 +14,7 @@
                 {!! Form::open(['route' => 'facturas.store']) !!}
                 <div class="shadow overflow-hidden sm:rounded-md">
                     <div class="px-4 py-2 bg-white">
-                        {{-- Campor Requeridos --}}
-                        @error('numero')
-                            <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
-                        @enderror
-                        @error('forma_pago')
-                            <span class="mt-2 text-sm text-red-500">{{$message}}</span>
-                        @enderror
+
                         <div class="grid grid-cols-12 gap-3">
 
                             <div class="col-start-1 col-span-8">
@@ -47,8 +41,9 @@
                                 </div>
 
                                 @foreach ($seleccionados as $i => $id)
-                                    @foreach($detalle as $p)
-                                        @if ($id == $p->id)
+                                    @foreach($detalle as $j => $p)
+
+                                        {{-- @if ($id == $p->id)
                                             <div class="grid grid-cols-12 gap-0 border">
                                                 <div class="col-start-1 col-span-2 text-xs py-1 pl-3 border-r">
                                                     {{ $p->codigo }}
@@ -60,16 +55,36 @@
                                                     $ {{ number_format($p->precio_venta_publico,2) }}
                                                 </div>
                                                 <div class="col-start-11 col-span-1 text-xs">
-                                                    {!! Form::number('cantidad['.$i.']', $items_cantidad, ['wire:keydown.tab' => 'valorFinal()' , 'class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
-                                                    {{-- <input type="text" name='cantida['.$i.']' value="1" class="px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300"> --}}
+                                                    {!! Form::text('cantidad['.$i.']', $items_cantidad, ['wire:keydown.tab' => 'valorFinal('.$p.')' , 'class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
                                                 </div>
                                                 <div class="col-start-12 col-span-1 text-xs text-right pr-3 py-1 border-r">
                                                     $ {{ number_format($p->precio_venta_publico,2) }}
                                                 </div>
                                             </div>
-                                        @endif
+                                        @endif --}}
 
+                                        @if ($id == $p['id'])
+                                            <div class="grid grid-cols-12 gap-0 border">
+                                                <div class="col-start-1 col-span-2 text-xs py-1 pl-3 border-r">
+                                                    {{ $p['codigo'] }}
+                                                </div>
+                                                <div class="col-start-3 col-span-7 text-xs py-1 pl-3 border-r">
+                                                    {{ $p['descripcion'] }}
+                                                </div>
+                                                <div class="col-start-10 col-span-1 text-xs text-right pr-3 py-1 border-r">
+                                                    $ {{ number_format(($p['precio_venta_publico']+0),2) }}
+                                                </div>
+                                                <div class="col-start-11 col-span-1 text-xs">
+                                                    {!! Form::text('cantidad['.$i.']', null, ['wire:model' => "cantidad.$i", 'wire:keydown.tab' => 'valorFinal('.$p['id'].', '.$i.')' , 'class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
+                                                </div>
+
+                                                <div class="col-start-12 col-span-1 text-xs text-right pr-3 py-1 border-r">
+                                                    $ {{ number_format(($p['importe']+0),2) }}
+                                                </div>
+                                            </div>
+                                        @endif
                                     @endforeach
+
                                 @endforeach
 
 
@@ -77,6 +92,13 @@
                             <div class="col-start-9 col-span-4">
                                 <div class="grid grid-cols-12 gap-0">
                                     <div class="col-start-1 col-span-12">
+                                        {{-- Campor Requeridos --}}
+                                        @error('numero')
+                                            <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
+                                        @enderror
+                                        @error('forma_pago')
+                                            <span class="mt-2 text-sm text-red-500">{{$message}}</span>
+                                        @enderror
                                         {!! Form::label('resumen', 'Datos de Factura', ['class' => 'bg-gray-100 p-2 border block text-xs text-gray-700']) !!}
                                         {!! Form::hidden('subtotal', $total) !!}
                                         {!! Form::hidden('iva', $total) !!}
