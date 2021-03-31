@@ -46,7 +46,7 @@
                                     </div>
                                 </div>
 
-                                @foreach ($seleccionados as $id)
+                                @foreach ($seleccionados as $i => $id)
                                     @foreach($detalle as $p)
                                         @if ($id == $p->id)
                                             <div class="grid grid-cols-12 gap-0 border">
@@ -60,8 +60,8 @@
                                                     $ {{ number_format($p->precio_venta_publico,2) }}
                                                 </div>
                                                 <div class="col-start-11 col-span-1 text-xs">
-                                                    {{-- {!! Form::text('cantidad', null, ['class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!} --}}
-                                                    20
+                                                    {!! Form::number('cantidad['.$i.']', $items_cantidad, ['wire:keydown.tab' => 'valorFinal()' , 'class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
+                                                    {{-- <input type="text" name='cantida['.$i.']' value="1" class="px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300"> --}}
                                                 </div>
                                                 <div class="col-start-12 col-span-1 text-xs text-right pr-3 py-1 border-r">
                                                     $ {{ number_format($p->precio_venta_publico,2) }}
@@ -78,6 +78,10 @@
                                 <div class="grid grid-cols-12 gap-0">
                                     <div class="col-start-1 col-span-12">
                                         {!! Form::label('resumen', 'Datos de Factura', ['class' => 'bg-gray-100 p-2 border block text-xs text-gray-700']) !!}
+                                        {!! Form::hidden('subtotal', $total) !!}
+                                        {!! Form::hidden('iva', $total) !!}
+                                        {!! Form::hidden('descuento', $total) !!}
+                                        {!! Form::hidden('total', $total) !!}
                                     </div>
                                     <div class="col-start-1 col-span-5 shadow">
                                         {!! Form::label('numero', 'Número:', ['class' => 'px-2 py-1 border border-gray-300 block text-xs text-gray-700']) !!}
@@ -95,7 +99,7 @@
                                     <div class="col-start-6 col-span-12 shadow">
                                         {!! Form::select('vendedor_id', $vendedors, null,
                                                         ['class' => 'block w-full py-1 px-3 border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs']) !!}
-                                        {!! Form::text('cupo', null, ['class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
+                                        {!! Form::label('cupo_disponible', '$ '.number_format(0,2), ['class' => 'text-right py-1 pr-2 border-b border-t border-r border-gray-300 block text-xs text-gray-700']) !!}
                                     </div>
                                     <div class="col-start-1 col-span-5 shadow">
                                         {!! Form::label('cliente', 'Cliente:', ['class' => 'px-2 py-1 border block text-xs text-gray-700']) !!}
@@ -114,16 +118,14 @@
                                         {!! Form::label('subtotal', 'Subtotal', ['class' => 'p-2 border-b border-t block text-xs text-gray-700']) !!}
                                         {!! Form::label('name', 'IVA', ['class' => 'p-2 border-b border-t block text-xs text-gray-700']) !!}
                                         {!! Form::label('name', 'Descuento', ['class' => 'p-2 border-b border-t block text-xs text-gray-700']) !!}
-                                        {!! Form::label('name', 'Total', ['class' => 'p-2 block border-t text-xs text-gray-700']) !!}
+                                        {!! Form::label('name', 'Total', ['class' => 'pl-2 py-1 font-bold block border-t text-lg text-gray-700']) !!}
                                     </div>
                                     <div class="mt-5 col-start-6 col-span-12 shadow border-t border-gray-200">
                                         {!! Form::label('valores', 'VALORES', ['class' => 'bg-gray-100 p-2 border block text-xs text-gray-700']) !!}
-                                        {!! Form::text('subtotal', null, ['class' => 'text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
-                                        {!! Form::text('iva', null, ['class' => 'text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
-                                        {!! Form::text('descuento', null, ['class' => 'text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
-                                        {{-- {!! Form::text('total', $total_aux, ['disabled', 'class' => 'py-1 text-right font-bold focus:ring-indigo-500 focus:border-indigo-500 block w-full text-lg border-gray-300']) !!} --}}
-                                        {!! Form::label('name', ' '.$total, ['class' => 'p-2 block border-t text-xs text-gray-700']) !!}
-                                        {!! Form::hidden('total', $total) !!}
+                                        {!! Form::label('subtotal', '$ '.number_format($total,2), ['class' => 'text-right p-2 border-b border-t border-gray-300 block text-xs text-gray-700']) !!}
+                                        {!! Form::label('iva', '$ '.number_format($total,2), ['class' => 'text-right p-2 border-b border-t border-gray-300 block text-xs text-gray-700']) !!}
+                                        {!! Form::label('descuento', '$ '.number_format($total,2), ['class' => 'text-right p-2 border-b border-t border-gray-300 block text-xs text-gray-700']) !!}
+                                        {!! Form::label('name', '$ '.number_format($total,2), ['class' => 'pr-2 py-1 text-right font-bold block w-full text-lg border-gray-300']) !!}
                                     </div>
                                 </div>
                             </div>

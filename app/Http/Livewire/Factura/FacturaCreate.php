@@ -12,6 +12,7 @@ class FacturaCreate extends Component
     public $detalle;
     public $seleccionados;
     public $total;
+    public $items_cantidad;
     protected $listeners = ['updateDetalle'];
 
     public function mount()
@@ -19,6 +20,7 @@ class FacturaCreate extends Component
         $this->detalle = Producto::where('id', '=', 0)->get();
         $this->seleccionados = array();
         $this->total = 0;
+        $this->items_cantidad = 1;
     }
     public function updateDetalle($id)
     {
@@ -34,6 +36,10 @@ class FacturaCreate extends Component
             $tmp_total = $tmp_total + $item->precio_venta_publico;
         }
         $this->total = $tmp_total;
+    }
+    public function valorFinal()
+    {
+        $this->items_cantidad = 5;
     }
     public function render()
     {
