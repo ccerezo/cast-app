@@ -43,4 +43,7 @@ class Producto extends Model
     public function inventario() {
         return $this->hasMany('App\Models\Inventario');
     }
+    public function facturaDetalle() {
+        return $this->hasMany('App\Models\FacturaDetalle');
+    }
 }

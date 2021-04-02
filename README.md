@@ -90,6 +90,7 @@ php artisan make:model Vendedor -m
 php artisan make:model MetodoPago -m
 php artisan make:model Inventario -m
 php artisan make:model Factura -m
+php artisan make:model FacturaDetalle -m
 ## Luego vuelvo a generar las migraciones
 php artisan migrate
 
@@ -115,6 +116,7 @@ php artisan make:controller VendedorController -r
 php artisan make:controller MetodoPagoController -r
 php artisan make:controller InventarioController -r
 php artisan make:controller FacturaController -r
+php artisan make:controller FacturaDetalleController -r
 
 ## laravel Collective para los formularios
 composer require laravelcollective/html

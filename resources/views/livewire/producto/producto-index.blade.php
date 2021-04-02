@@ -115,6 +115,14 @@
                                             ${{ number_format($producto->precio_venta_publico,2) }}
                                         </dd>
                                     </div>
+                                    <div class="bg-white px-2 py-0.5 sm:grid sm:grid-cols-2 sm:gap-2 sm:px-4">
+                                        <dt class="text-sm font-medium text-gray-500">
+                                            Descuento
+                                        </dt>
+                                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-1">
+                                            {{ $producto->descuento }}%
+                                        </dd>
+                                    </div>
                                     <div class="bg-gray-50 px-2 py-0.5 sm:grid sm:grid-cols-2 sm:gap-2 sm:px-4">
                                         <dt class="text-sm font-medium text-gray-500">
                                             Stock

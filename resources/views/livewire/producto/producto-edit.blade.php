@@ -60,7 +60,9 @@
                                         {{ $producto->linea->nombre }} {{ $producto->categoria->nombre }} {{ $producto->modelo->nombre }}
                                     </h3>
                                     <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                                        Talla {{ $producto->talla->numero1 }} - {{ $producto->color->nombre }} <span style="background-color: {{$producto->color->codigo}}" class="rounded-full relative top-1 inline-block w-4 h-4"></span>
+                                        Talla {{ $producto->talla->numero1 }} - {{ $producto->color->nombre }}
+                                        <span style="background-color: {{$producto->color->codigo}}" class="rounded-full relative top-1 inline-block w-4 h-4"></span>
+                                        <span> - {{$producto->descuento}}% Desct.</span>
                                     </p>
                                 </div>
                                 <div class="border-t border-gray-300">
@@ -86,7 +88,7 @@
                                             Producción
                                         </dt>
                                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-1">
-                                            <input type="text" wire:model="produccion.{{$producto->id}}" class="p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                            <input type="text" wire:model="produccion.{{$producto->id}}" class="text-right p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                         </dd>
                                     </div>
                                     <div class="bg-white px-2 py-0.5 sm:grid sm:grid-cols-2 sm:gap-2 sm:px-4">
@@ -94,7 +96,7 @@
                                             Mayoritas
                                         </dt>
                                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-1">
-                                            <input type="text" wire:model="mayorista.{{$producto->id}}" class="p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" >
+                                            <input type="text" wire:model="mayorista.{{$producto->id}}" class="text-right p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" >
                                         </dd>
                                     </div>
                                     <div class="bg-white px-2 py-0.5 sm:grid sm:grid-cols-2 sm:gap-2 sm:px-4">
@@ -102,7 +104,24 @@
                                             PVP
                                         </dt>
                                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-1">
-                                            <input type="text" wire:model="publico.{{$producto->id}}" class="p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" >
+                                            <input type="text" wire:model="publico.{{$producto->id}}" class="text-right p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" >
+                                        </dd>
+                                    </div>
+                                    <div class="bg-white px-2 py-0.5 sm:grid sm:grid-cols-2 sm:gap-2 sm:px-4">
+                                        <dt class="text-sm font-medium text-gray-500">
+                                            Descuento
+                                        </dt>
+                                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-1">
+                                            {{-- <input type="text" wire:model="descuento.{{$producto->id}}" class="text-right p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" > --}}
+                                            <select wire:model="descuento.{{$producto->id}}" class="text-right p-0.5 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                                <option value="0" {{ 'descuento'.$producto->id == 0 ? 'selected="selected"' : '' }}>0%</option>
+                                                <option value="5" {{ 'descuento'.$producto->id == 5 ? 'selected="selected"' : '' }}>5%</option>
+                                                <option value="10" {{ 'descuento'.$producto->id == 10 ? 'selected="selected"' : '' }}>10%</option>
+                                                <option value="15" {{ 'descuento'.$producto->id == 15 ? 'selected="selected"' : '' }}>15%</option>
+                                                <option value="20" {{ 'descuento'.$producto->id == 20 ? 'selected="selected"' : '' }}>20%</option>
+                                                <option value="25" {{ 'descuento'.$producto->id == 25 ? 'selected="selected"' : '' }}>25%</option>
+                                                <option value="30" {{ 'descuento'.$producto->id == 30 ? 'selected="selected"' : '' }}>30%</option>
+                                            </select>
                                         </dd>
                                     </div>
 

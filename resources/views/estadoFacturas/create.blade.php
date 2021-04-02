@@ -9,7 +9,8 @@
                         Crear Estado de Factura
                     </h3>
                     <p class="mt-1 text-sm text-gray-600">
-                        Agregue los diferentes estados que puede tomar una factura
+                        Agregue los diferentes estados que puede tomar una factura,
+                        PAGADA, PEDIENTE y ANULADA
                     </p>
                 </div>
             </div>

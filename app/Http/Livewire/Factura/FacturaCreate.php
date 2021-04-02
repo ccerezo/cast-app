@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Factura;
 
 use App\Models\Cliente;
+use App\Models\Factura;
 use App\Models\Producto;
 use App\Models\Vendedor;
 use Livewire\Component;
@@ -13,13 +14,23 @@ class FacturaCreate extends Component
     public $seleccionados;
     public $total;
     public $cantidad;
-    protected $listeners = ['updateDetalle'];
+    public $numeroFactura;
+    public $total_descuento;
+    public $subtotal;
+    public $iva;
+    public $cliente_id;
+    protected $listeners = ['updateDetalle', 'updateDetalleCliente'];
 
     public function mount()
     {
+        $ultimaFactura = Factura::latest()->first();
+        if($ultimaFactura != null)
+            $this->numeroFactura = $ultimaFactura->numero + 1;
+        else
+            $this->numeroFactura = 1;
         $this->detalle = Producto::where('id', '=', 0)->get();
         $this->seleccionados = array();
-        $this->total = 0;
+        $this->total = $this->subtotal = $this->total_descuento = $this->iva = $this->cliente_id = 0;
         $this->cantidad = array();
     }
     public function updateDetalle($id)
@@ -29,36 +40,41 @@ class FacturaCreate extends Component
         //$this->detalle = Producto::whereIn('id', $this->seleccionados)->get()->toArray();
         $productos = Producto::whereIn('id', $this->seleccionados)->get()->toArray();
         $func = function($producto,$cantidad) {
-
             $producto['cantidad'] = $cantidad;
-            $producto['importe'] = $producto['precio_venta_publico'] * $producto['cantidad'] ;
+            $producto['importe'] = $producto['precio_venta_publico'] * $producto['cantidad'];
+            $producto['valor_descuento'] = $producto['importe']*($producto['descuento']/100);
             return $producto;
         };
         array_push($this->cantidad, 1);
 
         $this->detalle = array_map($func,$productos,$this->cantidad);
 
-        $this->valores();
         for ($i = 0; $i < count($this->seleccionados); ++$i){
             $this->valorFinal($this->seleccionados[$i], $i);
         }
+        $this->valores();
 
+    }
+    public function updateDetalleCliente($id)
+    {
+        $this->cliente_id = $id;
     }
     public function valores()
     {
-        // $tmp_total = 0;
-        // foreach($this->detalle as $item){
-        //     $tmp_total = $tmp_total + $item->precio_venta_publico;
-        // }
+        $this->subtotal = array_sum(array_column(($this->detalle),'importe'));
+        $this->total_descuento = array_sum(array_column(($this->detalle),'valor_descuento'));
+        $this->total = $this->subtotal - $this->total_descuento;
 
-        $this->total = array_sum(array_column(($this->detalle),'importe')); //$tmp_total;
     }
     public function valorFinal($id,$indice)
     {
         $cantidadImporte = function($producto,$id,$indice) {
             if($id == $producto['id']) {
-                $producto['importe'] = $producto['precio_venta_publico'] * $this->cantidad[$indice];
-                $producto['cantidad'] = $this->cantidad[$indice];
+                if($this->cantidad[$indice]){
+                    $producto['importe'] = $producto['precio_venta_publico'] * $this->cantidad[$indice];
+                    $producto['valor_descuento'] = $producto['importe'] * ($producto['descuento']/100);
+                    $producto['cantidad'] = $this->cantidad[$indice];
+                }
             }
             return $producto;
         };

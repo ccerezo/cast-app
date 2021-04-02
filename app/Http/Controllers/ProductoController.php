@@ -80,7 +80,8 @@ class ProductoController extends Controller
                             'precio_produccion' => $productos['precio_produccion'],
                             'precio_mayorista' => $productos['precio_mayorista'],
                             'precio_venta_publico' => $productos['precio_venta_publico'],
-                            'descuento' => 0,
+                            'descuento' => $productos['descuento'],
+                            'iva' => $productos['iva'],
                             'stock' => $valor_color[0],
                             'talla_id' => $key_talla,
                             'color_id' => $key_color

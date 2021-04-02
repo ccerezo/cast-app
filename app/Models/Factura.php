@@ -20,4 +20,7 @@ class Factura extends Model
     public function estadoFactura() {
         return $this->belongsTo('App\Models\EstadoFactura');
     }
+    public function facturaDetalle() {
+        return $this->hasMany('App\Models\FacturaDetalle');
+    }
 }

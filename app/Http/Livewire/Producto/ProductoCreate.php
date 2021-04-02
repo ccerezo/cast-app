@@ -24,6 +24,7 @@ class ProductoCreate extends Component
         $modelos = Modelo::pluck('nombre','id');
         $colores = Color::all();
         $lineas_tallaje = Linea::pluck('id')->first();
+        $descuentos = ['0'=> '0%','5'=> '5%','10' =>'10%','15' =>'15%','20' =>'20%','25' =>'25%','30' =>'30%'];
         if(isset($this->lineaSelected) && $this->lineaSelected > 0){
             $tallajes = Tallaje::where('linea_id', '=', $this->lineaSelected)->pluck('talla_id');
             $tallas = Talla::whereIn('id', $tallajes)->get();
@@ -32,6 +33,6 @@ class ProductoCreate extends Component
             $tallas = Talla::whereIn('id', $tallajes)->get();
         }
 
-        return view('livewire.producto.producto-create', compact('lineas','categorias','tallas','bodegas','marcas','modelos','colores'));
+        return view('livewire.producto.producto-create', compact('lineas','categorias','tallas','bodegas','marcas','modelos','colores','descuentos'));
     }
 }

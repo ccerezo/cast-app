@@ -64,24 +64,33 @@
                             </div>
                             <div class="col-span-4 sm:col-span-4">
                                 {!! Form::label('name', 'Precio Producción', ['class' => 'block text-sm font-medium text-gray-700']) !!}
-                                {!! Form::text('precio_produccion', null, ['class' => 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
+                                {!! Form::number('precio_produccion', null, ['class' => 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
                                 @error('precio_produccion')
                                     <span class="mt-2 text-sm text-red-500">{{$message}}</span>
                                 @enderror
                             </div>
                             <div class="col-span-4 sm:col-span-4">
                                 {!! Form::label('name', 'Precio Mayorista', ['class' => 'block text-sm font-medium text-gray-700']) !!}
-                                {!! Form::text('precio_mayorista', null, ['class' => 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
+                                {!! Form::number('precio_mayorista', null, ['class' => 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
                                 @error('precio_mayorista')
                                     <span class="mt-2 text-sm text-red-500">{{$message}}</span>
                                 @enderror
                             </div>
                             <div class="col-span-4 sm:col-span-4">
                                 {!! Form::label('name', 'Precio Venta Público', ['class' => 'block text-sm font-medium text-gray-700']) !!}
-                                {!! Form::text('precio_venta_publico', null, ['class' => 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
+                                {!! Form::number('precio_venta_publico', null, ['class' => 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
                                 @error('precio_venta_publico')
                                     <span class="mt-2 text-sm text-red-500">{{$message}}</span>
                                 @enderror
+                            </div>
+                            <div class="col-span-4 sm:col-span-4">
+                                {!! Form::label('descuento', 'Descuento', ['class' => 'block text-sm font-medium text-gray-700']) !!}
+                                {!! Form::select('descuento', $descuentos, null,
+                                                ['class' => 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm']) !!}
+                            </div>
+                            <div class="col-span-8 pt-7 sm:col-span-8">
+                                {!! Form::radio('iva', 'si', null, ['class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} GRABA IVA
+                                {!! Form::radio('iva', 'no', true,[ 'class' => 'ml-4 py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} NO GRABA IVA
                             </div>
                             <div class="col-span-12 sm:col-span-12">
                                 {!! Form::label('tallaje', 'Tallaje: Color/Stock', ['class' => 'block text-sm font-medium text-gray-700']) !!}

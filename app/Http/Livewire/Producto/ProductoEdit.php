@@ -25,6 +25,7 @@ class ProductoEdit extends Component
     public $produccion;
     public $mayorista;
     public $publico;
+    public $descuento;
     public $stock;
     public $producto;
 
@@ -73,7 +74,7 @@ class ProductoEdit extends Component
             $productos = Producto::where($this->condiciones)
                             ->paginate(12);
         } else {
-            $productos = Producto::where('id', '=', '0')
+            $productos = Producto::where('activo', '=', 'si')
                             ->paginate(12);
         }
 
@@ -93,6 +94,7 @@ class ProductoEdit extends Component
             $this->produccion[$producto->id] = $producto->precio_produccion;
             $this->mayorista[$producto->id] = $producto->precio_mayorista;
             $this->publico[$producto->id] = $producto->precio_venta_publico;
+            $this->descuento[$producto->id] = $producto->descuento;
             $this->stock[$producto->id] = '';
         }
 
@@ -109,6 +111,7 @@ class ProductoEdit extends Component
             'precio_produccion' => $this->produccion[$id],
             'precio_mayorista' => $this->mayorista[$id],
             'precio_venta_publico' => $this->publico[$id],
+            'descuento' => $this->descuento[$id],
             'stock' => ($this->stock[$id] + $record->stock)
         ]);
 
