@@ -91,6 +91,7 @@ php artisan make:model MetodoPago -m
 php artisan make:model Inventario -m
 php artisan make:model Factura -m
 php artisan make:model FacturaDetalle -m
+php artisan make:model pagoFactura -m
 ## Luego vuelvo a generar las migraciones
 php artisan migrate
 
@@ -117,6 +118,7 @@ php artisan make:controller MetodoPagoController -r
 php artisan make:controller InventarioController -r
 php artisan make:controller FacturaController -r
 php artisan make:controller FacturaDetalleController -r
+php artisan make:controller PDFController
 
 ## laravel Collective para los formularios
 composer require laravelcollective/html
@@ -145,7 +147,8 @@ php artisan make:livewire shared\ProductoSearch
 
 ## para instalar codigo de barras
 composer require milon/barcode
-
+composer require barryvdh/laravel-dompdf
+composer update
 ## para atributos campos a la tabla
 php artisan make:migration add_codigo_to_categorias_table
 php artisan make:migration add_codigo_barras_to_productos_table
@@ -183,8 +186,15 @@ echo DNS1D::getBarcodeHTML('4445645656', 'CODE11');
 echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA');
 echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA2T');
 
+DELETE FROM factura_detalles;
+DELETE FROM facturas;
+DELETE FROM productos;
+DELETE FROM inventarios;
 
 ALTER TABLE productos AUTO_INCREMENT = 1;
+ALTER TABLE inventarios AUTO_INCREMENT = 1;
+ALTER TABLE facturas AUTO_INCREMENT = 1;
+ALTER TABLE factura_detalles AUTO_INCREMENT = 1;
 
 php artisan make:seeder ClienteSeeder
 php artisan make:factory ClienteFactory
@@ -222,5 +232,16 @@ BEGIN
     END IF ;
 END
 
+restarCupoDisponible
+facturas
+after
+insert
+BEGIN
+	IF NEW.estado_factura_id = 1 THEN
+    	UPDATE vendedors 
+    	SET cupo_disponible = (cupo_disponible - NEW.total)
+    	WHERE id = NEW.vendedor_id;
+	ENd IF;
+END
 
 

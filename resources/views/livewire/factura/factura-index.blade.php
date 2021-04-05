@@ -24,56 +24,48 @@
                     <table class="min-w-full">
                         <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                                 Número
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                                 Fecha
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                                 Cliente
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                                 Total
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                                 F. Pago
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                                 Estado
                             </th>
-                            <th scope="col" class="relative px-6 py-3">
+                            <th scope="col" class="relative px-3 py-3">
                                 <span class="sr-only">Edit</span>
                             </th>
-                            <th scope="col" class="relative px-6 py-3">
-                                <span class="sr-only">Eliminar</span>
+                            <th scope="col" class="relative px-3 py-3">
+                                <span class="sr-only">Anular</span>
                             </th>
                         </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                         @foreach ($facturas as $factura)
                             <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">
-                                            {{$factura->numero}}
-                                        </div>
-                                    </div>
+                            <td class="px-3 py-3 whitespace-nowrap">
+                                <div class="text-center text-sm font-medium text-gray-900">
+                                    {{$factura->numero}}
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">
-                                            {{$factura->fecha}}
-                                        </div>
-                                    </div>
+                            <td class="px-3 py-3 whitespace-nowrap">
+                                <div class="text-center text-sm font-medium text-gray-900">
+                                    {{ date('Y-m-d H:i', strtotime($factura->fecha)) }}
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="px-3 py-3 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <div class="text-sm font-medium text-gray-900">
                                             {{$factura->cliente->nombre}}
                                             <p class="text-xs">{{$factura->cliente->identificacion}}</p>
@@ -81,43 +73,56 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">
-                                            {{$factura->total}}
-                                        </div>
-                                    </div>
+                            <td class="px-3 py-3 whitespace-nowrap">
+                                <div class="text-right text-sm font-medium text-gray-900">
+                                    $ {{$factura->total}}
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="px-3 py-3 whitespace-nowrap">
                                 @if ($factura->forma_pago == 'CONTADO')
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        CONTADO
-                                    </span>
+                                    <div class="text-center">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full text-green-800">
+                                            CONTADO
+                                        </span>
+                                    </div>
                                 @else
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                        CRÉDITO
-                                    </span>
+                                    <div class="text-center">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full text-yellow-800">
+                                            CRÉDITO
+                                        </span>
+                                    </div>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">
+                            <td class="px-3 py-3 whitespace-nowrap">
+                                <div class="text-center">
+                                    @if ($factura->estadoFactura->codigo == '002')
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-200 text-green-800">
                                             {{$factura->estadoFactura->nombre}}
-                                        </div>
-                                    </div>
+                                        </span>
+                                    @else
+                                        @if ($factura->estadoFactura->codigo == '001')
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                {{$factura->estadoFactura->nombre}}
+                                            </span>
+                                        @else
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-200 text-red-800">
+                                                {{$factura->estadoFactura->nombre}}
+                                            </span>
+                                        @endif
+                                    @endif
+
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="{{route('facturas.edit', $factura)}}" class="mr-3 text-indigo-600 hover:text-indigo-800">Editar</a>
+                            <td class="px-3 py-3 whitespace-nowrap text-right text-sm font-medium">
+                                <a href="{{route('facturas.show', $factura)}}" class="mr-3 text-indigo-600 hover:text-indigo-800">Ver</a>
+                                <a href="{{route('facturas.edit', $factura)}}" class="mr-3 text-indigo-600 hover:text-indigo-800">edit</a>
+                                <a href="{{route('pdf.generate', $factura)}}" target="_blank" class="mr-3 text-indigo-600 hover:text-indigo-800">PDF</a>
                             </td>
                             <td>
                                 <form action="{{route('facturas.destroy', $factura)}}" method="POST">
                                     @csrf
                                     @method('delete')
-                                    <button type="submit" class="text-red-600 hover:text-red-800">Eliminar</button>
+                                    <button type="submit" class="text-red-600 hover:text-red-800">Anular</button>
                                 </form>
                             </td>
                             </tr>

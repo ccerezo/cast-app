@@ -23,4 +23,7 @@ class Factura extends Model
     public function facturaDetalle() {
         return $this->hasMany('App\Models\FacturaDetalle');
     }
+    public function pagoFacturas() {
+        return $this->hasMany('App\Models\PagoFactura');
+    }
 }

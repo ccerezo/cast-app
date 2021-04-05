@@ -40,7 +40,7 @@ class MarcaController extends Controller
         ]);
         $marca = Marca::create($request->all());
 
-        return redirect()->route('marcas.edit', compact('marca'))->with('info', 'El registro se creó con éxito.');;
+        return redirect()->route('marcas.edit', compact('marca'))->with('info', 'El registro se creó con éxito.');
     }
 
     /**

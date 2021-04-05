@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MetodoPago;
 use Illuminate\Http\Request;
 
 class MetodoPagoController extends Controller
@@ -13,7 +14,7 @@ class MetodoPagoController extends Controller
      */
     public function index()
     {
-        //
+        return view('metodoPagos.index');
     }
 
     /**
@@ -23,7 +24,7 @@ class MetodoPagoController extends Controller
      */
     public function create()
     {
-        //
+        return view('metodoPagos.create');
     }
 
     /**
@@ -34,7 +35,12 @@ class MetodoPagoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => 'required'
+        ]);
+        $metodoPago = MetodoPago::create($request->all());
+
+        return redirect()->route('metodoPagos.edit', compact('metodoPago'))->with('info', 'El registro se creó con éxito.');;
     }
 
     /**
@@ -54,9 +60,9 @@ class MetodoPagoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(MetodoPago $metodoPago)
     {
-        //
+        return view('metodoPagos.edit', compact('metodoPago'));
     }
 
     /**
@@ -66,9 +72,15 @@ class MetodoPagoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, MetodoPago $metodoPago)
     {
-        //
+        $request->validate([
+            'nombre' => 'required'
+        ]);
+
+        $metodoPago->update($request->all());
+
+        return redirect()->route('metodoPagos.edit', $metodoPago)->with('info', 'Los datos se actualizaron con éxito');
     }
 
     /**
@@ -77,8 +89,10 @@ class MetodoPagoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(MetodoPago $metodoPago)
     {
-        //
+        $metodoPago->delete();
+
+        return redirect()->route('metodoPagos.index')->with('info', 'El registro se Eliminó con éxito');
     }
 }

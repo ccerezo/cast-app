@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\EstadoFactura;
 use App\Models\Factura;
 use App\Models\FacturaDetalle;
+use App\Models\pagoFactura;
 use App\Models\Producto;
 use App\Models\Vendedor;
 use Illuminate\Http\Request;
@@ -67,7 +68,7 @@ class FacturaController extends Controller
             'estado_factura_id' => $estadoFactura->id
         ]);
         foreach($factura['cantidad'] as $key => $valor) {
-            $producto = Producto::where('id', '=', $venta->id)->first();
+            $producto = Producto::where('id', '=', $key)->first();
             $venta_detalle = FacturaDetalle::create(
                 [
                 '_token' => $factura['_token'],
@@ -81,6 +82,16 @@ class FacturaController extends Controller
                 'producto_id' => $key
             ]);
         }
+        $pago = pagoFactura::create(
+            [
+            '_token' => $factura['_token'],
+            'fecha' => $factura['fecha'],
+            'monto' => $factura['monto'],
+            'descripcion' => $factura['descripcion'],
+            'factura_id' => $venta->id,
+            'metodo_pago_id' => $factura['metodo_pago_id'],
+        ]);
+
         $factura = $venta;
         return redirect()->route('facturas.edit', compact('factura'))->with('info', 'El registro se creó con éxito.');
     }
@@ -91,9 +102,12 @@ class FacturaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Factura $factura)
     {
-        //
+        $clientes = Cliente::pluck('nombre','id');
+        $vendedors = Vendedor::pluck('nombre','id');
+        $productos = FacturaDetalle::where('factura_id', '=', $factura->id)->get();
+        return view('facturas.show', compact('factura','vendedors','clientes','productos'));
     }
 
     /**
@@ -106,8 +120,8 @@ class FacturaController extends Controller
     {
         $clientes = Cliente::pluck('nombre','id');
         $vendedors = Vendedor::pluck('nombre','id');
-        $formaPago = ['contado' => 'CONTADO', 'credito' => 'CRÉDITO'];
-        return view('facturas.edit', compact('factura','vendedors','clientes'));
+        $productos = FacturaDetalle::where('factura_id', '=', $factura->id)->get();
+        return view('facturas.edit', compact('factura','vendedors','clientes','productos'));
     }
 
     /**
@@ -128,8 +142,14 @@ class FacturaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Factura $factura)
     {
-        //
+        //$factura->delete();
+        // ESTADO FACTURA ID ES ANULADO
+        $factura->update([
+            'estado_factura_id' => 3
+        ]);
+
+        return redirect()->route('facturas.index')->with('info', 'La Factura fue ANULADA con éxito!');
     }
 }
