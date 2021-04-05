@@ -182,8 +182,7 @@
                                             {!! Form::radio('forma_pago', 'CONTADO', null, ['required', 'class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Contado
                                             {!! Form::radio('forma_pago', 'CREDITO', null, ['required', 'class' => 'ml-4 py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Crédito
                                         </div>
-                                        {!! Form::select('metodo_pago_id', $metodos, null,
-                                                        ['wire:model' => 'vendedor_id', 'class' => 'block w-full py-1 px-3 border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs']) !!}
+                                        {!! Form::select('metodo_pago_id', $metodos, null, ['class' => 'block w-full py-1 px-3 border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs']) !!}
                                         {!! Form::text('monto', null, ['class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
                                         {!! Form::text('descripcion', null, ['class' => 'px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
                                     </div>

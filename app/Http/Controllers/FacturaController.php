@@ -48,9 +48,9 @@ class FacturaController extends Controller
         //return $request->all();
         $factura = $request->all();
         if(strcmp($factura['forma_pago'], 'CONTADO') === 0){
-            $estadoFactura = EstadoFactura::where('codigo', '=', '002')->first(); //002 es PAGADA
+            $estadoFactura = EstadoFactura::where('codigo', '=', '01')->first(); //01 ES PAGADA
         } else {
-            $estadoFactura = EstadoFactura::where('codigo', '=', '001')->first(); //001 es PENDIENTE
+            $estadoFactura = EstadoFactura::where('codigo', '=', '03')->first(); //03 NO Pagada
         }
 
         $venta = Factura::create(
@@ -145,9 +145,10 @@ class FacturaController extends Controller
     public function destroy(Factura $factura)
     {
         //$factura->delete();
+        $estadoFactura = EstadoFactura::where('codigo', '=', '02')->first(); //02 ES ANULADA
         // ESTADO FACTURA ID ES ANULADO
         $factura->update([
-            'estado_factura_id' => 3
+            'estado_factura_id' => $estadoFactura->id
         ]);
 
         return redirect()->route('facturas.index')->with('info', 'La Factura fue ANULADA con éxito!');

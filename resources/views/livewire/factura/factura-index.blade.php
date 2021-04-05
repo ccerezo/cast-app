@@ -95,12 +95,12 @@
                             </td>
                             <td class="px-3 py-3 whitespace-nowrap">
                                 <div class="text-center">
-                                    @if ($factura->estadoFactura->codigo == '002')
+                                    @if ($factura->estadoFactura->codigo == '01')
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-200 text-green-800">
                                             {{$factura->estadoFactura->nombre}}
                                         </span>
                                     @else
-                                        @if ($factura->estadoFactura->codigo == '001')
+                                        @if ($factura->estadoFactura->codigo == '03' || $factura->estadoFactura->codigo == '04')
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
                                                 {{$factura->estadoFactura->nombre}}
                                             </span>

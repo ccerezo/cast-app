@@ -212,7 +212,7 @@ BEGIN
     END IF ;
 END
 
-actualizarInventario
+actualizarEntradasInventario
 productos
 after
 update
@@ -221,6 +221,19 @@ BEGIN
     SET entradas = (entradas + (NEW.stock-OLD.stock)), stock = (stock + (NEW.stock-OLD.stock)), ultima_entrada = NEW.updated_at
     WHERE id = NEW.id;
 END
+
+actualizarSalidasInventario
+factura_detalles
+after
+insert
+BEGIN
+	IF NEW.id > 0 THEN
+    UPDATE inventarios 
+    SET salidas = (salidas + (NEW.cantidad)), stock = (stock - (NEW.cantidad)), ultima_salida = NEW.created_at
+    WHERE producto_id = NEW.producto_id;
+    END IF;
+END
+
 
 eliminarInventario
 productos
@@ -237,11 +250,22 @@ facturas
 after
 insert
 BEGIN
-	IF NEW.estado_factura_id = 1 THEN
-    	UPDATE vendedors 
-    	SET cupo_disponible = (cupo_disponible - NEW.total)
-    	WHERE id = NEW.vendedor_id;
-	ENd IF;
+    IF NEW.estado_factura_id = 3 || NEW.estado_factura_id = 4 THEN
+        UPDATE vendedors 
+        SET cupo_disponible = (cupo_disponible - NEW.total)
+        WHERE id = NEW.vendedor_id;
+    END IF ;
 END
 
+anularFactura
+facturas
+after
+insert
+BEGIN
+    IF NEW.estado_factura_id = 3 || NEW.estado_factura_id = 4 THEN
+        UPDATE vendedors 
+        SET cupo_disponible = (cupo_disponible - NEW.total)
+        WHERE id = NEW.vendedor_id;
+    END IF ;
+END
 
