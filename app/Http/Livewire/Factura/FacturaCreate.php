@@ -38,7 +38,7 @@ class FacturaCreate extends Component
             $this->numeroFactura = 1;
         $this->detalle = Producto::where('id', '=', 0)->get();
         $this->seleccionados = array();
-        $this->total = $this->subtotal = $this->total_descuento = $this->iva = $this->cliente_id = 0;
+        $this->total = $this->subtotal = $this->total_descuento = $this->iva = 0;
         $this->cantidad = array();
     }
 
@@ -120,7 +120,7 @@ class FacturaCreate extends Component
     {
         $clientes = Cliente::pluck('nombre','id');
         $vendedors = Vendedor::pluck('nombre','id');
-        $metodos = MetodoPago::pluck('nombre','id');
+        $metodos = MetodoPago::where('activo', '=', 'si')->get();
         $formaPago = ['contado' => 'CONTADO', 'credito' => 'CRÉDITO'];
         return view('livewire.factura.factura-create', compact('clientes','vendedors','metodos','formaPago'));
     }

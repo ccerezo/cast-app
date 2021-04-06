@@ -1,6 +1,14 @@
 <div>
     <div class="flex justify-between border-b border-gray-300">
-        <p class="inline-flex mt-4 pl-5 text-lg text-gray-700">Factura</p>
+        <p class="inline-flex mt-4 pl-5 text-lg text-gray-700">Factura {!! Form::text('numero', null, ['wire:model' => "numeroFactura", 'class' => 'border-0 mb-1 px-2 text-right focus:ring-indigo-500 focus:border-indigo-500 text-xs border-gray-300']) !!}</p>
+        <div>
+            {!! Form::label('l_fecha', 'Fecha:', ['class' => 'mt-4 text-xs text-gray-700']) !!}
+            {!! Form::datetime('fecha', \Carbon\Carbon::now()->format('Y-m-d H:i'), ['class' => 'mt-4 px-2 text-right focus:ring-indigo-500 focus:border-indigo-500 text-xs border-0']) !!}
+            @error('fecha')
+                <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
+            @enderror
+        </div>
+
     </div>
     <div class="mt-10 sm:mt-0">
         <div class="md:grid md:grid-cols-6 md:gap-3">
@@ -15,204 +23,202 @@
                 <div class="shadow overflow-hidden sm:rounded-md">
                     <div class="px-4 py-2 bg-white">
 
-                        <div class="grid grid-cols-12 gap-3">
+                        <div class="px-2 grid grid-cols-12 gap-6 border-gray-300 rounded">
+                            <div class="col-start-1 col-span-2">
+                                <div class="grid grid-cols-1 gap-0">
 
-                            <div class="col-start-1 col-span-8">
+                                    {!! Form::label('l_numero', 'Número:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
+                                    {!! Form::text('numero', null, ['wire:model' => "numeroFactura", 'class' => 'mb-1 px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 text-xs border-gray-300']) !!}
+                                    @error('numero')
+                                        <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
+                                    @enderror
 
-                                {{-- {!! Form::text('producto_id', null, ['class' => 'focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300 rounded', 'placeholder' => 'Buscar Producto']) !!} --}}
 
-                                @livewire('shared.producto-search')
-                                <div class="grid grid-cols-12 gap-0">
-                                    {{-- <div class="col-start-1 col-span-1">
-                                        {!! Form::label('codigo', 'Código', ['class' => 'bg-gray-100 px-2 py-1  border-b border-t block text-xs text-gray-700']) !!}
-                                    </div> --}}
-                                    <div class="col-start-1 col-span-7">
-                                        {!! Form::label('descripcion', 'Descripción', ['class' => 'bg-gray-100 px-2 py-1 border-b border-t block text-xs text-gray-700']) !!}
-                                    </div>
-                                    <div class="col-start-8 col-span-1">
-                                        {!! Form::label('precio', 'Precio', ['class' => 'bg-gray-100 px-2 py-1 border-b border-t block text-xs text-gray-700']) !!}
-                                    </div>
-                                    <div class="col-start-9 col-span-1">
-                                        {!! Form::label('cantidad', 'Cantidad', ['class' => 'bg-gray-100 px-2 py-1 border-b border-t block text-xs text-gray-700']) !!}
-                                    </div>
-                                    <div class="col-start-10 col-span-1">
-                                        {!! Form::label('descuento', 'Descuento', ['class' => 'bg-gray-100 px-2 py-1 border-b border-t block text-xs text-gray-700']) !!}
-                                    </div>
-                                    <div class="col-start-11 col-span-2">
-                                        <div class="grid grid-cols-12 gap-0">
-                                            <div class="col-start-1 col-span-10 text-center">
-                                                {!! Form::label('importe', 'Importe', ['class' => 'bg-gray-100 px-2 py-1 border-b border-t block text-xs text-gray-700']) !!}
-                                            </div>
-                                            <div class="col-start-11 col-span-2">
-                                                {!! Form::label('-', '', ['class' => 'bg-gray-100 px-2 py-1  border-b border-t block text-xs text-gray-100']) !!}
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </div>
-
-                                @foreach ($seleccionados as $i => $id)
-                                    @foreach($detalle as $j => $p)
-
-                                        {{-- @if ($id == $p->id)
-                                            <div class="grid grid-cols-12 gap-0 border">
-                                                <div class="col-start-1 col-span-2 text-xs py-1 pl-3 border-r">
-                                                    {{ $p->codigo }}
-                                                </div>
-                                                <div class="col-start-3 col-span-7 text-xs py-1 pl-3 border-r">
-                                                    {{ $p->descripcion }}
-                                                </div>
-                                                <div class="col-start-10 col-span-1 text-xs text-right pr-3 py-1 border-r">
-                                                    $ {{ number_format($p->precio_venta_publico,2) }}
-                                                </div>
-                                                <div class="col-start-11 col-span-1 text-xs">
-                                                    {!! Form::text('cantidad['.$i.']', $items_cantidad, ['wire:keydown.tab' => 'valorFinal('.$p.')' , 'class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
-                                                </div>
-                                                <div class="col-start-12 col-span-1 text-xs text-right pr-3 py-1 border-r">
-                                                    $ {{ number_format($p->precio_venta_publico,2) }}
-                                                </div>
-                                            </div>
-                                        @endif --}}
-
-                                        @if ($id == $p['id'])
-                                            <div class="grid grid-cols-12 gap-0">
-                                                {{-- <div class="col-start-1 col-span-1 text-xs py-0.5 pl-3 border-r">
-                                                    <svg wire:click="eliminarProducto({{$p['id']}})" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 60 24" stroke="currentColor" class="cursor-pointer text-red-700">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                    </svg>
-                                                </div> --}}
-                                                <div class="col-start-1 col-span-7 text-xs py-1 pl-3">
-                                                    {{ $p['descripcion'] }} {{ ($p['descuento']+0) > 0 ? ' - Desct. '.$p['descuento'].'%':'' }}
-                                                </div>
-                                                <div class="col-start-8 col-span-1 text-xs text-right pr-3 py-1">
-                                                    $ {{ number_format(($p['precio_venta_publico']+0),2) }}
-                                                </div>
-                                                <div class="col-start-9 col-span-1 text-xs">
-                                                    {!! Form::number('cantidad['.$p['id'].']', null, ['wire:model' => "cantidad.$i",
-                                                                                                        'wire:keydown.tab' => 'valorFinal('.$p['id'].', '.$i.')' ,
-                                                                                                        'wire:keydown.enter.prevent' => 'valorFinal('.$p['id'].', '.$i.')' ,
-                                                                                                        'wire:change' => 'valorFinal('.$p['id'].', '.$i.')' ,
-                                                                                                        'min' => '1',
-                                                                                                        'max' => ($p['stock']+0),
-                                                                                                        'class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
-                                                </div>
-                                                <div class="col-start-10 col-span-1 text-xs text-right pr-3 py-1">
-                                                    $ {{ number_format(($p['valor_descuento']+0),2) }}
-                                                </div>
-                                                <div class="col-start-11 col-span-2 text-xs text-right">
-                                                    <div class="grid grid-cols-12 gap-0">
-                                                        <div class="col-start-1 col-span-9 pr-3 py-1">
-                                                            $ {{ number_format(($p['importe']+0),2) }}
-                                                        </div>
-                                                        <div class="col-start-10 col-span-3 pl-2">
-                                                            <svg wire:click="eliminarProducto({{$p['id']}})" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 24" stroke="currentColor" class="cursor-pointer text-red-700">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                            </svg>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                                <span class="mt-2 text-sm text-red-500 ">{{$mensaje_repetido}}</span>
                             </div>
-                            <div class="col-start-9 col-span-4">
-                                <div class="grid grid-cols-12 gap-0">
-                                    <div class="col-start-1 col-span-12">
-                                        {{-- Campor Requeridos --}}
-                                        @error('numero')
+
+                            <div class="col-start-3 col-span-3">
+                                <div class="grid grid-cols-1 gap-0">
+                                    {!! Form::label('l_vendedor', 'Vendedor:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
+                                    {!! Form::select('vendedor_id', $vendedors, null,
+                                                    ['wire:model' => 'vendedor_id', 'wire:change' => 'consultarVendedor()',
+                                                        'class' => 'mb-1 w-full block py-1 px-3 border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs']) !!}
+                                    @error('vendedor_id')
+                                        <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
+                                    @enderror
+
+                                    {!! Form::label('l_cupo', 'Cupo Disponible:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
+                                    {!! Form::label('cupo_disponible', '$ '.number_format($vendedor->cupo_disponible,2), ['class' => 'w-full block text-right py-1 pr-2 border border-gray-300 block text-xs text-gray-700']) !!}
+
+                                </div>
+                            </div>
+
+                            <div class="col-start-6 col-span-3">
+                                <div class="grid grid-cols-1 gap-0">
+                                    {!! Form::label('l_cliente', 'Cliente:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
+                                    <div class="mb-1">
+                                        @livewire('shared.cliente-search')
+                                        @error('cliente_id')
                                             <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
                                         @enderror
-                                        @error('forma_pago')
-                                            <span class="mt-2 text-sm text-red-500">{{$message}}</span>
-                                        @enderror
-                                        {!! Form::label('resumen', 'Datos de Factura', ['class' => 'bg-gray-100 p-2 border block text-xs text-gray-700']) !!}
-                                        {!! Form::hidden('cliente_id', $cliente_id) !!}
-                                        {!! Form::hidden('subtotal', $subtotal) !!}
-                                        {!! Form::hidden('iva', $iva) !!}
-                                        {!! Form::hidden('descuento', $total_descuento) !!}
-                                        {!! Form::hidden('total', $total) !!}
-                                    </div>
-                                    <div class="col-start-1 col-span-5 shadow">
-                                        {!! Form::label('numero', 'Número:', ['class' => 'px-2 py-1 border border-gray-300 block text-xs text-gray-700']) !!}
-                                        {!! Form::label('fecha', 'Fecha:', ['class' => 'px-2 py-1 border border-gray-300 block text-xs text-gray-700']) !!}
-                                    </div>
-                                    <div class="col-start-6 col-span-12 shadow">
-                                        {!! Form::text('numero', null, ['wire:model' => "numeroFactura", 'class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
-                                        {!! Form::datetime('fecha', \Carbon\Carbon::now()->format('Y-m-d H:i'), ['class' => 'px-2 pt-0.5 pb-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-r border-gray-300']) !!}
                                     </div>
 
-                                    <div class="col-start-1 col-span-5 shadow">
-                                        {!! Form::label('vendedor', 'Vendedor:', ['class' => 'px-2 py-1 border block text-xs text-gray-700']) !!}
-                                        {!! Form::label('cupo', 'Cupo Disponible:', ['class' => 'px-2 py-1 border block text-xs text-gray-700']) !!}
-                                    </div>
-                                    <div class="col-start-6 col-span-12 shadow">
-                                        {!! Form::select('vendedor_id', $vendedors, null,
-                                                        ['wire:model' => 'vendedor_id', 'wire:change' => 'consultarVendedor()',
-                                                            'class' => 'block w-full py-1 px-3 border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs']) !!}
-                                        {!! Form::label('cupo_disponible', '$ '.number_format($vendedor->cupo_disponible,2), ['class' => 'text-right py-1 pr-2 border-b border-t border-r border-gray-300 block text-xs text-gray-700']) !!}
-                                    </div>
-                                    <div class="col-start-1 col-span-5 shadow">
-                                        {!! Form::label('cliente', 'Cliente:', ['class' => 'px-2 py-1 border block text-xs text-gray-700']) !!}
-                                        {{-- {!! Form::label('pago', 'Forma de Pago:', ['class' => 'px-2 py-1 border block text-xs text-gray-700']) !!} --}}
-                                    </div>
-                                    <div class="col-start-6 col-span-12 shadow text-xs">
-                                        {{-- {!! Form::select('cliente_id', $clientes, null,
-                                                        ['class' => 'block w-full px-2 py-1 border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs']) !!} --}}
-                                        @livewire('shared.cliente-search')
-                                        {{-- <div class="px-1 py-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-r border-gray-300">
-                                            {!! Form::radio('forma_pago', 'CONTADO', null, ['required', 'class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Contado
-                                            {!! Form::radio('forma_pago', 'CREDITO', null, ['required', 'class' => 'ml-4 py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Crédito
-                                        </div> --}}
-                                    </div>
-
-
-                                    <div class="col-start-1 col-span-12 mt-5">
-                                        {!! Form::label('resumen', 'Registrar Pago', ['class' => 'bg-gray-100 p-2 border block text-xs text-gray-700']) !!}
-
-                                    </div>
-                                    <div class="col-start-1 col-span-5 shadow border-t border-b border-l border-gray-200">
-                                        {!! Form::label('pago', 'Forma de Pago:', ['class' => 'px-2 py-1 border block text-xs text-gray-700']) !!}
-                                        {!! Form::label('pago', 'Método de Pago:', ['class' => 'px-2 py-1 border block text-xs text-gray-700']) !!}
-                                        {!! Form::label('name', 'Monto', ['class' => 'px-2 py-1 border block text-xs text-gray-700']) !!}
-                                        {!! Form::label('name', 'Descripción', ['class' => 'px-2 py-1 block text-xs text-gray-700']) !!}
-                                    </div>
-                                    <div class="col-start-6 col-span-12 shadow border-t border-gray-200">
-                                        <div class="px-1 py-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-r border-gray-300">
-                                            {!! Form::radio('forma_pago', 'CONTADO', null, ['required', 'class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Contado
-                                            {!! Form::radio('forma_pago', 'CREDITO', null, ['required', 'class' => 'ml-4 py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Crédito
-                                        </div>
-                                        {!! Form::select('metodo_pago_id', $metodos, null, ['class' => 'block w-full py-1 px-3 border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs']) !!}
-                                        {!! Form::text('monto', null, ['class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
-                                        {!! Form::text('descripcion', null, ['class' => 'px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
-                                    </div>
-
-
-
-                                    <div class="mt-5 col-start-1 col-span-5 shadow border-t border-b border-l border-gray-200">
-                                        {!! Form::label('resumen', 'Resumen', ['class' => 'bg-gray-100 p-2 border-b border-t block text-xs text-gray-700']) !!}
-                                        {!! Form::label('subtotal', 'Subtotal', ['class' => 'p-2 border-b border-t block text-xs text-gray-700']) !!}
-                                        {!! Form::label('name', 'IVA', ['class' => 'p-2 border-b border-t block text-xs text-gray-700']) !!}
-                                        {!! Form::label('name', 'Descuento', ['class' => 'p-2 border-b border-t block text-xs text-gray-700']) !!}
-                                        {!! Form::label('name', 'Total', ['class' => 'pl-2 py-1 font-bold block border-t text-lg text-gray-700']) !!}
-                                    </div>
-                                    <div class="mt-5 col-start-6 col-span-12 shadow border-t border-gray-200">
-                                        {!! Form::label('valores', 'VALORES', ['class' => 'bg-gray-100 p-2 border block text-xs text-gray-700']) !!}
-                                        {!! Form::label('subtotal', '$ '.number_format($subtotal,2), ['class' => 'text-right p-2 border-b border-t border-gray-300 block text-xs text-gray-700']) !!}
-                                        {!! Form::label('iva', '$ '.number_format($iva,2), ['class' => 'text-right p-2 border-b border-t border-gray-300 block text-xs text-gray-700']) !!}
-                                        {!! Form::label('descuento', '$ '.number_format($total_descuento,2), ['class' => 'text-right p-2 border-b border-t border-gray-300 block text-xs text-gray-700']) !!}
-                                        {!! Form::label('name', '$ '.number_format($total,2), ['class' => 'pr-2 py-1 text-right font-bold block w-full text-lg border-gray-300']) !!}
+                                    {!! Form::label('l_pago', 'Forma de Pago:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
+                                    <div class="text-xs pl-1 py-1">
+                                        {!! Form::radio('forma_pago', 'CONTADO', null, ['required', 'class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Contado
+                                        {!! Form::radio('forma_pago', 'CREDITO', null, ['required', 'class' => 'ml-4 py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Crédito
                                     </div>
                                 </div>
                             </div>
 
+                            <div class="col-start-9 col-span-4">
+                                <div class="grid grid-cols-1 gap-0">
+                                    {!! Form::label('l_observacion', 'Observación:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
+                                    {!! Form::text('observacion', null, ['class' => 'mb-1 px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
 
+                                    {!! Form::label('l_metodo', 'Metodo de Pago:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
+                                    <div class="text-xs pl-1 py-1">
+                                        @foreach($metodos as $metodo)
+                                            {!! Form::radio('metodo_pago_id', $metodo->id, null, ['class' => 'ml-2 py-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} <span>{{$metodo->nombre}}</span>
+                                        @endforeach
+                                    </div>
 
+                                </div>
+                            </div>
+
+                                {!! Form::hidden('cliente_id', $cliente_id) !!}
+                                {!! Form::hidden('subtotal', $subtotal) !!}
+                                {!! Form::hidden('iva', $iva) !!}
+                                {!! Form::hidden('descuento', $total_descuento) !!}
+                                {!! Form::hidden('total', $total) !!}
 
                         </div>
 
+                        <div class="col-start-1 col-span-12 mt-5 border-gray-300 pb-3 rounded">
 
+                            {{-- <div class="col-start-1 col-span-12">
+                                <label class="bg-gray-100 p-2 border block text-xs text-gray-700">Agregar productos a la Factura</label>
+                            </div> --}}
+                            <div class="col-start-1 col-span-12 m-2">
+                                @livewire('shared.producto-search')
+                            </div>
 
+                            <div class="grid grid-cols-12 gap-0 m-2">
+                                <div class="col-start-1 col-span-7">
+                                    {!! Form::label('descripcion', 'Descripción', ['class' => 'bg-gray-50 px-2 py-1 border block text-xs text-gray-700']) !!}
+                                </div>
+                                <div class="col-start-8 col-span-1">
+                                    {!! Form::label('precio', 'Precio', ['class' => 'text-center bg-gray-50 px-2 py-1 border-r border-b border-t block text-xs text-gray-700']) !!}
+                                </div>
+                                <div class="col-start-9 col-span-1">
+                                    {!! Form::label('cantidad', 'Cantidad', ['class' => 'text-center bg-gray-50 px-2 py-1 border-r border-b border-t block text-xs text-gray-700']) !!}
+                                </div>
+                                <div class="col-start-10 col-span-1">
+                                    {!! Form::label('descuento', 'Descuento', ['class' => 'text-center bg-gray-50 px-2 py-1 border-r border-b border-t block text-xs text-gray-700']) !!}
+                                </div>
+                                <div class="col-start-11 col-span-2">
+                                    <div class="grid grid-cols-12 gap-0">
+                                        <div class="col-start-1 col-span-10 text-center">
+                                            {!! Form::label('importe', 'Importe', ['class' => 'bg-gray-50 px-2 py-1 border-b border-t block text-xs text-gray-700']) !!}
+                                        </div>
+                                        <div class="col-start-11 col-span-2">
+                                            {!! Form::label('-', '', ['class' => 'bg-gray-50 px-2 py-1  border-b border-t border-r block text-xs text-gray-100']) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @foreach ($seleccionados as $i => $id)
+                                @foreach($detalle as $j => $p)
+
+                                    @if ($id == $p['id'])
+                                        <div class="grid grid-cols-12 gap-0">
+                                            {{-- <div class="col-start-1 col-span-1 text-xs py-0.5 pl-3 border-r">
+                                                <svg wire:click="eliminarProducto({{$p['id']}})" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 60 24" stroke="currentColor" class="cursor-pointer text-red-700">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </div> --}}
+                                            <div class="col-start-1 col-span-7 text-xs py-1 pl-4">
+                                                {{ $p['descripcion'] }} {{ ($p['descuento']+0) > 0 ? ' - Desct. '.$p['descuento'].'%':'' }}
+                                            </div>
+                                            <div class="col-start-8 col-span-1 text-xs text-right pr-3 py-1">
+                                                $ {{ number_format(($p['precio_venta_publico']+0),2) }}
+                                            </div>
+                                            <div class="col-start-9 col-span-1 text-xs">
+                                                {!! Form::number('cantidad['.$p['id'].']', null, ['wire:model' => "cantidad.$i",
+                                                                                                    'wire:keydown.tab' => 'valorFinal('.$p['id'].', '.$i.')' ,
+                                                                                                    'wire:keydown.enter.prevent' => 'valorFinal('.$p['id'].', '.$i.')' ,
+                                                                                                    'wire:change' => 'valorFinal('.$p['id'].', '.$i.')' ,
+                                                                                                    'min' => '1',
+                                                                                                    'max' => ($p['stock']+0),
+                                                                                                    'class' => 'px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
+                                            </div>
+                                            <div class="col-start-10 col-span-1 text-xs text-right pr-3 py-1">
+                                                $ {{ number_format(($p['valor_descuento']+0),2) }}
+                                            </div>
+                                            <div class="col-start-11 col-span-2 text-xs text-right">
+                                                <div class="grid grid-cols-12 gap-0">
+                                                    <div class="col-start-1 col-span-9 pr-3 py-1">
+                                                        $ {{ number_format(($p['importe']+0),2) }}
+                                                    </div>
+                                                    <div class="col-start-10 col-span-3 pl-2">
+                                                        <svg wire:click="eliminarProducto({{$p['id']}})" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 40 24" stroke="currentColor" class="cursor-pointer text-red-700">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            @endforeach
+                            <span class="mt-2 text-sm text-red-500 pl-3">{{$mensaje_repetido}}</span>
+                            @if(count($detalle))
+                                <div class="grid grid-cols-12">
+                                    <div class="col-start-10 col-span-1">
+                                        <label class="text-right pr-2 py-1 block text-xs text-gray-700">Subtotal:</label>
+                                    </div>
+                                    <div class="col-start-11 col-span-2 text-xs text-right">
+                                        <div class="grid grid-cols-12 gap-0">
+                                            <div class="col-start-1 col-span-9 pr-3 pt-1">
+                                                {!! Form::label('subtotal', '$ '.number_format($subtotal,2), ['class' => 'block text-xs text-gray-700 text-right']) !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-start-10 col-span-1">
+                                        <label class="text-right pr-2 pt-1 block text-xs text-gray-700">IVA:</label>
+                                    </div>
+                                    <div class="col-start-11 col-span-2 text-xs text-right">
+                                        <div class="grid grid-cols-12 gap-0">
+                                            <div class="col-start-1 col-span-9 pr-3 pt-1">
+                                                {!! Form::label('subtotal', '$ '.number_format($iva,2), ['class' => 'block text-xs text-gray-700 text-right']) !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-start-10 col-span-1">
+                                        <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Descuento:</label>
+                                    </div>
+                                    <div class="col-start-11 col-span-2 text-xs text-right">
+                                        <div class="grid grid-cols-12 gap-0">
+                                            <div class="col-start-1 col-span-9 pr-3 pt-1">
+                                                {!! Form::label('subtotal', '$ '.number_format($total_descuento,2), ['class' => 'block text-xs text-gray-700 text-right']) !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-start-10 col-span-1 mt-1">
+                                        <label class="text-right pr-2 pt-1 font-bold block text-lg text-gray-700 border-t border-gray-300 ">Total:</label>
+                                    </div>
+                                    <div class="col-start-11 col-span-2 mt-1">
+                                        <div class="grid grid-cols-12 gap-0">
+                                            <div class="col-start-1 col-span-9 pr-3 pt-1 border-t border-gray-300">
+                                                {!! Form::label('total', '$ '.number_format($total,2), ['class' => 'text-right font-bold block w-full text-lg']) !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                         <a href="{{route('facturas.index')}}" class="inline-flex items-center mt-4 mr-5 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-900 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
@@ -221,7 +227,6 @@
                         {!! Form::submit('Guardar', ['class' => 'cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']) !!}
                     </div>
                 </div>
-
                 {!! Form::close() !!}
             </div>
         </div>

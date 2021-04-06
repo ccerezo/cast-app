@@ -269,3 +269,9 @@ BEGIN
     END IF ;
 END
 
+@foreach($status as $st)
+   <div class="form-check form-check-inline">
+     {{Form::label('Status',$st->name)}}
+     {{Form::radio('Status',$st->id,$st->id == $person->status_id ? true : false,['class'=>'with-gap'])}}
+   </div>
+@endforeach

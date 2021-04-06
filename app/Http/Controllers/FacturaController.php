@@ -43,13 +43,16 @@ class FacturaController extends Controller
     {
         $request->validate([
             'numero' => 'required',
+            'cliente_id' => 'required',
             'forma_pago' => 'required'
         ]);
         //return $request->all();
+        $es_a_credito = false;
         $factura = $request->all();
         if(strcmp($factura['forma_pago'], 'CONTADO') === 0){
             $estadoFactura = EstadoFactura::where('codigo', '=', '01')->first(); //01 ES PAGADA
         } else {
+            $es_a_credito = true;
             $estadoFactura = EstadoFactura::where('codigo', '=', '03')->first(); //03 NO Pagada
         }
 
@@ -63,6 +66,7 @@ class FacturaController extends Controller
             'total' => $factura['total'],
             'descuento' => $factura['descuento'],
             'forma_pago' => $factura['forma_pago'],
+            'observacion' => $factura['observacion'],
             'cliente_id' => $factura['cliente_id'],
             'vendedor_id' => $factura['vendedor_id'],
             'estado_factura_id' => $estadoFactura->id
@@ -82,15 +86,17 @@ class FacturaController extends Controller
                 'producto_id' => $key
             ]);
         }
-        $pago = pagoFactura::create(
-            [
-            '_token' => $factura['_token'],
-            'fecha' => $factura['fecha'],
-            'monto' => $factura['monto'],
-            'descripcion' => $factura['descripcion'],
-            'factura_id' => $venta->id,
-            'metodo_pago_id' => $factura['metodo_pago_id'],
-        ]);
+        if(!$es_a_credito){
+            $pago = pagoFactura::create(
+                [
+                '_token' => $factura['_token'],
+                'fecha' => $factura['fecha'],
+                'monto' => $factura['total'],
+                'descripcion' => $factura['observacion'],
+                'factura_id' => $venta->id,
+                'metodo_pago_id' => $factura['metodo_pago_id'],
+            ]);
+        }
 
         $factura = $venta;
         return redirect()->route('facturas.edit', compact('factura'))->with('info', 'El registro se creó con éxito.');

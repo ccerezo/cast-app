@@ -36,7 +36,6 @@
                             </div>
                         </div>
 
-
                         <div class="mt-5 grid grid-cols-12 gap-0">
                             <div class="col-start-1 col-span-1">
                                 {!! Form::label('codigo', 'Código', ['class' => 'bg-gray-100 px-2 py-1  border-b border-t block text-xs text-gray-700']) !!}
@@ -82,11 +81,6 @@
                         </div>
                         @endforeach
 
-                        {{-- <div class="grid grid-cols-12 gap-0">
-                            <div class="mt-5 col-start-9 col-span-4">
-                                <label class="bg-gray-100 p-2 border block text-xs text-gray-700">Valores</label>
-                            </div>
-                        </div> --}}
                         <div class="grid grid-cols-12 gap-0 border-t pt-3">
                             <div class="col-start-11 col-span-2">
                                 <div class="grid grid-cols-2 gap-0">
