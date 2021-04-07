@@ -1,14 +1,7 @@
 <div>
     <div class="flex justify-between border-b border-gray-300">
-        <p class="inline-flex mt-4 pl-5 text-lg text-gray-700">Factura {!! Form::text('numero', null, ['wire:model' => "numeroFactura", 'class' => 'border-0 mb-1 px-2 text-right focus:ring-indigo-500 focus:border-indigo-500 text-xs border-gray-300']) !!}</p>
-        <div>
-            {!! Form::label('l_fecha', 'Fecha:', ['class' => 'mt-4 text-xs text-gray-700']) !!}
-            {!! Form::datetime('fecha', \Carbon\Carbon::now()->format('Y-m-d H:i'), ['class' => 'mt-4 px-2 text-right focus:ring-indigo-500 focus:border-indigo-500 text-xs border-0']) !!}
-            @error('fecha')
-                <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
-            @enderror
-        </div>
-
+        {{-- <p class="inline-flex mt-3 pl-5 text-lg text-gray-700">Factura: #{!! Form::text('numero', null, ['wire:model' => "numeroFactura", 'class' => 'pt-0.5 border-0 pl-2 focus:ring-indigo-500 focus:border-indigo-500 text-md border-gray-300']) !!}</p> --}}
+        <p class="inline-flex mt-3 pl-5 text-lg text-gray-700">Factura</p>
     </div>
     <div class="mt-10 sm:mt-0">
         <div class="md:grid md:grid-cols-6 md:gap-3">
@@ -23,67 +16,70 @@
                 <div class="shadow overflow-hidden sm:rounded-md">
                     <div class="px-4 py-2 bg-white">
 
-                        <div class="px-2 grid grid-cols-12 gap-6 border-gray-300 rounded">
-                            <div class="col-start-1 col-span-2">
-                                <div class="grid grid-cols-1 gap-0">
-
-                                    {!! Form::label('l_numero', 'Número:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
-                                    {!! Form::text('numero', null, ['wire:model' => "numeroFactura", 'class' => 'mb-1 px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 text-xs border-gray-300']) !!}
-                                    @error('numero')
-                                        <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
-                                    @enderror
-
-
-
-                                </div>
-                            </div>
-
-                            <div class="col-start-3 col-span-3">
-                                <div class="grid grid-cols-1 gap-0">
-                                    {!! Form::label('l_vendedor', 'Vendedor:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
-                                    {!! Form::select('vendedor_id', $vendedors, null,
-                                                    ['wire:model' => 'vendedor_id', 'wire:change' => 'consultarVendedor()',
-                                                        'class' => 'mb-1 w-full block py-1 px-3 border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs']) !!}
-                                    @error('vendedor_id')
-                                        <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
-                                    @enderror
-
-                                    {!! Form::label('l_cupo', 'Cupo Disponible:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
-                                    {!! Form::label('cupo_disponible', '$ '.number_format($vendedor->cupo_disponible,2), ['class' => 'w-full block text-right py-1 pr-2 border border-gray-300 block text-xs text-gray-700']) !!}
-
-                                </div>
-                            </div>
-
-                            <div class="col-start-6 col-span-3">
-                                <div class="grid grid-cols-1 gap-0">
-                                    {!! Form::label('l_cliente', 'Cliente:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
-                                    <div class="mb-1">
-                                        @livewire('shared.cliente-search')
-                                        @error('cliente_id')
+                        <div class="px-2 grid grid-cols-12 gap-3 border-gray-300 rounded">
+                            <div class="col-start-1 col-span-4">
+                                <div class="grid grid-cols-12 gap-0">
+                                    <div class="col-start-1 col-span-2">
+                                        {!! Form::label('l_numero', 'Número:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
+                                    </div>
+                                    <div class="col-start-3 col-span-4">
+                                        {!! Form::text('numero', null, ['wire:model' => "numeroFactura", 'class' => 'mb-1 px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 text-xs border-gray-300']) !!}
+                                        @error('numero')
                                             <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
                                         @enderror
                                     </div>
+                                    <div class="col-start-1 col-span-2">
+                                        {!! Form::label('l_fecha', 'Fecha:', ['class' => 'mt-3 text-xs text-gray-700']) !!}
+                                    </div>
+                                    <div class="col-start-3 col-span-4">
+                                        {!! Form::datetime('fecha', \Carbon\Carbon::now()->format('Y-m-d H:i'), ['class' => 'mr-2 py-0.5 px-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs border border-gray-300']) !!}
+                                        @error('fecha')
+                                            <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
 
-                                    {!! Form::label('l_pago', 'Forma de Pago:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
-                                    <div class="text-xs pl-1 py-1">
-                                        {!! Form::radio('forma_pago', 'CONTADO', null, ['required', 'class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Contado
-                                        {!! Form::radio('forma_pago', 'CREDITO', null, ['required', 'class' => 'ml-4 py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Crédito
+                            <div class="col-start-5 col-span-4">
+                                <div class="grid grid-cols-12 gap-0">
+                                    <div class="col-start-1 col-span-3">
+                                        {!! Form::label('l_vendedor', 'Vendedor:', ['class' => 'py-1 text-xs text-gray-700']) !!}
+                                    </div>
+                                    <div class="col-start-4 col-span-5">
+                                        {!! Form::select('vendedor_id', $vendedors, null,
+                                                        ['wire:model' => 'vendedor_id', 'wire:change' => 'consultarVendedor()',
+                                                            'class' => 'w-full block mb-1 py-1 px-3 border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs']) !!}
+                                        @error('vendedor_id')
+                                            <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
+                                        @enderror
+                                    </div>
+                                    <div class="col-start-1 col-span-3">
+                                        {!! Form::label('l_cupo', 'Cupo Disponible:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
+                                    </div>
+                                    <div class="col-start-4 col-span-5">
+                                        {!! Form::label('cupo_disponible', '$ '.number_format($vendedor->cupo_disponible,2), ['class' => 'w-full block text-right py-1 pr-2 border border-gray-300 text-xs text-gray-700']) !!}
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-start-9 col-span-4">
-                                <div class="grid grid-cols-1 gap-0">
-                                    {!! Form::label('l_observacion', 'Observación:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
-                                    {!! Form::text('observacion', null, ['class' => 'mb-1 px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300']) !!}
-
-                                    {!! Form::label('l_metodo', 'Metodo de Pago:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
-                                    <div class="text-xs pl-1 py-1">
-                                        @foreach($metodos as $metodo)
-                                            {!! Form::radio('metodo_pago_id', $metodo->id, null, ['class' => 'ml-2 py-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} <span>{{$metodo->nombre}}</span>
-                                        @endforeach
+                                <div class="grid grid-cols-12 gap-0">
+                                    <div class="col-start-1 col-span-2 text-right">
+                                        {!! Form::label('l_cliente', 'Cliente:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
                                     </div>
-
+                                    <div class="col-start-4 col-span-9 mb-1 w-full">
+                                        @livewire('shared.cliente-search')
+                                        @error('cliente_id')
+                                            <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
+                                        @enderror
+                                    </div>
+                                    {{-- <div class="col-start-1 col-span-3">
+                                        {!! Form::label('l_pago', 'Forma de Pago:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
+                                    </div>
+                                    <div class="col-start-4 col-span-9 text-xs pl-1 py-1">
+                                        {!! Form::radio('forma_pago', 'CONTADO', null, ['required', 'class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Contado
+                                        {!! Form::radio('forma_pago', 'CREDITO', null, ['required', 'class' => 'ml-4 py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Crédito
+                                    </div> --}}
                                 </div>
                             </div>
 
@@ -95,12 +91,12 @@
 
                         </div>
 
-                        <div class="col-start-1 col-span-12 mt-5 border-gray-300 pb-3 rounded">
+                        <div class="col-start-1 col-span-8 mt-5 border-gray-300 pb-3 rounded">
 
                             {{-- <div class="col-start-1 col-span-12">
                                 <label class="bg-gray-100 p-2 border block text-xs text-gray-700">Agregar productos a la Factura</label>
                             </div> --}}
-                            <div class="col-start-1 col-span-12 m-2">
+                            <div class="col-start-1 col-span-8 m-2">
                                 @livewire('shared.producto-search')
                             </div>
 
@@ -173,9 +169,15 @@
                                     @endif
                                 @endforeach
                             @endforeach
-                            <span class="mt-2 text-sm text-red-500 pl-3">{{$mensaje_repetido}}</span>
+
+                            @if ($mensaje_repetido !== '')
+                                <span class="mt-1 text-xs text-red-500 pl-3">{{$mensaje_repetido}}</span>
+                            @endif
+
+
                             @if(count($detalle))
                                 <div class="grid grid-cols-12">
+
                                     <div class="col-start-10 col-span-1">
                                         <label class="text-right pr-2 py-1 block text-xs text-gray-700">Subtotal:</label>
                                     </div>
@@ -202,17 +204,56 @@
                                     <div class="col-start-11 col-span-2 text-xs text-right">
                                         <div class="grid grid-cols-12 gap-0">
                                             <div class="col-start-1 col-span-9 pr-3 pt-1">
-                                                {!! Form::label('subtotal', '$ '.number_format($total_descuento,2), ['class' => 'block text-xs text-gray-700 text-right']) !!}
+                                                {!! Form::label('descuento', '$ '.number_format($total_descuento,2), ['class' => 'block text-xs text-gray-700 text-right']) !!}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-start-10 col-span-1 mt-1">
-                                        <label class="text-right pr-2 pt-1 font-bold block text-lg text-gray-700 border-t border-gray-300 ">Total:</label>
+                                        <label class="text-right pr-2 pt-1 font-bold block text-lg text-gray-700 border-t border-b border-l border-gray-300">Total:</label>
                                     </div>
                                     <div class="col-start-11 col-span-2 mt-1">
                                         <div class="grid grid-cols-12 gap-0">
-                                            <div class="col-start-1 col-span-9 pr-3 pt-1 border-t border-gray-300">
+                                            <div class="col-start-1 col-span-9 pr-3 pt-1 border-t border-b border-r border-gray-300">
                                                 {!! Form::label('total', '$ '.number_format($total,2), ['class' => 'text-right font-bold block w-full text-lg']) !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-start-9 col-span-1">
+                                        <label class="text-right pr-2 py-1 block text-xs text-gray-700">Forma de Pago:</label>
+                                    </div>
+                                    <div class="col-start-10 col-span-3">
+                                        <div class="grid grid-cols-12 gap-0">
+                                            <div class="col-start-1 col-span-10 pl-3 py-1 text-sm border border-gray-300">
+                                                {!! Form::radio('forma_pago', 'CONTADO', null, ['required', 'class' => 'py-1.5 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Contado
+                                                {!! Form::radio('forma_pago', 'CREDITO', null, ['required', 'class' => 'ml-4 py-1.5 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Crédito
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-start-8 col-span-2">
+                                        <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Método de Pago:</label>
+                                    </div>
+                                    <div class="col-start-10 col-span-3">
+                                        <div class="grid grid-cols-12 gap-0">
+                                            <div class="col-start-1 col-span-10 pl-3 py-1 text-sm border border-gray-300">
+
+                                                @foreach($metodos as $metodo)
+
+
+                                                    {!! Form::radio('metodo_pago_id', $metodo->id, null, ['class' => 'py-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} <span class="mr-5">{{$metodo->nombre}}</span>
+
+
+                                                @endforeach
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-start-9 col-span-1">
+                                        <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Observación:</label>
+                                    </div>
+                                    <div class="col-start-10 col-span-3 text-xs">
+                                        <div class="grid grid-cols-12 gap-0">
+                                            <div class="col-start-1 col-span-10 text-sm">
+                                                {!! Form::text('observacion', null, ['class' => 'mb-1 px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full border-gray-300']) !!}
                                             </div>
                                         </div>
                                     </div>
@@ -231,19 +272,5 @@
             </div>
         </div>
     </div>
-    <x-jet-dialog-modal wire:model="openModal">
-        <x-slot name="title">
-            Registar Pago
-        </x-slot>
 
-        <x-slot name="content">
-           <p>El cliente va pagar con cheque, efectivo transferencia</p>
-        </x-slot>
-
-        <x-slot name="footer">
-            <x-jet-secondary-button wire:click="$set('openModal', false)" wire:loading.attr="disabled">
-                {{ __('Cerrar') }}
-            </x-jet-secondary-button>
-        </x-slot>
-    </x-jet-dialog-modal>
 </div>
