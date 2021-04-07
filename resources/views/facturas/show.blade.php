@@ -23,15 +23,43 @@
                                 </div>
                                 <div class="grid grid-cols-3 gap-0">
                                     <label class="px-2 py-1 block text-xs text-gray-700">Número: {{ $factura->numero }}</label>
-                                    <label class="px-2 py-1 block text-xs text-gray-700">Fecha: {{ $factura->fecha }}</label>
                                     <label class="px-2 py-1 block text-xs text-gray-700">Vendedor:  {{ $factura->vendedor->nombre }}</label>
-                                </div>
-                                <div class="grid grid-cols-3 gap-0">
                                     <label class="px-2 py-1 block text-xs text-gray-700">Cliente: {{ $factura->cliente->nombre }}</label>
-                                    <label class="px-2 py-1 block text-xs text-gray-700">Cédula/RUC: {{ $factura->cliente->identificacion }}</label>
                                 </div>
                                 <div class="grid grid-cols-3 gap-0">
+                                    <label class="px-2 py-1 block text-xs text-gray-700">Fecha: {{ $factura->fecha }}</label>
                                     <label class="px-2 py-1 block text-xs text-gray-700">Forma de Pago: {{ $factura->forma_pago }}</label>
+                                    <label class="px-2 py-1 block text-xs text-gray-700">Estado:
+                                        @if ($factura->estadoFactura->codigo == '01')
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-200 text-green-800">
+                                            {{$factura->estadoFactura->nombre}}
+                                        </span>
+                                        @else
+                                            @if ($factura->estadoFactura->codigo == '03' || $factura->estadoFactura->codigo == '04')
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                    {{$factura->estadoFactura->nombre}}
+                                                </span>
+                                            @else
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-200 text-red-800">
+                                                    {{$factura->estadoFactura->nombre}}
+                                                </span>
+                                            @endif
+                                        @endif
+                                    </label>
+                                </div>
+                                <div class="grid grid-cols-3 gap-0">
+                                    @if ($factura->observacion)
+                                        <label class="px-2 block text-xs text-gray-700">Observación: {{ $factura->observacion }}</label>
+                                    @else
+                                        <label></label>
+                                    @endif
+                                    @if ($pagos->count())
+                                        <label class="px-2 block text-xs text-gray-700">Método de pago:
+                                        @foreach ($pagos as $pago)
+                                            {{ $pago->metodoPago->nombre }}
+                                        @endforeach
+                                        </label>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -119,6 +147,7 @@
                         <a href="{{route('facturas.index')}}" class="inline-flex items-center mt-4 mr-5 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-900 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Regresar
                         </a>
+                        <a href="{{route('pdf.generate', $factura)}}" target="_blank" class="cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">Imprimir</a>
                         {{-- {!! Form::submit('Editar', ['class' => 'cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']) !!} --}}
                     </div>
                 </div>

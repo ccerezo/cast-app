@@ -224,29 +224,29 @@
                                     <div class="col-start-10 col-span-3">
                                         <div class="grid grid-cols-12 gap-0">
                                             <div class="col-start-1 col-span-10 pl-3 py-1 text-sm border border-gray-300">
-                                                {!! Form::radio('forma_pago', 'CONTADO', null, ['required', 'class' => 'py-1.5 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Contado
-                                                {!! Form::radio('forma_pago', 'CREDITO', null, ['required', 'class' => 'ml-4 py-1.5 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Crédito
+                                                {!! Form::radio('forma_pago', 'CONTADO', null, ['wire:model' => 'forma_pago', 'required', 'class' => 'py-1.5 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Contado
+                                                {!! Form::radio('forma_pago', 'CREDITO', null, ['wire:model' => 'forma_pago', 'required', 'class' => 'ml-4 py-1.5 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Crédito
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-start-8 col-span-2">
-                                        <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Método de Pago:</label>
-                                    </div>
-                                    <div class="col-start-10 col-span-3">
-                                        <div class="grid grid-cols-12 gap-0">
-                                            <div class="col-start-1 col-span-10 pl-3 py-1 text-sm border border-gray-300">
+                                    @if(strcmp($forma_pago, 'CONTADO') === 0)
+                                        <div class="col-start-8 col-span-2">
+                                            <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Método de Pago:</label>
+                                        </div>
+                                        <div class="col-start-10 col-span-3">
+                                            <div class="grid grid-cols-12 gap-0">
+                                                <div class="col-start-1 col-span-10 pl-3 py-1 text-sm border border-gray-300">
 
-                                                @foreach($metodos as $metodo)
+                                                    @foreach($metodos as $metodo)
+                                                        <div>
+                                                            {!! Form::radio('metodo_pago_id', $metodo->id, null, ['class' => 'py-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} <span class="mr-5">{{$metodo->nombre}}</span>
+                                                        </div>
+                                                    @endforeach
 
-
-                                                    {!! Form::radio('metodo_pago_id', $metodo->id, null, ['class' => 'py-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} <span class="mr-5">{{$metodo->nombre}}</span>
-
-
-                                                @endforeach
-
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
                                     <div class="col-start-9 col-span-1">
                                         <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Observación:</label>
                                     </div>

@@ -190,11 +190,13 @@ DELETE FROM factura_detalles;
 DELETE FROM facturas;
 DELETE FROM productos;
 DELETE FROM inventarios;
+DELETE FROM pago_facturas;
 
 ALTER TABLE productos AUTO_INCREMENT = 1;
 ALTER TABLE inventarios AUTO_INCREMENT = 1;
 ALTER TABLE facturas AUTO_INCREMENT = 1;
 ALTER TABLE factura_detalles AUTO_INCREMENT = 1;
+ALTER TABLE pago_facturas AUTO_INCREMENT = 1;
 
 php artisan make:seeder ClienteSeeder
 php artisan make:factory ClienteFactory
@@ -260,15 +262,14 @@ END
 anularFactura
 facturas
 after
-insert
+update
 BEGIN
-    IF NEW.estado_factura_id = 3 || NEW.estado_factura_id = 4 THEN
+    DECLARE v_codigo varchar(50);
+    SELECT codigo INTO v_codigo FROM estado_facturas WHERE id = NEW.estado_factura_id;
+    
+    IF (STRCMP(v_codigo,'02') = 0 && STRCMP(NEW.forma_pago,'CREDITO') = 0) THEN
         UPDATE vendedors 
-        SET cupo_disponible = (cupo_disponible - NEW.total)
+        SET cupo_disponible = (cupo_disponible + NEW.total)
         WHERE id = NEW.vendedor_id;
     END IF ;
 END
-
-@foreach($metodos as $metodo)
-    {!! Form::radio('metodo_pago_id', $metodo->id, null, ['class' => 'mr-3 py-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} <span>{{$metodo->nombre}}</span>
-@endforeach

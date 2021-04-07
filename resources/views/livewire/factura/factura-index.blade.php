@@ -115,7 +115,7 @@
                             </td>
                             <td class="px-3 py-3 whitespace-nowrap text-right text-sm font-medium">
                                 <a href="{{route('facturas.show', $factura)}}" class="mr-3 text-indigo-600 hover:text-indigo-800">Ver</a>
-                                <a href="{{route('facturas.edit', $factura)}}" class="mr-3 text-indigo-600 hover:text-indigo-800">edit</a>
+                                {{-- <a href="{{route('facturas.edit', $factura)}}" class="mr-3 text-indigo-600 hover:text-indigo-800">edit</a> --}}
                                 <a href="{{route('pdf.generate', $factura)}}" target="_blank" class="mr-3 text-indigo-600 hover:text-indigo-800">PDF</a>
                             </td>
                             <td>

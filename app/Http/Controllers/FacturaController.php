@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\EstadoFactura;
 use App\Models\Factura;
 use App\Models\FacturaDetalle;
+use App\Models\Inventario;
 use App\Models\pagoFactura;
 use App\Models\Producto;
 use App\Models\Vendedor;
@@ -79,7 +80,7 @@ class FacturaController extends Controller
                 'precio_produccion' => $producto->precio_produccion,
                 'precio_mayorista' => $producto->precio_mayorista,
                 'precio_venta_publico' => $producto->precio_venta_publico,
-                'cantidad' => $valor[0],
+                'cantidad' => $valor,
                 'descuento' => $producto->descuento,
                 'iva' => $producto->iva,
                 'factura_id' => $venta->id,
@@ -99,7 +100,7 @@ class FacturaController extends Controller
         }
 
         $factura = $venta;
-        return redirect()->route('facturas.edit', compact('factura'))->with('info', 'El registro se creó con éxito.');
+        return redirect()->route('facturas.show', compact('factura'))->with('info', 'El registro se creó con éxito.');
     }
 
     /**
@@ -113,7 +114,8 @@ class FacturaController extends Controller
         $clientes = Cliente::pluck('nombre','id');
         $vendedors = Vendedor::pluck('nombre','id');
         $productos = FacturaDetalle::where('factura_id', '=', $factura->id)->get();
-        return view('facturas.show', compact('factura','vendedors','clientes','productos'));
+        $pagos = pagoFactura::where('factura_id', '=', $factura->id)->get();
+        return view('facturas.show', compact('factura','vendedors','clientes','productos','pagos'));
     }
 
     /**
@@ -156,6 +158,16 @@ class FacturaController extends Controller
         $factura->update([
             'estado_factura_id' => $estadoFactura->id
         ]);
+
+        $detalles_factura = FacturaDetalle::where('factura_id', '=', $factura->id)->get();
+
+        foreach($detalles_factura as $item){
+            $inventario = Inventario::where('producto_id', '=', $item->producto_id)->first();
+            $inventario->update([
+                'stock' => $item->cantidad + $inventario->stock,
+                'salidas' => $inventario->salidas - $item->cantidad
+            ]);
+        }
 
         return redirect()->route('facturas.index')->with('info', 'La Factura fue ANULADA con éxito!');
     }

@@ -25,6 +25,7 @@ class FacturaCreate extends Component
     public $indice;
     public $mensaje_repetido;
     public $openModal = false;
+    public $forma_pago;
     protected $listeners = ['updateDetalle', 'updateDetalleCliente'];
 
     public function mount()
