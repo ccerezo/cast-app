@@ -4,14 +4,17 @@ namespace App\Http\Livewire\Producto;
 
 use App\Models\Categoria;
 use App\Models\Color;
+use App\Models\Inventario;
 use App\Models\Linea;
 use App\Models\Modelo;
 use App\Models\Producto;
 use App\Models\Talla;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ProductoEdit extends Component
 {
+    use WithPagination;
     public $search;
     public $searchCategoria;
     public $searchLinea;
@@ -28,6 +31,7 @@ class ProductoEdit extends Component
     public $descuento;
     public $stock;
     public $producto;
+    public $created;
 
     public function render()
     {
@@ -71,11 +75,17 @@ class ProductoEdit extends Component
         }
 
         if($this->bandera) {
+            $this->created = false;
             $productos = Producto::where($this->condiciones)
                             ->paginate(12);
         } else {
-            $productos = Producto::where('activo', '=', 'si')
+            if($this->created){
+                $productos = Producto::where('created_at', '>=', $this->created)
                             ->paginate(12);
+            } else {
+                $productos = Producto::where('activo', '>=', 'si')
+                            ->paginate(12);
+            }
         }
 
         return view('livewire.producto.producto-edit', compact('productos','categorias','lineas','tallas','modelos','colors'));
@@ -87,6 +97,7 @@ class ProductoEdit extends Component
         // $this->searchLinea = $producto->linea_id;
         // $this->searchCategoria = $producto->categoria_id;
         // $this->searchModelo = $producto->modelo_id;
+        $this->created = $producto->created_at;
         $productos = Producto::where($this->condiciones)->get();
 
         foreach($productos as $producto){
@@ -113,6 +124,12 @@ class ProductoEdit extends Component
             'precio_venta_publico' => $this->publico[$id],
             'descuento' => $this->descuento[$id],
             'stock' => ($this->stock[$id] + $record->stock)
+        ]);
+        $inventario = Inventario::where('producto_id', '=', $record->id)->first();
+        $inventario->update([
+            'entradas' => $inventario->entradas + $this->stock[$id],
+            'stock' => $record->stock,
+            'ultima_entrada' => date("Y-m-d H:i:s")
         ]);
 
         $this->stock[$id] = '';

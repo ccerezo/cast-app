@@ -10,10 +10,22 @@ class FacturaIndex extends Component
 {
     use WithPagination;
     public $search;
+    public $openModal = false;
+    public $factura_tmp;
 
+    public function modalEliminar($id) {
+        $this->openModal = true;
+        $this->factura_tmp = Factura::find($id);
+    }
     public function render()
     {
-        $facturas = Factura::where('numero', 'LIKE', '%' . $this->search . '%')
+        // $facturas = Factura::where('numero', 'LIKE', '%' . $this->search . '%')
+        //                     ->paginate(10);
+        $facturas = Factura::join('clientes', 'facturas.cliente_id', '=', 'clientes.id')
+                            ->where('facturas.numero', 'LIKE', '%' . $this->search . '%')
+                            ->orWhere('clientes.nombre', 'LIKE', '%' . $this->search . '%')
+                            ->orWhere('clientes.identificacion', 'LIKE', '%' . $this->search . '%')
+                            ->select('facturas.*')
                             ->paginate(10);
         return view('livewire.factura.factura-index', compact('facturas'));
     }

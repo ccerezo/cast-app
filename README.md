@@ -214,15 +214,6 @@ BEGIN
     END IF ;
 END
 
-actualizarEntradasInventario
-productos
-after
-update
-BEGIN
-    UPDATE inventarios 
-    SET entradas = (entradas + (NEW.stock-OLD.stock)), stock = (stock + (NEW.stock-OLD.stock)), ultima_entrada = NEW.updated_at
-    WHERE id = NEW.id;
-END
 
 actualizarSalidasInventario
 factura_detalles
@@ -230,11 +221,13 @@ after
 insert
 BEGIN
 	IF NEW.id > 0 THEN
-    UPDATE inventarios 
-    SET salidas = (salidas + (NEW.cantidad)), stock = (stock - (NEW.cantidad)), ultima_salida = NEW.created_at
-    WHERE producto_id = NEW.producto_id;
-    END IF;
-END
+        UPDATE inventarios 
+        SET salidas = (salidas + (NEW.cantidad)), stock = (stock - (NEW.cantidad)), ultima_salida = NEW.created_at
+        WHERE producto_id = NEW.producto_id;
+        UPDATE productos 
+        SET stock = (stock - NEW.cantidad) 
+        WHERE id = NEW.producto_id;
+    END
 
 
 eliminarInventario

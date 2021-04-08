@@ -163,10 +163,15 @@ class FacturaController extends Controller
 
         foreach($detalles_factura as $item){
             $inventario = Inventario::where('producto_id', '=', $item->producto_id)->first();
+            $producto = Producto::where('id', '=', $item->producto_id)->first();
             $inventario->update([
                 'stock' => $item->cantidad + $inventario->stock,
                 'salidas' => $inventario->salidas - $item->cantidad
             ]);
+            $producto->update([
+                'stock' => $item->cantidad + $producto->stock,
+            ]);
+
         }
 
         return redirect()->route('facturas.index')->with('info', 'La Factura fue ANULADA con éxito!');
