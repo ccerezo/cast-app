@@ -22,8 +22,9 @@ class CreateFacturasTable extends Migration
             $table->decimal('total',10,2);
             $table->decimal('descuento',10,2);
             $table->enum('forma_pago',['CONTADO','CREDITO'])->default('CONTADO');
-            $table->enum('tipo',['NORMAL','DISTRIBUIDOR'])->default('NORMAL');
+            $table->enum('tipo',['FINAL','MAYORISTA'])->default('FINAL');
             $table->string('observacion',150)->nullable();
+            $table->date('vencimiento')->nullable();
             $table->unsignedBigInteger('cliente_id');
             $table->unsignedBigInteger('vendedor_id');
             $table->unsignedBigInteger('estado_factura_id');

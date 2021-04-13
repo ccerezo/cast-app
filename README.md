@@ -119,6 +119,7 @@ php artisan make:controller InventarioController -r
 php artisan make:controller FacturaController -r
 php artisan make:controller FacturaDetalleController -r
 php artisan make:controller PDFController
+php artisan make:controller PagoFacturaController -r
 
 ## laravel Collective para los formularios
 composer require laravelcollective/html
@@ -144,7 +145,7 @@ php artisan make:livewire factura\FacturaIndex
 php artisan make:livewire factura\FacturaCreate
 php artisan make:livewire shared\ClienteSearch
 php artisan make:livewire shared\ProductoSearch
-
+php artisan make:livewire pagoFactura\PagoFacturaIndex
 ## para instalar codigo de barras
 composer require milon/barcode
 composer require barryvdh/laravel-dompdf
@@ -227,7 +228,8 @@ BEGIN
         UPDATE productos 
         SET stock = (stock - NEW.cantidad) 
         WHERE id = NEW.producto_id;
-    END
+    END IF ;
+END
 
 
 eliminarInventario

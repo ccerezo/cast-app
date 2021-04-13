@@ -11,6 +11,7 @@ use App\Http\Controllers\LineaController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\MetodoPagoController;
 use App\Http\Controllers\ModeloController;
+use App\Http\Controllers\PagoFacturaController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\TallaController;
@@ -69,6 +70,8 @@ Route::resource('inventarios', InventarioController::class)->names('inventarios'
 Route::resource('facturas', FacturaController::class)->names('facturas')->middleware('auth');
 
 Route::resource('metodoPagos', MetodoPagoController::class)->names('metodoPagos')->middleware('auth');
+
+Route::resource('pagoFacturas', PagoFacturaController::class)->names('pagoFacturas')->middleware('auth');
 
 Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');
 Route::get('pdf/generate/{id}', [PDFController::class, 'generatePDF'])->name('pdf.generate');

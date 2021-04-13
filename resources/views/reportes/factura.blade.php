@@ -54,10 +54,34 @@
                 @foreach ($facturaDetalle as $item)
                     <tr>
                         <td>{{$item->producto->descripcion}} {{ ($item->descuento+0) > 0 ? ' - Desct. '.$item->descuento.'%':'' }}</td>
-                        <td style="text-align:right;">$ {{number_format($item->precio_venta_publico,2)}}</td>
+                        <td style="text-align:right;">
+                            @if (strcmp($factura->tipo, 'FINAL') === 0)
+                                $ {{number_format($item->precio_venta_publico,2)}}
+                            @else
+                                @if (strcmp($factura->tipo, 'MAYORISTA') === 0)
+                                    $ {{number_format($item->precio_mayorista,2)}}
+                                @endif
+                            @endif
+                        </td>
                         <td style="text-align:center;">{{$item->cantidad}}</td>
-                        <td style="text-align:center;">$ {{number_format(($item->precio_venta_publico * $item->cantidad) * (($item->descuento)/100),2)}}</td>
-                        <td style="text-align:right;padding-right:5px">$ {{number_format(($item->precio_venta_publico * $item->cantidad),2)}}</td>
+                        <td style="text-align:center;">
+                            @if (strcmp($factura->tipo, 'FINAL') === 0)
+                                $ {{number_format(($item->precio_venta_publico * $item->cantidad) * (($item->descuento)/100),2)}}
+                            @else
+                                @if (strcmp($factura->tipo, 'MAYORISTA') === 0)
+                                    $ {{number_format(($item->precio_mayorista * $item->cantidad) * (($item->descuento)/100),2)}}
+                                @endif
+                            @endif
+                        </td>
+                        <td style="text-align:right;padding-right:5px">
+                            @if (strcmp($factura->tipo, 'FINAL') === 0)
+                                $ {{number_format(($item->precio_venta_publico * $item->cantidad),2)}}
+                            @else
+                                @if (strcmp($factura->tipo, 'MAYORISTA') === 0)
+                                    $ {{number_format(($item->precio_mayorista * $item->cantidad),2)}}
+                                @endif
+                            @endif
+                        </td>
                   </tr>
                 @endforeach
             </tbody>

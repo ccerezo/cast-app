@@ -14,10 +14,9 @@ class Navigation extends Component
             ['name' => 'Clientes', 'route' => route('clientes.index'), 'active' => request()->routeIs('clientes.index')],
             ['name' => 'Inventario', 'route' => route('inventarios.index'), 'active' => request()->routeIs('inventarios.index')],
             ['name' => 'Facturas', 'route' => route('facturas.index'), 'active' => request()->routeIs('facturas.index')],
-            /*[
-                'name' => 'Modelo', 'route' => route('modelos.index'), 'active' => request()->routeIs('modelos.index')
+            ['name' => 'Cuentas por Cobrar', 'route' => route('pagoFacturas.index'), 'active' => request()->routeIs('pagoFacturas.index')
             ],
-            [
+            /*[
                 'name' => 'Tallas', 'route' => route('tallas.index'), 'active' => request()->routeIs('tallas.index')
             ],
             */

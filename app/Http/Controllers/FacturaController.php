@@ -67,7 +67,9 @@ class FacturaController extends Controller
             'total' => $factura['total'],
             'descuento' => $factura['descuento'],
             'forma_pago' => $factura['forma_pago'],
+            'tipo' => $factura['tipo'],
             'observacion' => $factura['observacion'],
+            'vencimiento' => $factura['vencimiento'],
             'cliente_id' => $factura['cliente_id'],
             'vendedor_id' => $factura['vendedor_id'],
             'estado_factura_id' => $estadoFactura->id

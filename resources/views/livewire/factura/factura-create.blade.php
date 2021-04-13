@@ -73,13 +73,13 @@
                                             <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
                                         @enderror
                                     </div>
-                                    {{-- <div class="col-start-1 col-span-3">
-                                        {!! Form::label('l_pago', 'Forma de Pago:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
+                                    <div class="col-start-1 col-span-2 text-right">
+                                        {!! Form::label('l_tipo_factura', 'Tipo:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
                                     </div>
                                     <div class="col-start-4 col-span-9 text-xs pl-1 py-1">
-                                        {!! Form::radio('forma_pago', 'CONTADO', null, ['required', 'class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Contado
-                                        {!! Form::radio('forma_pago', 'CREDITO', null, ['required', 'class' => 'ml-4 py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Crédito
-                                    </div> --}}
+                                        {!! Form::radio('tipo', 'FINAL', null, ['wire:model' => 'tipo_factura', 'wire:click' => 'cambiarPrecios()','required', 'class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Final
+                                        {!! Form::radio('tipo', 'MAYORISTA', null, ['wire:model' => 'tipo_factura', 'wire:click' => 'cambiarPrecios()','required', 'class' => 'ml-4 py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Mayorista
+                                    </div>
                                 </div>
                             </div>
 
@@ -139,7 +139,14 @@
                                                 {{ $p['descripcion'] }} {{ ($p['descuento']+0) > 0 ? ' - Desct. '.$p['descuento'].'%':'' }}
                                             </div>
                                             <div class="col-start-8 col-span-1 text-xs text-right pr-3 py-1">
-                                                $ {{ number_format(($p['precio_venta_publico']+0),2) }}
+                                                @if (strcmp($this->tipo_factura, 'FINAL') === 0)
+                                                    $ {{ number_format(($p['precio_venta_publico']+0),2) }}
+                                                @else
+                                                    @if (strcmp($this->tipo_factura, 'MAYORISTA') === 0)
+                                                        $ {{ number_format(($p['precio_mayorista']+0),2) }}
+                                                    @endif
+                                                @endif
+
                                             </div>
                                             <div class="col-start-9 col-span-1 text-xs">
                                                 {!! Form::number('cantidad['.$p['id'].']', null, ['wire:model' => "cantidad.$i",
@@ -242,17 +249,33 @@
                                                             {!! Form::radio('metodo_pago_id', $metodo->id, null, ['class' => 'py-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} <span class="mr-5">{{$metodo->nombre}}</span>
                                                         </div>
                                                     @endforeach
-
+                                                    {!! Form::hidden('vencimiento', null) !!}
                                                 </div>
                                             </div>
                                         </div>
+                                    @else
+                                        @if(strcmp($forma_pago, 'CREDITO') === 0)
+                                            <div class="col-start-8 col-span-2">
+                                                <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Vencimiento:</label>
+                                            </div>
+                                            <div class="col-start-10 col-span-3">
+                                                <div class="grid grid-cols-12 gap-0">
+                                                    <div class="col-start-1 col-span-10">
+                                                        {!! Form::date('vencimiento', \Carbon\Carbon::now(), ['class' => 'w-full mr-2 py-0.5 px-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs border border-gray-300']) !!}
+                                                        @error('vencimiento')
+                                                            <span class="mt-2 text-xs text-red-500">{{$message}}</span><br>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
                                     @endif
                                     <div class="col-start-9 col-span-1">
                                         <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Observación:</label>
                                     </div>
                                     <div class="col-start-10 col-span-3 text-xs">
                                         <div class="grid grid-cols-12 gap-0">
-                                            <div class="col-start-1 col-span-10 text-sm">
+                                            <div class="col-start-1 col-span-10 text-xs">
                                                 {!! Form::text('observacion', null, ['class' => 'mb-1 px-2 py-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full border-gray-300']) !!}
                                             </div>
                                         </div>

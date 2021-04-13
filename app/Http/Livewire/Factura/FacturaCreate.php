@@ -24,6 +24,7 @@ class FacturaCreate extends Component
     public $cliente_id;
     public $indice;
     public $mensaje_repetido;
+    public $tipo_factura;
     public $openModal = false;
     public $forma_pago;
     protected $listeners = ['updateDetalle', 'updateDetalleCliente'];
@@ -52,8 +53,16 @@ class FacturaCreate extends Component
             $productos = Producto::whereIn('id', $this->seleccionados)->get()->toArray();
             $func = function($producto,$cantidad) {
                 $producto['cantidad'] = $cantidad;
-                $producto['importe'] = $producto['precio_venta_publico'] * $producto['cantidad'];
-                $producto['valor_descuento'] = $producto['importe']*($producto['descuento']/100);
+                if(strcmp($this->tipo_factura, 'FINAL') === 0){
+                    $producto['importe'] = $producto['precio_venta_publico'] * $producto['cantidad'];
+                    $producto['valor_descuento'] = $producto['importe']*($producto['descuento']/100);
+                } else {
+                    if(strcmp($this->tipo_factura, 'MAYORISTA') === 0){
+                        $producto['importe'] = $producto['precio_mayorista'] * $producto['cantidad'];
+                        $producto['valor_descuento'] = $producto['importe']*($producto['descuento']/100);
+                    }
+                }
+
                 return $producto;
             };
 
@@ -71,6 +80,15 @@ class FacturaCreate extends Component
         //array_push($this->seleccionados, ['id', '=', $id]);
         //$this->detalle = Producto::whereIn('id', $this->seleccionados)->get()->toArray();
 
+    }
+    public function cambiarPrecios()
+    {
+        if(count($this->detalle) > 0) {
+            for ($i = 0; $i < count($this->seleccionados); ++$i){
+                $this->valorFinal($this->seleccionados[$i], $i);
+            }
+            $this->valores();
+        }
     }
     public function updateDetalleCliente($id)
     {
@@ -101,9 +119,17 @@ class FacturaCreate extends Component
         $cantidadImporte = function($producto,$id,$indice) {
             if($id == $producto['id']) {
                 if($this->cantidad[$indice]){
-                    $producto['importe'] = $producto['precio_venta_publico'] * $this->cantidad[$indice];
-                    $producto['valor_descuento'] = $producto['importe'] * ($producto['descuento']/100);
-                    $producto['cantidad'] = $this->cantidad[$indice];
+                    if(strcmp($this->tipo_factura, 'FINAL') === 0){
+                        $producto['importe'] = $producto['precio_venta_publico'] * $this->cantidad[$indice];
+                        $producto['valor_descuento'] = $producto['importe'] * ($producto['descuento']/100);
+                        $producto['cantidad'] = $this->cantidad[$indice];
+                    } else {
+                        if(strcmp($this->tipo_factura, 'MAYORISTA') === 0){
+                            $producto['importe'] = $producto['precio_mayorista'] * $this->cantidad[$indice];
+                            $producto['valor_descuento'] = $producto['importe'] * ($producto['descuento']/100);
+                            $producto['cantidad'] = $this->cantidad[$indice];
+                        }
+                    }
                 }
             }
             return $producto;
