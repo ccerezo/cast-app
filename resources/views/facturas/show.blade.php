@@ -21,14 +21,20 @@
                                         <label class="bg-gray-100 p-2 border block text-xs text-gray-700">Datos de Factura</label>
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-3 gap-0">
+                                <div class="grid grid-cols-4 gap-0">
                                     <label class="px-2 py-1 block text-xs text-gray-700">Número: {{ $factura->numero }}</label>
                                     <label class="px-2 py-1 block text-xs text-gray-700">Vendedor:  {{ $factura->vendedor->nombre }}</label>
                                     <label class="px-2 py-1 block text-xs text-gray-700">Cliente: {{ $factura->cliente->nombre }}</label>
-                                </div>
-                                <div class="grid grid-cols-3 gap-0">
-                                    <label class="px-2 py-1 block text-xs text-gray-700">Fecha: {{ $factura->fecha }}</label>
                                     <label class="px-2 py-1 block text-xs text-gray-700">Forma de Pago: {{ $factura->forma_pago }}</label>
+                                </div>
+                                <div class="grid grid-cols-4 gap-0">
+                                    <label class="px-2 py-1 block text-xs text-gray-700">F. Ingreso: {{ date('Y-m-d H:i', strtotime($factura->fecha)) }}</label>
+                                    @if ($factura->vencimiento)
+                                        <label class="px-2 py-1 block text-xs text-gray-700">F. Vencimiento: {{ $factura->vencimiento }}</label>
+                                    @else
+                                        <label></label>
+                                    @endif
+                                    <label class="px-2 py-1 block text-xs text-gray-700">Facturado como: {{ $factura->tipo }}</label>
                                     <label class="px-2 py-1 block text-xs text-gray-700">Estado:
                                         @if ($factura->estadoFactura->codigo == '01')
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-200 text-green-800">
@@ -47,20 +53,44 @@
                                         @endif
                                     </label>
                                 </div>
-                                <div class="grid grid-cols-3 gap-0">
+                                @if (strcmp($factura->forma_pago, 'CREDITO') === 0)
+                                <div class="grid grid-cols-4 gap-0">
                                     @if ($factura->observacion)
-                                        <label class="px-2 block text-xs text-gray-700">Observación: {{ $factura->observacion }}</label>
+                                        <label class="px-2 py-1 block text-xs text-gray-700">Observación: {{ $factura->observacion }}</label>
                                     @else
                                         <label></label>
                                     @endif
+                                    <label></label>
+                                    <label></label>
                                     @if ($pagos->count())
-                                        <label class="px-2 block text-xs text-gray-700">Método de pago:
+                                        <label class="px-2 py-1 block text-xs text-gray-700">Método de pago:
+                                        @foreach ($pagos as $pago)
+                                            {{ $pago->metodoPago->nombre }}
+                                        @endforeach
+                                        </label>
+                                    @else
+                                        <label></label>
+                                    @endif
+                                </div>
+                                @endif
+                                @if (strcmp($factura->forma_pago, 'CONTADO') === 0)
+                                <div class="grid grid-cols-4 gap-0">
+                                    @if ($factura->observacion)
+                                        <label class="px-2 py-1 block text-xs text-gray-700">Observación: {{ $factura->observacion }}</label>
+                                    @else
+                                        <label></label>
+                                    @endif
+                                    <label></label>
+                                    <label></label>
+                                    @if ($pagos->count())
+                                        <label class="px-2 py-1 block text-xs text-gray-700">Método de pago:
                                         @foreach ($pagos as $pago)
                                             {{ $pago->metodoPago->nombre }}
                                         @endforeach
                                         </label>
                                     @endif
                                 </div>
+                                @endif
                             </div>
                         </div>
 

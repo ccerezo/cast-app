@@ -166,7 +166,6 @@
 
         <x-slot name="content">
             <p>Está seguro que desea <b>ANULAR</b> la Factura?</p>
-
         </x-slot>
 
         <x-slot name="footer">

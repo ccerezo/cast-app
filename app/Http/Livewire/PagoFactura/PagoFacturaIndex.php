@@ -3,9 +3,11 @@
 namespace App\Http\Livewire\PagoFactura;
 
 use App\Models\Cliente;
+use App\Models\EstadoFactura;
 use App\Models\Vendedor;
 use App\Models\Factura;
 use App\Models\MetodoPago;
+use App\Models\pagoFactura;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -17,11 +19,23 @@ class PagoFacturaIndex extends Component
     public $searchContado;
     public $searchCredito;
     public $openModal = false;
+    public $factura_tmp;
     public $vendedor;
     public $vendedor_id;
     public $cliente_id;
     public $condiciones = array();
+    public $monto;
+    public $fecha;
+    public $metodo_pago;
+    public $descripcion;
+    public $pagada;
     protected $listeners = ['updateDetalleCliente'];
+
+    protected $rules = [
+        'monto' => 'required',
+        'fecha' => 'required',
+        'metodo_pago' => 'required'
+    ];
 
     public function mount()
     {
@@ -35,6 +49,31 @@ class PagoFacturaIndex extends Component
     public function updateDetalleCliente($id)
     {
         $this->cliente_id = $id;
+    }
+    public function registrarPago($id) {
+        $this->openModal = true;
+        $this->factura_tmp = Factura::find($id);
+    }
+    public function save() {
+        $this->validate();
+
+        $pago = pagoFactura::create([
+            'fecha' => $this->fecha,
+            'monto' => $this->monto,
+            'descripcion' => $this->descripcion,
+            'factura_id' => $this->factura_tmp->id,
+            'metodo_pago_id' => $this->metodo_pago
+        ]);
+
+        if($pago->monto >= $this->factura_tmp->total){
+            $this->pagada = 'PAGADA';
+            $estado_factura = EstadoFactura::where('codigo', '=', '01')->first();
+            $this->factura_tmp->update([
+                'estado_factura_id' => $estado_factura->id
+            ]);
+        }
+
+        $this->reset(['fecha','monto','descripcion','metodo_pago']);
     }
     public function render()
     {

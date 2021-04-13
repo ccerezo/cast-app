@@ -84,14 +84,16 @@
                                 Número
                             </th>
                             <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
-                                Fecha
+                                F. Ingreso
                             </th>
                             <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                                 Cliente
                             </th>
-
                             <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
-                                PVP
+                                F. Vencimiento
+                            </th>
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                                Valor
                             </th>
                             <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                                 F. Pago
@@ -120,15 +122,7 @@
                             </td>
                             <td class="px-3 py-3 whitespace-nowrap">
                                 <div class="text-center text-sm font-medium text-gray-900">
-                                    {{ date('Y-m-d H:i', strtotime($factura->fecha)) }}
-                                    @php
-                                        $hoy = \Carbon\Carbon::parse(date('Y-m-d H:i'));
-                                        $fecha = \Carbon\Carbon::parse($factura->fecha);
-
-                                    @endphp
-
-                                    {{$hoy->diffInDays($factura->fecha)}}
-                                    {{-- {!! Form::datetime('fecha', \Carbon\Carbon::createFromFormat('Y-m-d',$factura->fecha )->addDay()->toDateTimeString(), ['class' => 'mr-2 py-0.5 px-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs border border-gray-300']) !!} --}}
+                                    {{ date('Y-m-d', strtotime($factura->fecha)) }}
                                 </div>
                             </td>
                             <td class="px-3 py-3 whitespace-nowrap">
@@ -141,6 +135,23 @@
                                     </div>
                                 </div>
                             </td>
+                            <td class="px-3 py-3 whitespace-nowrap">
+                                <div class="text-center text-sm font-medium text-gray-900">
+                                    @if ($factura->vencimiento)
+                                        <p>{{ date('Y-m-d', strtotime($factura->vencimiento)) }}</p>
+                                        @php
+                                            $hoy = \Carbon\Carbon::parse(date('Y-m-d'));
+                                            $vencimiento = \Carbon\Carbon::parse($factura->vencimiento);
+                                        @endphp
+                                        @if ($vencimiento->diffInDays($hoy, false) > 0)
+                                        <p class="px-2 inline text-xs leading-5 font-semibold rounded-full text-yellow-800">
+                                            {{$vencimiento->diffInDays($hoy, false)}} días vencidos
+                                        </p>
+                                        @endif
+                                    @endif
+                                </div>
+                            </td>
+
                             <td class="px-3 py-3 whitespace-nowrap">
                                 <div class="text-right text-sm font-medium text-gray-900">
                                     $ {{$factura->total}}
@@ -182,13 +193,13 @@
 
                                 </div>
                             </td>
-                            <td class="px-1 py-3 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="{{route('facturas.show', $factura)}}" class="text-indigo-600 hover:text-indigo-800" title="Ver Factura">
+                            <td class="px-1 py-3 whitespace-nowrap text-center text-sm font-medium">
+                                <button type="button" wire:click="registrarPago({{$factura->id}})" class="text-indigo-600 hover:text-indigo-800">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd" />
                                     </svg>
-                                </a>
+                                </button>
 
                             </td>
                             <td class="px-1 py-3 whitespace-nowrap text-right text-sm font-medium">
@@ -215,4 +226,75 @@
         </div>
         </div>
     </div>
+
+    <x-jet-dialog-modal wire:model="openModal">
+        <x-slot name="title">
+            @if ($factura_tmp)
+            <p class="px-2 w-full text-gray-600 border-b border-gray-300 shadow-b">
+                Registar Pago de Factura # {{$factura_tmp->numero}}
+            </p>
+            @endif
+        </x-slot>
+        <x-slot name="content">
+            <div class="grid grid-cols-12 gap-0">
+                <div class="col-start-1 col-span-2 border-r border-gray-300">
+                    <label class="text-right pr-2 pt-2 block text-xs text-gray-700">Saldo Factura:</label>
+                </div>
+                @if ($factura_tmp)
+                <div class="col-start-3 col-span-8 ml-2 pb-2">
+                    <label class="font-bold block w-full text-lg pl-2 pt-1 text-gray-700">$ {{number_format($factura_tmp->total,2)}}</label>
+                </div>
+                @endif
+                <div class="col-start-1 col-span-2 border-r border-gray-300">
+                    <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Método de Pago:</label>
+                </div>
+                <div class="col-start-3 col-span-10 ml-1 pb-2 ">
+                    <div class="grid grid-cols-12 gap-0">
+                        <div class="col-start-1 col-span-12 pl-3 py-1 text-sm">
+                            @foreach($metodos as $metodo)
+                                <x-jet-input type="radio" name="metodo_pago" value="{{$metodo->id}}" wire:model.defer="metodo_pago" class="py-0.5 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"/>
+                                <span class="mr-3">{{$metodo->nombre}}</span>
+                            @endforeach
+                            <x-jet-input-error for="metodo_pago" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-start-1 col-span-2 border-r border-gray-300 ml-2">
+                    <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Fecha de Pago:</label>
+                </div>
+                <div class="col-start-3 col-span-8 ml-2 pb-2">
+                    <x-jet-input type="date" wire:model.defer="fecha" class="mr-2 py-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm border border-gray-300" />
+                    <x-jet-input-error for="fecha" />
+                </div>
+                <div class="col-start-1 col-span-2 border-r border-gray-300 pb-5">
+                    <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Monto Recibido:</label>
+                </div>
+                <div class="col-start-3 col-span-8 ml-2">
+                    <x-jet-input type="number" wire:model.defer="monto" class="mr-2 py-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm border border-gray-300" />
+                    <x-jet-input-error for="monto" />
+                </div>
+                <div class="col-start-1 col-span-2 border-r border-gray-300 pb-5">
+                    <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Descripción:</label>
+                </div>
+                <div class="col-start-3 col-span-9 ml-2">
+                    <x-jet-input type="text" wire:model.defer="descripcion" class="w-full mr-2 py-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm border border-gray-300" />
+                    <x-jet-input-error for="descripcion" />
+                </div>
+            </div>
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$set('openModal', false)" wire:loading.attr="disabled">
+                {{ __('Cerrar') }}
+            </x-jet-secondary-button>
+            <x-jet-danger-button wire:click="save" class="inline-flex items-center border border-gray-300 rounded-md shadow-sm disabled:opacity-25">
+                <svg wire:loading wire:target="save" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Guardar Pago
+            </x-jet-danger-button>
+            {{$pagada}}
+        </x-slot>
+    </x-jet-dialog-modal>
 </div>
