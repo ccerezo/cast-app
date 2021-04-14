@@ -75,3 +75,4 @@ Route::resource('pagoFacturas', PagoFacturaController::class)->names('pagoFactur
 
 Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');
 Route::get('pdf/generate/{id}', [PDFController::class, 'generatePDF'])->name('pdf.generate');
+Route::get('pdf/generatePago/{id}', [PDFController::class, 'generatePagoPDF'])->name('pdf.generatePago');

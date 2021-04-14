@@ -26,6 +26,7 @@ class FacturaIndex extends Component
                             ->orWhere('clientes.nombre', 'LIKE', '%' . $this->search . '%')
                             ->orWhere('clientes.identificacion', 'LIKE', '%' . $this->search . '%')
                             ->select('facturas.*')
+                            ->orderBy('facturas.id', 'desc')
                             ->paginate(10);
         return view('livewire.factura.factura-index', compact('facturas'));
     }

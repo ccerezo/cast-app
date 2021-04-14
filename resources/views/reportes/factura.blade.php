@@ -25,6 +25,9 @@
     table thead tr th{
         text-align:center;
     }
+    table tfoot tr td{
+        padding: 5px;
+    }
     .text-right{
         text-align: right;
     }

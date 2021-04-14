@@ -28,7 +28,8 @@ class PagoFacturaIndex extends Component
     public $fecha;
     public $metodo_pago;
     public $descripcion;
-    public $pagada;
+    public $pagos_factura = array();
+    public $total_pagos = 0;
     protected $listeners = ['updateDetalleCliente'];
 
     protected $rules = [
@@ -53,6 +54,8 @@ class PagoFacturaIndex extends Component
     public function registrarPago($id) {
         $this->openModal = true;
         $this->factura_tmp = Factura::find($id);
+        $this->pagos_factura = pagoFactura::where('factura_id', '=', $id)->get();
+        $this->total_pagos = pagoFactura::where('factura_id', '=', $this->factura_tmp->id)->sum('monto');
     }
     public function save() {
         $this->validate();
@@ -65,14 +68,26 @@ class PagoFacturaIndex extends Component
             'metodo_pago_id' => $this->metodo_pago
         ]);
 
-        if($pago->monto >= $this->factura_tmp->total){
-            $this->pagada = 'PAGADA';
+        $this->pagos_factura = pagoFactura::where('factura_id', '=', $this->factura_tmp->id)->get();
+        $this->total_pagos = pagoFactura::where('factura_id', '=', $this->factura_tmp->id)->sum('monto');
+        $this->vendedor = Vendedor::where('id', '=', $this->factura_tmp->vendedor_id)->first();
+        $cupoDisponible = $this->vendedor->cupo_disponible + $pago->monto;
+        $this->vendedor->update([
+            'cupo_disponible' => $cupoDisponible
+        ]);
+
+        if($this->total_pagos >= $this->factura_tmp->total){
             $estado_factura = EstadoFactura::where('codigo', '=', '01')->first();
             $this->factura_tmp->update([
                 'estado_factura_id' => $estado_factura->id
             ]);
+        } else {
+            $estado_factura = EstadoFactura::where('codigo', '=', '04')->first();
+            $this->factura_tmp->update([
+                'estado_factura_id' => $estado_factura->id
+            ]);
         }
-
+        $this->factura_tmp = Factura::find($this->factura_tmp->id);
         $this->reset(['fecha','monto','descripcion','metodo_pago']);
     }
     public function render()
@@ -103,6 +118,7 @@ class PagoFacturaIndex extends Component
         $facturas = Factura::join('clientes', 'facturas.cliente_id', '=', 'clientes.id')
                         ->where($this->condiciones)
                         ->select('facturas.*')
+                        ->orderBy('facturas.id', 'desc')
                         ->paginate(10);
 
 

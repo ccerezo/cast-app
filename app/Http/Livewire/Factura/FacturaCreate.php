@@ -24,7 +24,7 @@ class FacturaCreate extends Component
     public $cliente_id;
     public $indice;
     public $mensaje_repetido;
-    public $tipo_factura;
+    public $tipo_factura = 'FINAL';
     public $openModal = false;
     public $forma_pago;
     protected $listeners = ['updateDetalle', 'updateDetalleCliente'];
