@@ -268,3 +268,7 @@ BEGIN
         WHERE id = NEW.vendedor_id;
     END IF ;
 END
+
+contrl + D reemplazar variables
+alt click para escribir varias linea
+HASTA AQUI  QUIERO VOLVER
