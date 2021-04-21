@@ -9,9 +9,12 @@ class TipoCliente extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tipo','activo'];
+    protected $fillable = ['tipo','codigo','activo'];
 
     public function clientes() {
         return $this->hasMany('App\Models\Cliente');
+    }
+    public function facturas() {
+        return $this->hasMany('App\Models\Factura');
     }
 }

@@ -1,9 +1,10 @@
 <div>
     <div class="flex justify-between border-b border-gray-300 pb-2 mb-3 shadow ">
         <p class="inline-flex mt-4 pl-5 text-lg text-gray-700">Listado de Clientes</p>
-        <a href="{{route('clientes.create')}}" class="inline-flex items-center mt-4 mr-5 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+        @livewire('cliente.cliente-create')
+        {{-- <a href="{{route('clientes.create')}}" class="inline-flex items-center mt-4 mr-5 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
             Agregar Cliente
-        </a>
+        </a> --}}
     </div>
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -39,7 +40,9 @@
                             <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Correo
                             </th>
-
+                            <th scope="col" class="relative px-3 py-2">
+                                <span class="sr-only">Edit</span>
+                                </th>
                             <th scope="col" class="relative px-3 py-2">
                             <span class="sr-only">Edit</span>
                             </th>
@@ -53,7 +56,7 @@
                             <tr>
                             <td class="px-4 py-2 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <div class="text-sm font-medium text-gray-900">
                                             {{$cliente->identificacion}}
                                         </div>
@@ -90,16 +93,20 @@
                             </td>
                             <td class="px-4 py-2 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <div class="text-sm font-medium text-gray-900">
                                             {{$cliente->correo}}
                                         </div>
                                     </div>
                                 </div>
                             </td>
-
-                            <td class="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="{{route('clientes.edit', $cliente)}}" class="mr-3 text-indigo-600 hover:text-indigo-800">Editar</a>
+                            <td class="px-2 py-2 whitespace-nowrap text-right text-sm font-medium">
+                            @if ($cliente->tipoCliente->codigo == '01')
+                                <a href="" class="mr-3 text-indigo-600 hover:text-indigo-800">Cupo</a>
+                            @endif
+                            </td>
+                            <td class="px-2 py-2 whitespace-nowrap text-sm font-medium">
+                                @livewire('cliente.cliente-edit', ['cliente' => $cliente], key($cliente->id))
                             </td>
                             <td>
                                 <form action="{{route('clientes.destroy', $cliente)}}" method="POST">

@@ -16,6 +16,7 @@ class CreateTipoClientesTable extends Migration
         Schema::create('tipo_clientes', function (Blueprint $table) {
             $table->id();
             $table->string('tipo', 30);
+            $table->string('codigo', 10);
             $table->enum('activo',['si','no'])->default('si');
             $table->timestamps();
         });
