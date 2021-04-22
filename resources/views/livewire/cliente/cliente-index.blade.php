@@ -1,9 +1,10 @@
 <div>
     <div class="flex justify-between border-b border-gray-300 pb-2 mb-3 shadow ">
         <p class="inline-flex mt-4 pl-5 text-lg text-gray-700">Listado de Clientes</p>
-        <a href="{{route('clientes.create')}}" class="inline-flex items-center mt-4 mr-5 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+        @livewire('cliente.cliente-create')
+        {{-- <a href="{{route('clientes.create')}}" class="inline-flex items-center mt-4 mr-5 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
             Agregar Cliente
-        </a>
+        </a> --}}
     </div>
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -39,7 +40,9 @@
                             <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Correo
                             </th>
-
+                            <th scope="col" class="relative px-3 py-2">
+                                <span class="sr-only">Edit</span>
+                                </th>
                             <th scope="col" class="relative px-3 py-2">
                             <span class="sr-only">Edit</span>
                             </th>
@@ -53,7 +56,7 @@
                             <tr>
                             <td class="px-4 py-2 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <div class="text-sm font-medium text-gray-900">
                                             {{$cliente->identificacion}}
                                         </div>
@@ -90,22 +93,25 @@
                             </td>
                             <td class="px-4 py-2 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="ml-4">
+                                    <div class="ml-2">
                                         <div class="text-sm font-medium text-gray-900">
                                             {{$cliente->correo}}
                                         </div>
                                     </div>
                                 </div>
                             </td>
-
-                            <td class="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="{{route('clientes.edit', $cliente)}}" class="mr-3 text-indigo-600 hover:text-indigo-800">Editar</a>
+                            <td class="px-2 py-2 whitespace-nowrap">
+                                @livewire('cliente.cliente-edit', ['cliente' => $cliente], key($cliente->id))
                             </td>
-                            <td>
+                            <td class="px-2 pt-0 whitespace-nowrap">
                                 <form action="{{route('clientes.destroy', $cliente)}}" method="POST">
                                     @csrf
                                     @method('delete')
-                                    <button type="submit" class="text-red-600 hover:text-red-800">Eliminar</button>
+                                    <button type="submit" class="text-red-600 hover:text-red-800">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
                                 </form>
                             </td>
                             </tr>

@@ -92,6 +92,7 @@ php artisan make:model Inventario -m
 php artisan make:model Factura -m
 php artisan make:model FacturaDetalle -m
 php artisan make:model pagoFactura -m
+php artisan make:model Cupo -m
 ## Luego vuelvo a generar las migraciones
 php artisan migrate
 
@@ -137,6 +138,8 @@ php artisan make:livewire producto\ProductoCreate
 php artisan make:livewire producto\ProductoEdit
 php artisan make:livewire tipoCliente\TipoClienteIndex
 php artisan make:livewire cliente\ClienteIndex
+php artisan make:livewire cliente\ClienteCreate
+php artisan make:livewire cliente\ClienteEdit
 php artisan make:livewire estadoFactura\EstadoFacturaIndex
 php artisan make:livewire vendedor\VendedorIndex
 php artisan make:livewire metodoPago\MetodoPagoIndex

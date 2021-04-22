@@ -36,7 +36,8 @@ class TipoClienteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tipo' => 'required'
+            'tipo' => 'required',
+            'codigo' => 'required'
         ]);
         $tipoCliente = TipoCliente::create($request->all());
 

@@ -6,7 +6,7 @@ use App\Models\Cliente;
 use App\Models\Factura;
 use App\Models\MetodoPago;
 use App\Models\Producto;
-use App\Models\Vendedor;
+use App\Models\TipoCliente;
 use Livewire\Component;
 
 class FacturaCreate extends Component
@@ -32,8 +32,7 @@ class FacturaCreate extends Component
     public function mount()
     {
         $ultimaFactura = Factura::latest()->first();
-        $this->vendedor = Vendedor::where('activo', '=', 'si')->first();
-        $this->vendedor_id = $this->vendedor->id;
+
         if($ultimaFactura != null)
             $this->numeroFactura = $ultimaFactura->numero + 1;
         else
@@ -96,7 +95,7 @@ class FacturaCreate extends Component
     }
     public function consultarVendedor()
     {
-        $this->vendedor = Vendedor::where('id', '=', $this->vendedor_id)->first();
+
     }
     public function eliminarProducto($id)
     {
@@ -146,9 +145,9 @@ class FacturaCreate extends Component
     public function render()
     {
         $clientes = Cliente::pluck('nombre','id');
-        $vendedors = Vendedor::pluck('nombre','id');
+        $tiposCliente = TipoCliente::where('activo', '=', 'si')->get();
         $metodos = MetodoPago::where('activo', '=', 'si')->get();
         $formaPago = ['contado' => 'CONTADO', 'credito' => 'CRÉDITO'];
-        return view('livewire.factura.factura-create', compact('clientes','vendedors','metodos','formaPago'));
+        return view('livewire.factura.factura-create', compact('clientes','tiposCliente','metodos','formaPago'));
     }
 }

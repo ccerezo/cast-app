@@ -16,6 +16,7 @@ class CreateMetodoPagosTable extends Migration
         Schema::create('metodo_pagos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre',30);
+            $table->string('codigo',10)->nullable();
             $table->enum('activo',['si','no'])->default('si');
             $table->timestamps();
         });

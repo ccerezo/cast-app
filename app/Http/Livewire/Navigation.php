@@ -32,7 +32,6 @@ class Navigation extends Component
             ['name' => 'Tallaje', 'route' => route('tallajes.index'), 'active' => request()->routeIs('tallajes.index')],
             ['name' => 'Tipo Clientes', 'route' => route('tipoClientes.index'), 'active' => request()->routeIs('tipoClientes.index')],
             ['name' => 'Estados Factura', 'route' => route('estadoFacturas.index'), 'active' => request()->routeIs('estadoFacturas.index')],
-            ['name' => 'Vendedores', 'route' => route('vendedors.index'), 'active' => request()->routeIs('vendedors.index')],
             ['name' => 'Método de Pago', 'route' => route('metodoPagos.index'), 'active' => request()->routeIs('metodoPagos.index')],
 
         ];

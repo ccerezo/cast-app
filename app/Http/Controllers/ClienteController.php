@@ -25,8 +25,7 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        $tipos = TipoCliente::pluck('tipo','id');
-        return view('clientes.create', compact('tipos'));
+        return view('clientes.create');
     }
 
     /**

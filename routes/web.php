@@ -17,7 +17,6 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\TallaController;
 use App\Http\Controllers\TallajeController;
 use App\Http\Controllers\TipoClienteController;
-use App\Http\Controllers\VendedorController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -62,8 +61,6 @@ Route::resource('tipoClientes', TipoClienteController::class)->names('tipoClient
 Route::resource('clientes', ClienteController::class)->names('clientes')->middleware('auth');
 
 Route::resource('estadoFacturas', EstadoFacturaController::class)->names('estadoFacturas')->middleware('auth');
-
-Route::resource('vendedors', VendedorController::class)->names('vendedors')->middleware('auth');
 
 Route::resource('inventarios', InventarioController::class)->names('inventarios')->middleware('auth');
 

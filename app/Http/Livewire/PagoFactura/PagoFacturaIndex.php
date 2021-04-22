@@ -4,7 +4,6 @@ namespace App\Http\Livewire\PagoFactura;
 
 use App\Models\Cliente;
 use App\Models\EstadoFactura;
-use App\Models\Vendedor;
 use App\Models\Factura;
 use App\Models\MetodoPago;
 use App\Models\pagoFactura;
@@ -40,12 +39,12 @@ class PagoFacturaIndex extends Component
 
     public function mount()
     {
-        $this->vendedor = Vendedor::where('activo', '=', 'si')->first();
+
         $this->vendedor_id = $this->vendedor->id;
     }
     public function consultarVendedor()
     {
-        $this->vendedor = Vendedor::where('id', '=', $this->vendedor_id)->first();
+
     }
     public function updateDetalleCliente($id)
     {
@@ -70,7 +69,6 @@ class PagoFacturaIndex extends Component
 
         $this->pagos_factura = pagoFactura::where('factura_id', '=', $this->factura_tmp->id)->get();
         $this->total_pagos = pagoFactura::where('factura_id', '=', $this->factura_tmp->id)->sum('monto');
-        $this->vendedor = Vendedor::where('id', '=', $this->factura_tmp->vendedor_id)->first();
         $cupoDisponible = $this->vendedor->cupo_disponible + $pago->monto;
         $this->vendedor->update([
             'cupo_disponible' => $cupoDisponible
@@ -94,7 +92,7 @@ class PagoFacturaIndex extends Component
     {
         $this->condiciones = array();
         $clientes = Cliente::pluck('nombre','id');
-        $vendedors = Vendedor::pluck('nombre','id');
+
         $metodos = MetodoPago::where('activo', '=', 'si')->get();
         $formaPago = ['contado' => 'CONTADO', 'credito' => 'CRÉDITO'];
         if(isset($this->searchNumero) && $this->searchNumero > 0){
@@ -122,7 +120,7 @@ class PagoFacturaIndex extends Component
                         ->paginate(10);
 
 
-        return view('livewire.pago-factura.pago-factura-index', compact('facturas','clientes','vendedors','metodos','formaPago'));
+        return view('livewire.pago-factura.pago-factura-index', compact('facturas','clientes','metodos','formaPago'));
     }
     public function updatingSearchNumero()
     {

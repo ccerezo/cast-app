@@ -19,4 +19,8 @@ class Cliente extends Model
         return $this->hasMany('App\Models\Factura');
     }
 
+    public function cupos() {
+        return $this->hasMany('App\Models\Cupo');
+    }
+
 }
