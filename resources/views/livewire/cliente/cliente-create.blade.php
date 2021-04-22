@@ -1,5 +1,5 @@
 <div>
-    <x-jet-danger-button wire:click="$set('openModal',true)">
+    <x-jet-danger-button wire:click="$set('openModal',true)" class="inline-flex items-center mt-4 mr-5 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
         Agregar Cliente
     </x-jet-danger-button>
     <x-jet-dialog-modal wire:model="openModal">

@@ -31,12 +31,24 @@ class ClienteEdit extends Component
         $this->cupo = Cupo::where('cliente_id', '=', $this->cliente->id)->first();
         if($this->cupo)
             $this->cupo_aprobado = $this->cupo->cupo_aprobado;
+        else{
+            if($this->tipoCliente->codigo != '01')
+                $this->cupo_aprobado = 1;
+        }
     }
     public function getTipoCliente()
     {
         $this->tipoCliente = TipoCliente::find($this->cliente->tipo_cliente_id);
         if($this->cupo)
             $this->cupo_aprobado = $this->cupo->cupo_aprobado;
+        else{
+            if($this->tipoCliente->codigo != '01')
+                $this->cupo_aprobado = 1;
+            else
+                $this->cupo_aprobado = null;
+        }
+
+
     }
     public function save() {
         $this->validate();
@@ -50,6 +62,15 @@ class ClienteEdit extends Component
                     'cupo_aprobado' => $this->cupo_aprobado,
                     'cupo_disponible' => $this->cupo_aprobado,
                     'saldo' => 0
+                ]);
+            }
+        } else {
+            if($this->tipoCliente->codigo == '01'){
+                $cupo = Cupo::create([
+                    'cupo_aprobado' => $this->cupo_aprobado,
+                    'cupo_disponible' => $this->cupo_aprobado,
+                    'saldo' => 0,
+                    'cliente_id' => $this->cliente->id
                 ]);
             }
         }

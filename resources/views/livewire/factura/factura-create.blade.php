@@ -49,10 +49,10 @@
                                         {!! Form::label('vendedor', Auth::user()->name, ['class' => 'w-full block text-right py-1 pr-2 border border-gray-300 text-xs text-gray-700']) !!}
                                     </div>
                                     <div class="col-start-1 col-span-3">
-                                        {!! Form::label('l_cupo', 'Cupo Disponible:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
+                                        {!! Form::label('l_cupo', '-', ['class' => 'pt-1 text-xs text-gray-700']) !!}
                                     </div>
                                     <div class="col-start-4 col-span-5">
-                                        {!! Form::label('cupo_disponible', '$ '.number_format($vendedor->cupo_disponible,2), ['class' => 'w-full block text-right py-1 pr-2 border border-gray-300 text-xs text-gray-700']) !!}
+                                        {!! Form::label('cupo_disponible', '-', ['class' => 'w-full block text-right py-1 pr-2 border border-gray-300 text-xs text-gray-700']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -72,14 +72,21 @@
                                         {!! Form::label('l_tipo_factura', 'Tipo:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
                                     </div>
                                     <div class="col-start-4 col-span-9 text-xs pl-1 py-1">
-                                    {!! Form::select('vendedor_id', $vendedors, null,
+                                    {{-- {!! Form::select('vendedor_id', $vendedors, null,
                                                 ['wire:model' => 'vendedor_id', 'wire:change' => 'consultarVendedor()',
-                                                    'class' => 'w-full block mb-1 py-1 px-3 border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs']) !!}
+                                                    'class' => 'w-full block mb-1 py-1 px-3 border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs']) !!} --}}
                                     </div>
                                     {{-- <div class="col-start-4 col-span-9 text-xs pl-1 py-1">
                                         {!! Form::radio('tipo', 'FINAL', null, ['wire:model' => 'tipo_factura', 'wire:click' => 'cambiarPrecios()','required', 'class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Final
                                         {!! Form::radio('tipo', 'MAYORISTA', null, ['wire:model' => 'tipo_factura', 'wire:click' => 'cambiarPrecios()','required', 'class' => 'ml-4 py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Mayorista
                                     </div> --}}
+                                    <div class="col-start-4 col-span-9 text-xs pl-1 py-1">
+                                    @foreach($tiposCliente as $tipo)
+
+                                            {!! Form::radio('tipo_id', $tipo->id, null, ['class' => 'py-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} <span class="mr-5">{{$tipo->tipo}}</span>
+
+                                    @endforeach
+                                    </div>
                                 </div>
                             </div>
 

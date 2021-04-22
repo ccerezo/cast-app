@@ -33,7 +33,10 @@ class ClienteCreate extends Component
     public function getTipoCliente()
     {
         $this->tipoCliente = TipoCliente::find($this->tipo_cliente_id);
-        $this->cupo_aprobado = 1;
+        if($this->tipoCliente->codigo != '01')
+            $this->cupo_aprobado = 1;
+        else
+            $this->cupo_aprobado = null;
     }
     public function save() {
         $this->validate();
