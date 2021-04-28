@@ -15,10 +15,10 @@ class Factura extends Model
         return $this->belongsTo('App\Models\Cliente');
     }
     public function tipoCliente() {
-        return $this->belongsTo('App\Models\TipoCliente');
+        return $this->belongsTo('App\Models\TipoCliente','facturado_como_id');
     }
     public function user() {
-        return $this->belongsTo('App\Models\Users');
+        return $this->belongsTo('App\Models\User', 'cajero_id');
     }
     public function estadoFactura() {
         return $this->belongsTo('App\Models\EstadoFactura');

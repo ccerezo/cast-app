@@ -38,7 +38,7 @@
 
         <p>Número: {{ $factura->numero }}</p>
         <p>Fecha: {{ $factura->fecha }}</p>
-        <p>Vendedor:  {{ $factura->vendedor->nombre }}</p>
+        <p>Cajero:  {{ $factura->user->name }}</p>
         <p>Cliente:  {{ $factura->cliente->nombre }} - {{ $factura->cliente->identificacion }}</p>
         <p>Forma de Pago:  {{ $factura->forma_pago }}</p>
     </div>
@@ -58,30 +58,42 @@
                     <tr>
                         <td>{{$item->producto->descripcion}} {{ ($item->descuento+0) > 0 ? ' - Desct. '.$item->descuento.'%':'' }}</td>
                         <td style="text-align:right;">
-                            @if (strcmp($factura->tipo, 'FINAL') === 0)
-                                $ {{number_format($item->precio_venta_publico,2)}}
+                            @if (strcmp($factura->tipoCliente->codigo, '01') === 0)
+                                $ {{number_format($item->precio_produccion,2)}}
                             @else
-                                @if (strcmp($factura->tipo, 'MAYORISTA') === 0)
+                                @if (strcmp($factura->tipoCliente->codigo, '02') === 0)
                                     $ {{number_format($item->precio_mayorista,2)}}
+                                @else
+                                    @if (strcmp($factura->tipoCliente->codigo, '03') === 0)
+                                        $ {{number_format($item->precio_venta_publico,2)}}
+                                    @endif
                                 @endif
                             @endif
                         </td>
                         <td style="text-align:center;">{{$item->cantidad}}</td>
                         <td style="text-align:center;">
-                            @if (strcmp($factura->tipo, 'FINAL') === 0)
-                                $ {{number_format(($item->precio_venta_publico * $item->cantidad) * (($item->descuento)/100),2)}}
+                            @if (strcmp($factura->tipoCliente->codigo, '01') === 0)
+                                $ {{number_format(($item->precio_produccion * $item->cantidad) * (($item->descuento)/100),2)}}
                             @else
-                                @if (strcmp($factura->tipo, 'MAYORISTA') === 0)
+                                @if (strcmp($factura->tipoCliente->codigo, '02') === 0)
                                     $ {{number_format(($item->precio_mayorista * $item->cantidad) * (($item->descuento)/100),2)}}
+                                @else
+                                    @if (strcmp($factura->tipoCliente->codigo, '03') === 0)
+                                        $ {{number_format(($item->precio_venta_publico * $item->cantidad) * (($item->descuento)/100),2)}}
+                                    @endif
                                 @endif
                             @endif
                         </td>
                         <td style="text-align:right;padding-right:5px">
-                            @if (strcmp($factura->tipo, 'FINAL') === 0)
-                                $ {{number_format(($item->precio_venta_publico * $item->cantidad),2)}}
+                            @if (strcmp($factura->tipoCliente->codigo, '01') === 0)
+                                $ {{number_format(($item->precio_produccion * $item->cantidad),2)}}
                             @else
-                                @if (strcmp($factura->tipo, 'MAYORISTA') === 0)
+                                @if (strcmp($factura->tipoCliente->codigo, '02') === 0)
                                     $ {{number_format(($item->precio_mayorista * $item->cantidad),2)}}
+                                @else
+                                    @if (strcmp($factura->tipoCliente->codigo, '03') === 0)
+                                        $ {{number_format(($item->precio_venta_publico * $item->cantidad),2)}}
+                                    @endif
                                 @endif
                             @endif
                         </td>

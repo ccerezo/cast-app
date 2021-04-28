@@ -38,35 +38,31 @@
 
                     <div class="col-start-5 col-span-4">
                         <div class="grid grid-cols-12 gap-0">
-                            <div class="col-start-1 col-span-3">
-                                {!! Form::label('l_vendedor', 'Vendedor:', ['class' => 'py-1 text-xs text-gray-700']) !!}
+                            <div class="col-start-1 col-span-2">
+                                {!! Form::label('l_cliente', 'Cliente:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
                             </div>
-                            <div class="col-start-4 col-span-5">
-                                {!! Form::select('vendedor_id', $vendedors, null,
-                                                ['wire:model' => 'vendedor_id', 'wire:change' => 'consultarVendedor()',
-                                                    'class' => 'w-full block mb-1 py-1 px-3 border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-xs']) !!}
+                            <div class="col-start-3 col-span-9">
+                                @livewire('shared.cliente-search')
                             </div>
                             <div class="col-start-1 col-span-3">
-                                {!! Form::label('l_cupo', 'Saldo Total:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
+
                             </div>
                             <div class="col-start-4 col-span-5">
-                                <label class="block py-1 pl-2 text-xs border border-gray-300 text-gray-700">
-                                    $ {{number_format($vendedor->cupo_aprobado - $vendedor->cupo_disponible,2)}}
-                                </label>
+
                             </div>
                         </div>
                     </div>
 
                     <div class="col-start-9 col-span-4">
                         <div class="grid grid-cols-12 gap-0">
+
                             <div class="col-start-1 col-span-2 text-right">
-                                {!! Form::label('l_cliente', 'Cliente:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
+                                {!! Form::label('l_cta_x_cobrar', 'Por Cobrar:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
                             </div>
-                            <div class="col-start-4 col-span-9 mb-1 w-full">
-                                @livewire('shared.cliente-search')
-                                @error('cliente_id')
-                                    <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
-                                @enderror
+                            <div class="col-start-4 col-span-5 mb-1 w-full">
+                                <label class="block py-1 pr-2 text-xs text-right border border-gray-300 text-gray-700">
+                                    $ {{$por_cobrar - $abonado}}
+                                </label>
                             </div>
 
                         </div>
@@ -92,6 +88,12 @@
                             </th>
                             <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                                 Valor
+                            </th>
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                                Abonado
+                            </th>
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                                Saldo
                             </th>
                             <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                                 F. Pago
@@ -155,6 +157,16 @@
                             <td class="px-3 py-3 whitespace-nowrap">
                                 <div class="text-right text-sm font-medium text-gray-900">
                                     $ {{$factura->total}}
+                                </div>
+                            </td>
+                            <td class="px-3 py-3 whitespace-nowrap">
+                                <div class="text-right text-sm font-medium text-gray-900">
+                                    $ {{ number_format($this->abonadoPorFactura($factura->id),2)}}
+                                </div>
+                            </td>
+                            <td class="px-3 py-3 whitespace-nowrap">
+                                <div class="text-right text-sm font-medium text-gray-900">
+                                    $ {{ number_format($factura->total - $this->abonadoPorFactura($factura->id),2)}}
                                 </div>
                             </td>
 
@@ -285,13 +297,6 @@
                                         {{ $pago->descripcion }}
                                     </div>
                                 </td>
-                                <td class="px-1 py-3 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="{{route('pdf.generatePago', $pago)}}" target="_blank" class="text-gray-600 hover:text-gray-800" title="Imprimir">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" />
-                                        </svg>
-                                    </a>
-                                </td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -358,13 +363,17 @@
             </x-jet-secondary-button>
             @if ($factura_tmp)
                 @if ($factura_tmp->estadoFactura->codigo != '01')
-                <x-jet-danger-button wire:click="save" class="inline-flex items-center border border-gray-300 rounded-md shadow-sm disabled:opacity-25">
-                    <svg wire:loading wire:target="save" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Guardar Pago
-                </x-jet-danger-button>
+                    <x-jet-danger-button wire:click="save" class="inline-flex items-center border border-gray-300 rounded-md shadow-sm disabled:opacity-25">
+                        <svg wire:loading wire:target="save" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Guardar Pago
+                    </x-jet-danger-button>
+                @else
+                    <a href="{{route('pdf.generateComprobantePago', $factura_tmp->id)}}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" title="Imprimir">
+                        Imprimir
+                    </a>
                 @endif
             @endif
         </x-slot>

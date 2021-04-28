@@ -21,20 +21,15 @@
                                         <label class="bg-gray-100 p-2 border block text-xs text-gray-700">Datos de Factura</label>
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-4 gap-0">
+
+                                <div class="grid grid-cols-3 gap-0">
                                     <label class="px-2 py-1 block text-xs text-gray-700">Número: {{ $factura->numero }}</label>
-                                    <label class="px-2 py-1 block text-xs text-gray-700">Vendedor:  {{ $factura->vendedor->nombre }}</label>
                                     <label class="px-2 py-1 block text-xs text-gray-700">Cliente: {{ $factura->cliente->nombre }}</label>
                                     <label class="px-2 py-1 block text-xs text-gray-700">Forma de Pago: {{ $factura->forma_pago }}</label>
                                 </div>
-                                <div class="grid grid-cols-4 gap-0">
+                                <div class="grid grid-cols-3 gap-0">
                                     <label class="px-2 py-1 block text-xs text-gray-700">F. Ingreso: {{ date('Y-m-d H:i', strtotime($factura->fecha)) }}</label>
-                                    @if ($factura->vencimiento)
-                                        <label class="px-2 py-1 block text-xs text-gray-700">F. Vencimiento: {{ $factura->vencimiento }}</label>
-                                    @else
-                                        <label></label>
-                                    @endif
-                                    <label class="px-2 py-1 block text-xs text-gray-700">Facturado como: {{ $factura->tipo }}</label>
+                                    <label class="px-2 py-1 block text-xs text-gray-700">Facturado como: {{ $factura->tipoCliente->tipo }}</label>
                                     <label class="px-2 py-1 block text-xs text-gray-700">Estado:
                                         @if ($factura->estadoFactura->codigo == '01')
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-200 text-green-800">
@@ -54,13 +49,13 @@
                                     </label>
                                 </div>
                                 @if (strcmp($factura->forma_pago, 'CREDITO') === 0)
-                                <div class="grid grid-cols-4 gap-0">
-                                    @if ($factura->observacion)
-                                        <label class="px-2 py-1 block text-xs text-gray-700">Observación: {{ $factura->observacion }}</label>
+                                <div class="grid grid-cols-3 gap-0">
+                                    @if ($factura->vencimiento)
+                                        <label class="px-2 py-1 block text-xs text-gray-700">F. Vencimiento: {{ $factura->vencimiento }}</label>
                                     @else
                                         <label></label>
                                     @endif
-                                    <label></label>
+
                                     <label></label>
                                     @if ($pagos->count())
                                         <label class="px-2 py-1 block text-xs text-gray-700">Método de pago:
@@ -74,13 +69,8 @@
                                 </div>
                                 @endif
                                 @if (strcmp($factura->forma_pago, 'CONTADO') === 0)
-                                <div class="grid grid-cols-4 gap-0">
-                                    @if ($factura->observacion)
-                                        <label class="px-2 py-1 block text-xs text-gray-700">Observación: {{ $factura->observacion }}</label>
-                                    @else
-                                        <label></label>
-                                    @endif
-                                    <label></label>
+                                <div class="grid grid-cols-3 gap-0">
+                                    <label class="px-2 py-1 block text-xs text-gray-700">Cajero:  {{ $factura->user->name }}</label>
                                     <label></label>
                                     @if ($pagos->count())
                                         <label class="px-2 py-1 block text-xs text-gray-700">Método de pago:
@@ -91,6 +81,13 @@
                                     @endif
                                 </div>
                                 @endif
+                                <div class="grid grid-cols-2 gap-0">
+                                    @if ($factura->observacion)
+                                        <label class="px-2 py-1 block text-xs text-gray-700">Observación: {{ $factura->observacion }}</label>
+                                    @else
+                                        <label></label>
+                                    @endif
+                                </div>
                             </div>
                         </div>
 
@@ -125,11 +122,15 @@
                                 {{ $item->producto->descripcion }} {{ ($item->descuento+0) > 0 ? ' - Desct. '.$item->descuento.'%':'' }}
                             </div>
                             <div class="col-start-9 col-span-1 text-xs text-right pr-3 py-1 border-r">
-                                @if (strcmp($factura->tipo, 'FINAL') === 0)
-                                    $ {{ number_format(($item->precio_venta_publico+0),2) }}
+                                @if (strcmp($factura->tipoCliente->codigo, '01') === 0)
+                                    $ {{ number_format(($item->precio_produccion+0),2) }}
                                 @else
-                                    @if (strcmp($factura->tipo, 'MAYORISTA') === 0)
+                                    @if (strcmp($factura->tipoCliente->codigo, '02') === 0)
                                         $ {{ number_format(($item->precio_mayorista+0),2) }}
+                                    @else
+                                        @if (strcmp($factura->tipoCliente->codigo, '03') === 0)
+                                            $ {{ number_format(($item->precio_venta_publico+0),2) }}
+                                        @endif
                                     @endif
                                 @endif
 
@@ -138,21 +139,29 @@
                                 {{ $item->cantidad }}
                             </div>
                             <div class="col-start-11 col-span-1 text-xs text-right pr-3 py-1 border-r">
-                                @if (strcmp($factura->tipo, 'FINAL') === 0)
-                                    $ {{ number_format(($item->precio_venta_publico * $item->cantidad) * (($item->descuento)/100),2) }}
+                                @if (strcmp($factura->tipoCliente->codigo, '01') === 0)
+                                    $ {{ number_format(($item->precio_produccion * $item->cantidad) * (($item->descuento)/100),2) }}
                                 @else
-                                    @if (strcmp($factura->tipo, 'MAYORISTA') === 0)
+                                    @if (strcmp($factura->tipoCliente->codigo, '02') === 0)
                                         $ {{ number_format(($item->precio_mayorista * $item->cantidad) * (($item->descuento)/100),2) }}
+                                    @else
+                                        @if (strcmp($factura->tipoCliente->codigo, '03') === 0)
+                                            $ {{ number_format(($item->precio_venta_publico * $item->cantidad) * (($item->descuento)/100),2) }}
+                                        @endif
                                     @endif
                                 @endif
 
                             </div>
                             <div class="col-start-12 col-span-1 text-xs text-right pr-3 py-1 border-r">
-                                @if (strcmp($factura->tipo, 'FINAL') === 0)
-                                    $ {{ number_format(($item->precio_venta_publico * $item->cantidad),2) }}
+                                @if (strcmp($factura->tipoCliente->codigo, '01') === 0)
+                                    $ {{ number_format(($item->precio_produccion * $item->cantidad),2) }}
                                 @else
-                                    @if (strcmp($factura->tipo, 'MAYORISTA') === 0)
+                                    @if (strcmp($factura->tipoCliente->codigo, '02') === 0)
                                         $ {{ number_format(($item->precio_mayorista * $item->cantidad),2) }}
+                                    @else
+                                        @if (strcmp($factura->tipoCliente->codigo, '03') === 0)
+                                            $ {{ number_format(($item->precio_venta_publico * $item->cantidad),2) }}
+                                        @endif
                                     @endif
                                 @endif
 

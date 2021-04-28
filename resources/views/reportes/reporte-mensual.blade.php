@@ -33,45 +33,42 @@
 </style>
 <body>
     <br />
-    <p class="text-center titulo">Comprobante de Pago</p>
-    <br />
-    <div class="container">
-        <p>Factura #: {{ $factura->numero }}</p>
-        <p>Cliente:  {{ $factura->cliente->nombre }} - {{ $factura->cliente->identificacion }}</p>
-        {{-- <p>Estado Factura:  {{ $factura->estadoFactura->nombre }}</p> --}}
-    </div>
+    <p class="text-center titulo">Reporte Mensual, {{ \Carbon\Carbon::parse("".$vendido->anio."-".$vendido->mes."")->locale('es_ES')->monthName }} - {{$vendido->anio}} </p>
+    <p class="titulo text-center">Total de ventas del mes: <br>$ {{$vendido->vendido}}</p>
 
     <table>
         <thead>
             <tr>
-            <th class="border-bottom" style="width: 25%;"></th>
-            <th class="border-bottom" style="width: 15%;"></th>
-            <th class="border-bottom" style="width: 50%;"></th>
-            <th class="border-bottom" style="width: 10%;"></th>
+                <th class="border" style="width: 10%;">Fact. #</th>
+                <th class="border" style="width: 20%;">Fecha</th>
+                <th class="border" style="width: 50%;">Cliente</th>
+                <th class="border" style="width: 10%;">Valor</th>
+                <th class="border" style="width: 10%;">Saldo</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
+            {{-- <tr>
                 <td style="text-align:center;padding:10px auto; border-left: 1px solid #c7c7c7">Factura #: {{ $factura->numero }}</td>
                 <td style="text-align:center;padding:10px auto">{{ date('Y-m-d H:i', strtotime($factura->fecha)) }}</td>
                 <td></td>
                 <td class="text-right border" style="padding:10px 5px">$ {{number_format($factura->total,2)}}</td>
-            </tr>
-            @foreach ($pagos as $pago)
+            </tr> --}}
+            @foreach ($facturas as $factura)
                 <tr>
-                    <td style="text-align:center;padding:10px auto;border-left: 1px solid #c7c7c7">{{ $pago->metodoPago->nombre }}</td>
-                    <td style="text-align:center;padding:10px auto">{{ date('Y-m-d H:i', strtotime($pago->fecha)) }}</td>
-                    <td style="text-align:center;padding:10px auto">{{ $pago->descripcion }}</td>
-                    <td class="text-right border" style="text-align:right;padding-right:5px">$ {{ number_format($pago->monto,2) }}</td>
+                    <td class="border-bottom" style="text-align:center;padding:5px auto;">{{ $factura->numero }}</td>
+                    <td class="border-bottom"style="text-align:center;padding:5px auto;">{{ date('Y-m-d H:i', strtotime($factura->fecha)) }}</td>
+                    <td class="border-bottom"style="text-align:center;padding:5px auto;">{{ $factura->cliente->nombre }}</td>
+                    <td class="border-bottom" class="text-right" style="text-align:right;padding-right:5px">$ {{ number_format($factura->total,2) }}</td>
+                    <td class="border-bottom" style="text-align:right;padding-right:5px;">$ {{ number_format($factura->total - $factura->recibido,2) }}</td>
                 </tr>
             @endforeach
         </tbody>
-        <tfoot>
+        {{-- <tfoot>
             <tr>
                 <td colspan="3" class="text-right border" style="padding:10px 7px">Saldo:</td>
                 <td class="text-right border" style="padding:10px 5px">$ {{number_format($factura->total - $total_pagos ,2)}}</td>
             </tr>
-        </tfoot>
+        </tfoot> --}}
     </table>
 
 </body>

@@ -70,6 +70,8 @@ Route::resource('metodoPagos', MetodoPagoController::class)->names('metodoPagos'
 
 Route::resource('pagoFacturas', PagoFacturaController::class)->names('pagoFacturas')->middleware('auth');
 
+Route::get('reportes', [PDFController::class, 'index'])->name('reporte.index');
 Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');
 Route::get('pdf/generate/{id}', [PDFController::class, 'generatePDF'])->name('pdf.generate');
-Route::get('pdf/generatePago/{id}', [PDFController::class, 'generatePagoPDF'])->name('pdf.generatePago');
+Route::get('pdf/generateComprobantePago/{id}', [PDFController::class, 'generateComprobantePagoPDF'])->name('pdf.generateComprobantePago');
+Route::get('pdf/ventas/mensual/{anio}/{mes}', [PDFController::class, 'reporteMensualPDF'])->name('pdf.reporteMensualPDF');

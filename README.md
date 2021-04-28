@@ -149,6 +149,7 @@ php artisan make:livewire factura\FacturaCreate
 php artisan make:livewire shared\ClienteSearch
 php artisan make:livewire shared\ProductoSearch
 php artisan make:livewire pagoFactura\PagoFacturaIndex
+php artisan make:livewire reporte\ReporteIndex
 ## para instalar codigo de barras
 composer require milon/barcode
 composer require barryvdh/laravel-dompdf
@@ -245,33 +246,7 @@ BEGIN
     END IF ;
 END
 
-restarCupoDisponible
-facturas
-after
-insert
-BEGIN
-    IF NEW.estado_factura_id = 3 || NEW.estado_factura_id = 4 THEN
-        UPDATE vendedors 
-        SET cupo_disponible = (cupo_disponible - NEW.total)
-        WHERE id = NEW.vendedor_id;
-    END IF ;
-END
-
-anularFactura
-facturas
-after
-update
-BEGIN
-    DECLARE v_codigo varchar(50);
-    SELECT codigo INTO v_codigo FROM estado_facturas WHERE id = NEW.estado_factura_id;
-    
-    IF (STRCMP(v_codigo,'02') = 0 && STRCMP(NEW.forma_pago,'CREDITO') = 0) THEN
-        UPDATE vendedors 
-        SET cupo_disponible = (cupo_disponible + NEW.total)
-        WHERE id = NEW.vendedor_id;
-    END IF ;
-END
-
 contrl + D reemplazar variables
 alt click para escribir varias linea
 HASTA AQUI  QUIERO VOLVER
+

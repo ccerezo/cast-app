@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\Cupo;
 use App\Models\EstadoFactura;
 use App\Models\Factura;
 use App\Models\FacturaDetalle;
 use App\Models\Inventario;
 use App\Models\pagoFactura;
 use App\Models\Producto;
-use App\Models\Vendedor;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Auth;
 
 class FacturaController extends Controller
 {
@@ -67,11 +69,11 @@ class FacturaController extends Controller
             'total' => $factura['total'],
             'descuento' => $factura['descuento'],
             'forma_pago' => $factura['forma_pago'],
-            'tipo' => $factura['tipo'],
             'observacion' => $factura['observacion'],
             'vencimiento' => $factura['vencimiento'],
+            'facturado_como_id' => $factura['facturado_como_id'],
             'cliente_id' => $factura['cliente_id'],
-            'vendedor_id' => $factura['vendedor_id'],
+            'cajero_id' => Auth::user()->id,
             'estado_factura_id' => $estadoFactura->id
         ]);
         foreach($factura['cantidad'] as $key => $valor) {
@@ -99,7 +101,18 @@ class FacturaController extends Controller
                 'factura_id' => $venta->id,
                 'metodo_pago_id' => $factura['metodo_pago_id'],
             ]);
+        } else {
+            $cupo = Cupo::where('cliente_id', '=', $factura['cliente_id'])->first();
+            if($cupo) {
+                $cupo->update([
+                    'ultimo_credito' => $factura['fecha'],
+                    'cupo_disponible' => $cupo->cupo_disponible - $factura['total'],
+                    'saldo' => $cupo->saldo + $factura['total'],
+                ]);
+            }
         }
+
+
 
         $factura = $venta;
         return redirect()->route('facturas.show', compact('factura'))->with('info', 'El registro se creó con éxito.');
@@ -114,10 +127,9 @@ class FacturaController extends Controller
     public function show(Factura $factura)
     {
         $clientes = Cliente::pluck('nombre','id');
-        $vendedors = Vendedor::pluck('nombre','id');
         $productos = FacturaDetalle::where('factura_id', '=', $factura->id)->get();
         $pagos = pagoFactura::where('factura_id', '=', $factura->id)->get();
-        return view('facturas.show', compact('factura','vendedors','clientes','productos','pagos'));
+        return view('facturas.show', compact('factura','clientes','productos','pagos'));
     }
 
     /**
@@ -129,9 +141,8 @@ class FacturaController extends Controller
     public function edit(Factura $factura)
     {
         $clientes = Cliente::pluck('nombre','id');
-        $vendedors = Vendedor::pluck('nombre','id');
         $productos = FacturaDetalle::where('factura_id', '=', $factura->id)->get();
-        return view('facturas.edit', compact('factura','vendedors','clientes','productos'));
+        return view('facturas.edit', compact('factura','clientes','productos'));
     }
 
     /**
@@ -174,6 +185,15 @@ class FacturaController extends Controller
                 'stock' => $item->cantidad + $producto->stock,
             ]);
 
+        }
+        if(strcmp($factura->forma_pago, 'CREDITO') === 0){
+            $cupo = Cupo::where('cliente_id', '=', $factura->cliente_id)->first();
+            if($cupo) {
+                $cupo->update([
+                    'cupo_disponible' => $cupo->cupo_disponible + $factura->total,
+                    'saldo' => $cupo->saldo - $factura->total,
+                ]);
+            }
         }
 
         return redirect()->route('facturas.index')->with('info', 'La Factura fue ANULADA con éxito!');

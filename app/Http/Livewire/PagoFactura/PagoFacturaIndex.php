@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\PagoFactura;
 
 use App\Models\Cliente;
+use App\Models\Cupo;
 use App\Models\EstadoFactura;
 use App\Models\Factura;
 use App\Models\MetodoPago;
@@ -19,8 +20,8 @@ class PagoFacturaIndex extends Component
     public $searchCredito;
     public $openModal = false;
     public $factura_tmp;
-    public $vendedor;
-    public $vendedor_id;
+    public $por_cobrar;
+    public $abonado;
     public $cliente_id;
     public $condiciones = array();
     public $monto;
@@ -39,17 +40,23 @@ class PagoFacturaIndex extends Component
 
     public function mount()
     {
+        $this->por_cobrar = Factura::where('forma_pago', '=', 'CREDITO')
+                        ->whereIn('facturas.estado_factura_id', [3, 4])
+                        ->sum('total');
 
-        $this->vendedor_id = $this->vendedor->id;
-    }
-    public function consultarVendedor()
-    {
-
+        $this->abonado =  pagoFactura::join('facturas', 'pago_facturas.factura_id', '=', 'facturas.id')
+                        ->where('facturas.forma_pago', '=', 'CREDITO')
+                        ->whereIn('facturas.estado_factura_id', [3, 4])
+                        ->sum('pago_facturas.monto');
     }
     public function updateDetalleCliente($id)
     {
         $this->cliente_id = $id;
+        $this->por_cobrar =  $this->cobrarCliente();
+        $this->abonado =  $this->abonadoTotalCliente();
+
     }
+
     public function registrarPago($id) {
         $this->openModal = true;
         $this->factura_tmp = Factura::find($id);
@@ -69,10 +76,13 @@ class PagoFacturaIndex extends Component
 
         $this->pagos_factura = pagoFactura::where('factura_id', '=', $this->factura_tmp->id)->get();
         $this->total_pagos = pagoFactura::where('factura_id', '=', $this->factura_tmp->id)->sum('monto');
-        $cupoDisponible = $this->vendedor->cupo_disponible + $pago->monto;
-        $this->vendedor->update([
-            'cupo_disponible' => $cupoDisponible
-        ]);
+        $cupo = Cupo::where('cliente_id', '=', $this->factura_tmp->cliente_id)->first();
+        if($cupo) {
+            $cupo->update([
+                'cupo_disponible' => $cupo->cupo_disponible + $this->monto,
+                'saldo' => $cupo->saldo - $this->monto,
+            ]);
+        }
 
         if($this->total_pagos >= $this->factura_tmp->total){
             $estado_factura = EstadoFactura::where('codigo', '=', '01')->first();
@@ -85,7 +95,10 @@ class PagoFacturaIndex extends Component
                 'estado_factura_id' => $estado_factura->id
             ]);
         }
+
         $this->factura_tmp = Factura::find($this->factura_tmp->id);
+        $this->por_cobrar =  $this->cobrarCliente();
+        $this->abonado = $this->abonadoTotalCliente();
         $this->reset(['fecha','monto','descripcion','metodo_pago']);
     }
     public function render()
@@ -109,18 +122,42 @@ class PagoFacturaIndex extends Component
         if(isset($this->cliente_id) && $this->cliente_id > 0){
             array_push($this->condiciones, ['facturas.cliente_id', '=', $this->cliente_id]);
         }
-        if(isset($this->vendedor_id) && $this->vendedor_id > 0){
-            array_push($this->condiciones, ['facturas.vendedor_id', '=', $this->vendedor_id]);
-        }
 
         $facturas = Factura::join('clientes', 'facturas.cliente_id', '=', 'clientes.id')
                         ->where($this->condiciones)
+                        ->where('estado_factura_id', '<>', 2)
                         ->select('facturas.*')
                         ->orderBy('facturas.id', 'desc')
                         ->paginate(10);
 
 
         return view('livewire.pago-factura.pago-factura-index', compact('facturas','clientes','metodos','formaPago'));
+    }
+
+    public function cobrarCliente() {
+
+        return Factura::join('clientes', 'facturas.cliente_id', '=', 'clientes.id')
+                    ->where('facturas.cliente_id', '=', $this->cliente_id)
+                    ->where('facturas.forma_pago', '=', 'CREDITO')
+                    ->whereIn('facturas.estado_factura_id', [3, 4])
+                    ->sum('facturas.total');
+    }
+
+    public function abonadoTotalCliente() {
+
+        return pagoFactura::join('facturas', 'pago_facturas.factura_id', '=', 'facturas.id')
+                        ->join('clientes', 'facturas.cliente_id', '=', 'clientes.id')
+                        ->where('clientes.id', '=', $this->cliente_id)
+                        ->where('facturas.forma_pago', '=', 'CREDITO')
+                        ->whereIn('facturas.estado_factura_id', [3, 4])
+                        ->sum('pago_facturas.monto');
+    }
+    public function abonadoPorFactura($factura_id) {
+
+        return pagoFactura::join('facturas', 'pago_facturas.factura_id', '=', 'facturas.id')
+                        ->join('clientes', 'facturas.cliente_id', '=', 'clientes.id')
+                        ->where('facturas.id', '=', $factura_id)
+                        ->sum('pago_facturas.monto');
     }
     public function updatingSearchNumero()
     {

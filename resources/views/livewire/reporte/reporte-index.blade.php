@@ -1,0 +1,104 @@
+<div>
+    <div class="flex justify-between border-b border-gray-300 mb-3">
+        {{-- <p class="inline-flex mt-3 pl-5 text-lg text-gray-700">Factura: #{!! Form::text('numero', null, ['wire:model' => "numeroFactura", 'class' => 'pt-0.5 border-0 pl-2 focus:ring-indigo-500 focus:border-indigo-500 text-md border-gray-300']) !!}</p> --}}
+        <p class="inline-flex mt-3 pl-5 text-lg text-gray-700">Ventas Mensuales</p>
+    </div>
+    <div class="flex flex-col">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            @if (session('info'))
+                    <div class="bg-green-400 border-l-4 border-green-900 text-gray-900 p-4" role="alert">
+                        <p class="font-bold">Información!</p>
+                        <p>{{session('info')}}</p>
+                    </div>
+            @endif
+
+            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+
+                @if($ventas->count())
+                <div class="min-w-full divide-y divide-gray-200">
+                    <table class="min-w-full">
+                        <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                                Año
+                            </th>
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                                Mes
+                            </th>
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                                Ventas
+                            </th>
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                                Detalle
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach ($ventas as $venta)
+                            <tr>
+                            <td class="px-3 py-3 whitespace-nowrap">
+                                <div class="text-center text-sm font-medium text-gray-900">
+                                    {{$venta->year}}
+
+                                </div>
+                            </td>
+                            <td class="px-3 py-3 whitespace-nowrap">
+                                <div class="text-center text-sm font-medium text-gray-900">
+                                    {{ \Carbon\Carbon::parse("".$venta->year."-".$venta->mes."")->locale('es_ES')->monthName }}
+                                </div>
+                            </td>
+                            <td class="px-3 py-3 whitespace-nowrap">
+                                <div class="text-center text-sm font-medium text-gray-900">
+                                    $ {{number_format($venta->total,2)}}
+                                </div>
+                            </td>
+                            <td class="px-3 py-3 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="ml-2">
+                                        <div class="text-sm font-medium text-gray-900">
+                                            <a href="{{route('pdf.reporteMensualPDF', [$venta->year, $venta->month])}}" target="_blank" class="text-gray-600 hover:text-gray-800" title="Imprimir">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                    <div class="bg-gray-100 px-6 py-2 border-t border-gray-200">
+                        {{ $ventas->links() }}
+                    </div>
+                </div>
+                @else
+                    <p class="bg-gray-100 px-6 py-2 border-t border-gray-200">No existen registros.</p>
+                @endif
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <x-jet-dialog-modal wire:model="openModal">
+        <x-slot name="title">
+           Seleccione Fechas, Desde - Hasta
+        </x-slot>
+        <x-slot name="content">
+            <div class="grid grid-cols-12 gap-0 border border-gray-300 mb-5">
+                poner la Fechas
+            </div>
+
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$set('openModal', false)" wire:loading.attr="disabled">
+                {{ __('Cerrar') }}
+            </x-jet-secondary-button>
+
+        </x-slot>
+    </x-jet-dialog-modal>
+</div>
