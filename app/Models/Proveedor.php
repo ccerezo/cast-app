@@ -9,4 +9,8 @@ class Proveedor extends Model
 {
     use HasFactory;
     protected $fillable = ['identificacion', 'nombre', 'direccion', 'telefono', 'correo', 'activo'];
+
+    public function inventarioMateriaPrima() {
+        return $this->hasMany('App\Models\InventarioMateriaPrima');
+    }
 }

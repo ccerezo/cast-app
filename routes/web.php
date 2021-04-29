@@ -7,6 +7,7 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\EstadoFacturaController;
 use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\InventarioController;
+use App\Http\Controllers\InventarioMateriaPrimaController;
 use App\Http\Controllers\LineaController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\MateriaPrimaController;
@@ -33,7 +34,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
@@ -75,6 +76,8 @@ Route::resource('pagoFacturas', PagoFacturaController::class)->names('pagoFactur
 Route::resource('proveedors', ProveedorController::class)->names('proveedors')->middleware('auth');
 
 Route::resource('materiaPrimas', MateriaPrimaController::class)->names('materiaPrimas')->middleware('auth');
+
+Route::resource('inventarioMateriaPrimas', InventarioMateriaPrimaController::class)->names('inventarioMateriaPrimas')->middleware('auth');
 
 Route::get('reportes', [PDFController::class, 'index'])->name('reporte.index');
 Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');

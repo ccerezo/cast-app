@@ -46,7 +46,7 @@ class TallajeController extends Controller
         ]);
         $tallaje = Tallaje::create($request->all());
 
-        return redirect()->route('tallajes.edit', compact('tallaje'))->with('info', 'El registro se creó con éxito.');;
+        return redirect()->route('tallajes.edit', compact('tallaje'))->with('info', 'El registro se creó con éxito.');
     }
 
     /**

@@ -16,12 +16,7 @@ class Navigation extends Component
             ['name' => 'Facturas', 'route' => route('facturas.index'), 'active' => request()->routeIs('facturas.index')],
             ['name' => 'Cuentas por Cobrar', 'route' => route('pagoFacturas.index'), 'active' => request()->routeIs('pagoFacturas.index')],
             ['name' => 'Reportes', 'route' => route('reporte.index'), 'active' => request()->routeIs('reporte.index')],
-            ['name' => 'Proveedor', 'route' => route('proveedors.index'), 'active' => request()->routeIs('proveedors.index')],
-            ['name' => 'Materia Prima', 'route' => route('materiaPrimas.index'), 'active' => request()->routeIs('materiaPrimas.index')],
-            /*[
-                'name' => 'Tallas', 'route' => route('tallas.index'), 'active' => request()->routeIs('tallas.index')
-            ],
-            */
+
         ];
         $configuraciones = [
             ['name' => 'Bodegas', 'route' => route('bodegas.index'), 'active' => request()->routeIs('bodegas.index') ],
@@ -37,6 +32,12 @@ class Navigation extends Component
             ['name' => 'Método de Pago', 'route' => route('metodoPagos.index'), 'active' => request()->routeIs('metodoPagos.index')],
 
         ];
-        return view('livewire.navigation', compact('menus', 'configuraciones'));
+        $inventarioMateriaPrima = [
+            ['name' => 'Proveedor', 'route' => route('proveedors.index'), 'active' => request()->routeIs('proveedors.index')],
+            ['name' => 'Materia Prima', 'route' => route('materiaPrimas.index'), 'active' => request()->routeIs('materiaPrimas.index')],
+            ['name' => 'Inventario', 'route' => route('inventarioMateriaPrimas.index'), 'active' => request()->routeIs('inventarioMateriaPrimas.index')],
+
+        ];
+        return view('livewire.navigation', compact('menus', 'configuraciones','inventarioMateriaPrima'));
     }
 }

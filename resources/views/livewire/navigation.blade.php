@@ -61,7 +61,20 @@
                         {{ $menu['name'] }}
                     </a>
                 @endforeach
-
+                <div class="relative" x-data="{ open: false }">
+                    <div>
+                    <button x-on:click="open = true" type="button" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" id="config-menu" aria-expanded="false" aria-haspopup="true">
+                        Inventario Materia Prima
+                    </button>
+                    </div>
+                    <div x-show="open" x-on:click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="config-menu">
+                    @foreach ($inventarioMateriaPrima as $menu)
+                        <a href="{{$menu['route']}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            {{ $menu['name'] }}
+                        </a>
+                    @endforeach
+                    </div>
+                </div>
             @endauth
 
             </div>
@@ -112,7 +125,7 @@
           </div>
         </div>
         @else
-            <a href="{{route('login')}}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Login</a>
+            <a href="{{route('login')}}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Iniciar Sessión</a>
             <a href="{{route('register')}}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Registrar</a>
         @endauth
       </div>
@@ -143,6 +156,20 @@
                     {{ $menu['name'] }}
                 </a>
             @endforeach
+            <div class="relative" x-data="{ open: false }">
+                <div>
+                <button x-on:click="open = true" type="button" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" id="config-menu" aria-expanded="false" aria-haspopup="true">
+                    Inventario Materia Prima
+                </button>
+                </div>
+                <div x-show="open" x-on:click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="config-menu">
+                @foreach ($inventarioMateriaPrima as $menu)
+                    <a href="{{$menu['route']}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        {{ $menu['name'] }}
+                    </a>
+                @endforeach
+                </div>
+            </div>
         @endauth
       </div>
     </div>
