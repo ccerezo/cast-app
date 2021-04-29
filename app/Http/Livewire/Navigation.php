@@ -16,6 +16,8 @@ class Navigation extends Component
             ['name' => 'Facturas', 'route' => route('facturas.index'), 'active' => request()->routeIs('facturas.index')],
             ['name' => 'Cuentas por Cobrar', 'route' => route('pagoFacturas.index'), 'active' => request()->routeIs('pagoFacturas.index')],
             ['name' => 'Reportes', 'route' => route('reporte.index'), 'active' => request()->routeIs('reporte.index')],
+            ['name' => 'Proveedor', 'route' => route('proveedors.index'), 'active' => request()->routeIs('proveedors.index')],
+            ['name' => 'Materia Prima', 'route' => route('materiaPrimas.index'), 'active' => request()->routeIs('materiaPrimas.index')],
             /*[
                 'name' => 'Tallas', 'route' => route('tallas.index'), 'active' => request()->routeIs('tallas.index')
             ],

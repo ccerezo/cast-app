@@ -93,6 +93,8 @@ php artisan make:model Factura -m
 php artisan make:model FacturaDetalle -m
 php artisan make:model pagoFactura -m
 php artisan make:model Cupo -m
+php artisan make:model Proveedor -m
+php artisan make:model MateriaPrima -m
 ## Luego vuelvo a generar las migraciones
 php artisan migrate
 
@@ -121,6 +123,8 @@ php artisan make:controller FacturaController -r
 php artisan make:controller FacturaDetalleController -r
 php artisan make:controller PDFController
 php artisan make:controller PagoFacturaController -r
+php artisan make:controller ProveedorController -r
+php artisan make:controller MateriaPrimaController -r
 
 ## laravel Collective para los formularios
 composer require laravelcollective/html
@@ -150,6 +154,8 @@ php artisan make:livewire shared\ClienteSearch
 php artisan make:livewire shared\ProductoSearch
 php artisan make:livewire pagoFactura\PagoFacturaIndex
 php artisan make:livewire reporte\ReporteIndex
+php artisan make:livewire proveedor\ProveedorIndex
+php artisan make:livewire materiaPrima\MateriaPrimaIndex
 ## para instalar codigo de barras
 composer require milon/barcode
 composer require barryvdh/laravel-dompdf

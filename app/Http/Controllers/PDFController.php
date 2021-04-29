@@ -41,6 +41,7 @@ class PDFController extends Controller
 
     }
     public function reporteMensualPDF($anio, $mes) {
+
         $vendido = Factura::selectRaw('SUM(total) AS vendido, YEAR(fecha) as anio, MONTH(fecha) as mes')
                         ->where('estado_factura_id', '<>', 2)
                         ->whereRaw('YEAR(fecha) = ? AND MONTH(fecha) = ?', [$anio,$mes])
@@ -55,6 +56,67 @@ class PDFController extends Controller
                         ->get();
 
         return PDF::loadView('reportes.reporte-mensual', compact('vendido','facturas'))
-                    ->stream('archivo-pago.pdf');
+                    ->stream('archivo-mensual.pdf');
+    }
+
+    public function reportePorPrecioPDF($desde, $hasta) {
+
+        $vendedor = Factura::leftJoin('pago_facturas','facturas.id','=','pago_facturas.factura_id')
+                        ->selectRaw('facturas.id,facturas.numero,facturas.fecha,facturas.cliente_id,facturas.total,SUM(pago_facturas.monto) AS recibido')
+                        ->where('facturas.facturado_como_id', '=', 1)
+                        ->where('facturas.estado_factura_id', '<>', 2)
+                        ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->groupByRaw('facturas.id,facturas.numero,facturas.fecha,facturas.cliente_id,facturas.total')
+                        ->orderBy('facturas.fecha', 'DESC')
+                        ->get();
+
+        $vendedor_total = Factura::where('facturas.facturado_como_id', '=', 1)
+                        ->where('facturas.estado_factura_id', '<>', 2)
+                        ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->sum('total');
+
+        $mayorista = Factura::leftJoin('pago_facturas','facturas.id','=','pago_facturas.factura_id')
+                        ->selectRaw('facturas.id,facturas.numero,facturas.fecha,facturas.cliente_id,facturas.total,SUM(pago_facturas.monto) AS recibido')
+                        ->where('facturas.facturado_como_id', '=', 2)
+                        ->where('facturas.estado_factura_id', '<>', 2)
+                        ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->groupByRaw('facturas.id,facturas.numero,facturas.fecha,facturas.cliente_id,facturas.total')
+                        ->orderBy('facturas.fecha', 'DESC')
+                        ->get();
+
+        $mayorista_total = Factura::where('facturas.facturado_como_id', '=', 2)
+                        ->where('facturas.estado_factura_id', '<>', 2)
+                        ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->sum('total');
+
+        $final = Factura::leftJoin('pago_facturas','facturas.id','=','pago_facturas.factura_id')
+                        ->selectRaw('facturas.id,facturas.numero,facturas.fecha,facturas.cliente_id,facturas.total,SUM(pago_facturas.monto) AS recibido')
+                        ->where('facturas.facturado_como_id', '=', 3)
+                        ->where('facturas.estado_factura_id', '<>', 2)
+                        ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->groupByRaw('facturas.id,facturas.numero,facturas.fecha,facturas.cliente_id,facturas.total')
+                        ->orderBy('facturas.fecha', 'DESC')
+                        ->get();
+
+        $final_total = Factura::where('facturas.facturado_como_id', '=', 3)
+                        ->where('facturas.estado_factura_id', '<>', 2)
+                        ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->sum('total');
+
+        return PDF::loadView('reportes.reporte-por-precios', compact('vendedor','vendedor_total', 'mayorista','mayorista_total','final','final_total'))
+                    ->stream('archivo-ventas-precios.pdf');
+    }
+
+    public function reportePorProductosPDF($desde, $hasta) {
+
+        $productos = Factura::Join('factura_detalles','facturas.id','=','factura_detalles.factura_id')
+                        ->Join('productos','factura_detalles.producto_id','=','productos.id')
+                        ->selectRaw('factura_detalles.*, productos.descripcion, facturas.fecha,facturas.facturado_como_id,facturas.cliente_id')
+                        ->where('facturas.estado_factura_id', '<>', 2)
+                        ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->orderBy('facturas.fecha', 'DESC')
+                        ->get();
+        return PDF::loadView('reportes.reporte-por-productos', compact('productos'))
+                    ->stream('archivo-ventas-productos.pdf');
     }
 }

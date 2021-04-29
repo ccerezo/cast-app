@@ -1,7 +1,10 @@
 <div>
-    <div class="flex justify-between border-b border-gray-300 mb-3">
+    <div class="flex justify-between border-b border-gray-300 pb-2 mb-3 shadow ">
         {{-- <p class="inline-flex mt-3 pl-5 text-lg text-gray-700">Factura: #{!! Form::text('numero', null, ['wire:model' => "numeroFactura", 'class' => 'pt-0.5 border-0 pl-2 focus:ring-indigo-500 focus:border-indigo-500 text-md border-gray-300']) !!}</p> --}}
         <p class="inline-flex mt-3 pl-5 text-lg text-gray-700">Ventas Mensuales</p>
+        <x-jet-danger-button wire:click="$set('openModal',true)" class="inline-flex items-center mt-2 mr-5 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Ver Reportes
+        </x-jet-danger-button>
     </div>
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -88,8 +91,23 @@
            Seleccione Fechas, Desde - Hasta
         </x-slot>
         <x-slot name="content">
-            <div class="grid grid-cols-12 gap-0 border border-gray-300 mb-5">
-                poner la Fechas
+            <div class="grid grid-cols-4 gap-0 border-t border-gray-300 mb-1">
+                <label class="mt-3">Fecha de Inicio:</label>
+                <div class="mt-3">
+                    {!! Form::date('desde', \Carbon\Carbon::now()->format('Y-m-d'), ['wire:model' => 'desde', 'class' => 'w-full block mb-1 py-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs border border-gray-300']) !!}
+                    @error('fecha')
+                        <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
+                    @enderror
+                </div>
+            </div>
+            <div class="grid grid-cols-4 gap-0 mb-5">
+                <label class="mt-3">Fecha de Fin:</label>
+                <div class="mt-3">
+                    {!! Form::date('hasta', \Carbon\Carbon::now()->format('Y-m-d'), ['wire:model' => 'hasta', 'class' => 'w-full block mb-1 py-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs border border-gray-300']) !!}
+                    @error('fin')
+                        <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
+                    @enderror
+                </div>
             </div>
 
         </x-slot>
@@ -98,7 +116,12 @@
             <x-jet-secondary-button wire:click="$set('openModal', false)" wire:loading.attr="disabled">
                 {{ __('Cerrar') }}
             </x-jet-secondary-button>
-
+            <a href="{{route('pdf.reportePorPrecioPDF', [$desde, $hasta])}}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" title="Imprimir">
+                Ventas por Precio
+            </a>
+            <a href="{{route('pdf.reportePorProductosPDF', [$desde, $hasta])}}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" title="Imprimir">
+                Productos Vendidos
+            </a>
         </x-slot>
     </x-jet-dialog-modal>
 </div>

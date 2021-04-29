@@ -9,11 +9,13 @@ use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\LineaController;
 use App\Http\Controllers\MarcaController;
+use App\Http\Controllers\MateriaPrimaController;
 use App\Http\Controllers\MetodoPagoController;
 use App\Http\Controllers\ModeloController;
 use App\Http\Controllers\PagoFacturaController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\TallaController;
 use App\Http\Controllers\TallajeController;
 use App\Http\Controllers\TipoClienteController;
@@ -70,8 +72,14 @@ Route::resource('metodoPagos', MetodoPagoController::class)->names('metodoPagos'
 
 Route::resource('pagoFacturas', PagoFacturaController::class)->names('pagoFacturas')->middleware('auth');
 
+Route::resource('proveedors', ProveedorController::class)->names('proveedors')->middleware('auth');
+
+Route::resource('materiaPrimas', MateriaPrimaController::class)->names('materiaPrimas')->middleware('auth');
+
 Route::get('reportes', [PDFController::class, 'index'])->name('reporte.index');
 Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');
-Route::get('pdf/generate/{id}', [PDFController::class, 'generatePDF'])->name('pdf.generate');
-Route::get('pdf/generateComprobantePago/{id}', [PDFController::class, 'generateComprobantePagoPDF'])->name('pdf.generateComprobantePago');
-Route::get('pdf/ventas/mensual/{anio}/{mes}', [PDFController::class, 'reporteMensualPDF'])->name('pdf.reporteMensualPDF');
+Route::get('pdf/generate/{id}', [PDFController::class, 'generatePDF'])->name('pdf.generate')->middleware('auth');
+Route::get('pdf/generateComprobantePago/{id}', [PDFController::class, 'generateComprobantePagoPDF'])->name('pdf.generateComprobantePago')->middleware('auth');
+Route::get('pdf/ventas/mensual/{anio}/{mes}', [PDFController::class, 'reporteMensualPDF'])->name('pdf.reporteMensualPDF')->middleware('auth');
+Route::get('pdf/ventas/por-precios/{desde}/{hasta}', [PDFController::class, 'reportePorPrecioPDF'])->name('pdf.reportePorPrecioPDF')->middleware('auth');
+Route::get('pdf/ventas/productos/{desde}/{hasta}', [PDFController::class, 'reportePorProductosPDF'])->name('pdf.reportePorProductosPDF')->middleware('auth');
