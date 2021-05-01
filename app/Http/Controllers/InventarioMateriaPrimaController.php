@@ -42,7 +42,8 @@ class InventarioMateriaPrimaController extends Controller
         $request->validate([
             'proveedor_id' => 'required',
             'materia_prima_id' => 'required',
-            'stock' => 'required',
+            'stock' => 'numeric|required',
+            'costo_unidad' => 'numeric',
         ]);
         $inventarioMateriaPrima = InventarioMateriaPrima::create($request->all());
 
@@ -85,7 +86,8 @@ class InventarioMateriaPrimaController extends Controller
         $request->validate([
             'proveedor_id' => 'required',
             'materia_prima_id' => 'required',
-            'stock' => 'required',
+            'stock' => 'numeric|required',
+            'costo_unidad' => 'numeric',
         ]);
 
         $inventarioMateriaPrima->update($request->all());

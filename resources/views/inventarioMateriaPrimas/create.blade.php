@@ -36,14 +36,14 @@
 
                         <div class="col-span-6 sm:col-span-6">
                             {!! Form::label('name', 'Costo de Unidad', ['class' => 'block text-sm font-medium text-gray-700']) !!}
-                            {!! Form::number('costo_unidad', null, ['class' => 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
+                            {!! Form::text('costo_unidad', null, ['class' => 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
                             @error('costo_unidad')
                                 <span class="mt-2 text-sm text-red-500">{{$message}}</span>
                             @enderror
                         </div>
                         <div class="col-span-6 sm:col-span-6">
                             {!! Form::label('name', 'Stock', ['class' => 'block text-sm font-medium text-gray-700']) !!}
-                            {!! Form::number('stock', null, ['class' => 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
+                            {!! Form::text('stock', null, ['class' => 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md']) !!}
                             @error('stock')
                                 <span class="mt-2 text-sm text-red-500">{{$message}}</span>
                             @enderror
