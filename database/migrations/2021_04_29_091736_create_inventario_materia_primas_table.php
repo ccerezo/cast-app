@@ -16,7 +16,7 @@ class CreateInventarioMateriaPrimasTable extends Migration
         Schema::create('inventario_materia_primas', function (Blueprint $table) {
             $table->id();
 
-            $table->integer('stock');
+            $table->decimal('stock',$precision = 10, $scale = 2);
             $table->decimal('costo_unidad',$precision = 10, $scale = 4);
             $table->date('fecha_compra')->nullable();
             $table->enum('activo',['si','no'])->default('si');

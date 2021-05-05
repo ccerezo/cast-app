@@ -96,6 +96,7 @@ php artisan make:model Cupo -m
 php artisan make:model Proveedor -m
 php artisan make:model MateriaPrima -m
 php artisan make:model InventarioMateriaPrima -m
+php artisan make:model MateriaPrimaDetalle -m
 ## Luego vuelvo a generar las migraciones
 php artisan migrate
 
@@ -152,6 +153,7 @@ php artisan make:livewire metodoPago\MetodoPagoIndex
 php artisan make:livewire inventario\InventarioIndex
 php artisan make:livewire factura\FacturaIndex
 php artisan make:livewire factura\FacturaCreate
+php artisan make:livewire factura\FacturaEdit
 php artisan make:livewire shared\ClienteSearch
 php artisan make:livewire shared\ProductoSearch
 php artisan make:livewire pagoFactura\PagoFacturaIndex

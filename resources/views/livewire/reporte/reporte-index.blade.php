@@ -122,6 +122,9 @@
             <a href="{{route('pdf.reportePorProductosPDF', [$desde, $hasta])}}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" title="Imprimir">
                 Productos Vendidos
             </a>
+            <a href="{{route('pdf.reporteLoMasVendidoPDF', [$desde, $hasta])}}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" title="Imprimir">
+                Lo más Vendido
+            </a>
         </x-slot>
     </x-jet-dialog-modal>
 </div>

@@ -119,4 +119,18 @@ class PDFController extends Controller
         return PDF::loadView('reportes.reporte-por-productos', compact('productos'))
                     ->stream('archivo-ventas-productos.pdf');
     }
+
+    public function reporteLoMasVendidoPDF($desde, $hasta) {
+
+        $productos = FacturaDetalle::Join('facturas','factura_detalles.factura_id','=','facturas.id')
+                        ->Join('productos','factura_detalles.producto_id','=','productos.id')
+                        ->selectRaw('factura_detalles.producto_id, SUM(factura_detalles.cantidad) as cantidad')
+                        ->where('facturas.estado_factura_id', '<>', 2)
+                        ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->groupBy('factura_detalles.producto_id')
+                        ->orderBy('cantidad', 'DESC')
+                        ->get();
+        return PDF::loadView('reportes.reporte-mas-vendido', compact('productos'))
+                    ->stream('archivo-top-productos.pdf');
+    }
 }

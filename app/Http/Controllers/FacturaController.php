@@ -140,9 +140,9 @@ class FacturaController extends Controller
      */
     public function edit(Factura $factura)
     {
-        $clientes = Cliente::pluck('nombre','id');
-        $productos = FacturaDetalle::where('factura_id', '=', $factura->id)->get();
-        return view('facturas.edit', compact('factura','clientes','productos'));
+        // $productos = FacturaDetalle::where('factura_id', '=', $factura->id)->get();
+        // $pagos = pagoFactura::where('factura_id', '=', $factura->id)->get();
+        return view('facturas.edit', compact('factura'));
     }
 
     /**
@@ -154,7 +154,95 @@ class FacturaController extends Controller
      */
     public function update(Request $request, Factura $factura)
     {
-        //
+        //return $request->all();
+        $detalle_nuevo = array();
+        $detalle_viejo = array();
+        $detalles_viejo = FacturaDetalle::where('factura_id', '=', $factura->id)
+                                        ->selectRaw('factura_detalles.producto_id')
+                                        ->get();
+
+        foreach($detalles_viejo as $dv) {
+            array_push($detalle_viejo, $dv->producto_id);
+        }
+        //return $detalle_viejo;
+
+        foreach($request->input('cantidad') as $key => $valor) {
+            $detalle = FacturaDetalle::where('factura_id', '=', $factura->id)
+                                        ->where('producto_id', '=', $key)
+                                        ->first();
+
+            //$id_nuevo = $detalle->id;
+            //return $detalle->id;
+            //$id_nuevo = $detalle->id;
+
+            array_push($detalle_nuevo, $key);
+
+            if($detalle) {
+                $producto = Producto::where('id', '=', $key)->first();
+                $inventario = Inventario::where('producto_id', '=', $key)->first();
+
+                if($detalle->cantidad > $valor) {
+
+                    $producto->update([
+                        'stock' => $producto->stock + ($detalle->cantidad - $valor)
+                    ]);
+
+                    $inventario->update([
+                        'salidas' => $inventario->salidas - ($detalle->cantidad - $valor),
+                        'stock' => $inventario->stock + ($detalle->cantidad - $valor)
+                    ]);
+                    $detalle->update([
+                        'cantidad' => $valor
+                    ]);
+                }
+
+
+
+            } else {
+                $producto = Producto::find($key);
+                $cupo = FacturaDetalle::create([
+                    'precio_produccion' => $producto->precio_produccion,
+                    'precio_mayorista' => $producto->precio_mayorista,
+                    'precio_venta_publico' => $producto->precio_venta_publico,
+                    'cantidad' => $valor,
+                    'descuento' => 0,
+                    'iva' => 'no',
+                    'factura_id' => $factura->id,
+                    'producto_id' => $producto->id
+                ]);
+            }
+
+        }
+
+        //print_r($detalle_viejo);
+        //print_r($detalle_nuevo);
+        $reemplazados = array_diff($detalle_viejo,$detalle_nuevo);
+        //return $reemplazados;
+        $detalles_a_eliminar = FacturaDetalle::where('factura_id', '=', $factura->id)
+                                ->whereIn('producto_id', $reemplazados)->get();
+
+        foreach($detalles_a_eliminar as $d) {
+
+            $producto = Producto::where('id', '=', $d->producto_id)->first();
+            $inventario = Inventario::where('producto_id', '=', $d->producto_id)->first();
+
+            $producto->update([
+                'stock' => $producto->stock + ($d->cantidad)
+            ]);
+
+            $inventario->update([
+                'salidas' => $inventario->salidas - ($d->cantidad),
+                'stock' => $inventario->stock + ($d->cantidad)
+            ]);
+
+        }
+
+        FacturaDetalle::where('factura_id', '=', $factura->id)
+                        ->whereIn('producto_id', $reemplazados)
+                        ->delete();
+        //FacturaDetalle::destroy($reemplazados);
+
+        return redirect()->route('facturas.edit', $factura)->with('info', 'Los datos se actualizaron con éxito');
     }
 
     /**

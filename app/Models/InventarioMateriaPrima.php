@@ -18,4 +18,8 @@ class InventarioMateriaPrima extends Model
     public function proveedor() {
         return $this->belongsTo('App\Models\Proveedor');
     }
+
+    public function materiaPrimaDetalle() {
+        return $this->hasMany('App\Models\MateriaPrimaDetalle');
+    }
 }
