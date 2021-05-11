@@ -69,6 +69,9 @@ class FacturaCreate extends Component
                         }
                     }
                 }
+                if(strcmp($producto['iva'], 'si') === 0){
+                    $producto['descripcion'] = '(I) '.$producto['descripcion'];
+                }
 
                 return $producto;
             };
@@ -129,7 +132,8 @@ class FacturaCreate extends Component
     {
         $this->subtotal = array_sum(array_column(($this->detalle),'importe'));
         $this->total_descuento = array_sum(array_column(($this->detalle),'valor_descuento'));
-        $this->total = $this->subtotal - $this->total_descuento;
+        $this->iva = array_sum(array_column(($this->detalle),'valor_iva'));
+        $this->total = ($this->subtotal + $this->iva) - $this->total_descuento;
 
     }
     public function valorFinal($id,$indice)
@@ -154,7 +158,13 @@ class FacturaCreate extends Component
                             }
                         }
                     }
+                    if(strcmp($producto['iva'], 'si') === 0){
+                        $producto['valor_iva'] = ($producto['importe'] * 1.12) - $producto['importe'];
+                    } else {
+                        $producto['valor_iva'] = 0;
+                    }
                 }
+
             }
             return $producto;
         };
