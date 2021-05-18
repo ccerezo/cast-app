@@ -17,12 +17,12 @@ class ProductoCreate extends Component
     public $lineaSelected;
     public function render()
     {
-        $lineas = Linea::pluck('nombre','id');
-        $categorias = Categoria::pluck('nombre','id');
+        $lineas = Linea::orderBy('nombre', 'asc')->pluck('nombre','id');
+        $categorias = Categoria::orderBy('nombre', 'asc')->pluck('nombre','id');
         $bodegas = Bodega::pluck('nombre','id');
-        $marcas = Marca::pluck('nombre','id');
-        $modelos = Modelo::pluck('nombre','id');
-        $colores = Color::all();
+        $marcas = Marca::orderBy('nombre', 'asc')->pluck('nombre','id');
+        $modelos = Modelo::orderBy('nombre', 'asc')->pluck('nombre','id');
+        $colores = Color::orderBy('nombre', 'asc')->get();
         $lineas_tallaje = Linea::pluck('id')->first();
         $descuentos = ['0'=> '0%','5'=> '5%','10' =>'10%','15' =>'15%','20' =>'20%','25' =>'25%','30' =>'30%'];
         if(isset($this->lineaSelected) && $this->lineaSelected > 0){

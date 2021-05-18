@@ -38,17 +38,15 @@ class ProductoEdit extends Component
         $this->condiciones = array();
         $this->bandera = false;
         $productos = array();
-        $categorias = Categoria::all();
-        $lineas = Linea::all();
+        $categorias = Categoria::orderBy('nombre', 'asc')->get();
+        $lineas = Linea::orderBy('nombre', 'asc')->get();
         $tallas = Talla::all();
-        $modelos = Modelo::all();
-        $colors = Color::all();
+        $modelos = Modelo::orderBy('nombre', 'asc')->get();
+        $colors = Color::orderBy('nombre', 'asc')->get();
         //array_push($this->condiciones, ['codigo', 'LIKE', '%' . $this->search . '%']);
         if(isset($this->searchCodigoBarras) && $this->searchCodigoBarras > 0){
-            array_push($this->condiciones, ['codigo_barras', 'LIKE', '%' . $this->searchCodigoBarras . '%']);
             $this->bandera = true;
         }
-
 
         if(isset($this->searchLinea) && $this->searchLinea > 0){
             array_push($this->condiciones, ['linea_id', '=', $this->searchLinea]);
@@ -77,14 +75,26 @@ class ProductoEdit extends Component
         if($this->bandera) {
             $this->created = false;
             $productos = Producto::where($this->condiciones)
-                            ->paginate(12);
+                                    ->where(function ($query) {
+                                        $query->where('codigo_barras', 'LIKE', '%' . $this->searchCodigoBarras . '%')
+                                            ->orWhere('codigo', 'LIKE', '%' . $this->searchCodigoBarras . '%');
+                                    })
+                                    ->paginate(12);
         } else {
             if($this->created){
                 $productos = Producto::where('created_at', '>=', $this->created)
-                            ->paginate(12);
+                                        ->where(function ($query) {
+                                            $query->where('codigo_barras', 'LIKE', '%' . $this->searchCodigoBarras . '%')
+                                                ->orWhere('codigo', 'LIKE', '%' . $this->searchCodigoBarras . '%');
+                                        })
+                                        ->paginate(12);
             } else {
                 $productos = Producto::where('activo', '>=', 'si')
-                            ->paginate(12);
+                                        ->where(function ($query) {
+                                            $query->where('codigo_barras', 'LIKE', '%' . $this->searchCodigoBarras . '%')
+                                                ->orWhere('codigo', 'LIKE', '%' . $this->searchCodigoBarras . '%');
+                                        })
+                                        ->paginate(12);
             }
         }
 

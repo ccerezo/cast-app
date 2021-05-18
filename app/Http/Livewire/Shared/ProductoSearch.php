@@ -71,9 +71,12 @@ class ProductoSearch extends Component
     public function updatedQuery()
     {
         $this->productos = Producto::where('descripcion', 'like', '%' . $this->query . '%')
-            ->orWhere('codigo_barras', 'like', '%' . $this->query . '%')
-            ->get()
-            ->toArray();
+                                    ->orWhere(function ($query) {
+                                        $query->where('codigo_barras', 'LIKE', '%' . $this->query . '%')
+                                            ->orWhere('codigo', 'LIKE', '%' . $this->query . '%');
+                                    })
+                                    ->get()
+                                    ->toArray();
     }
 
     public function render()

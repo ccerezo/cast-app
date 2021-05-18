@@ -34,14 +34,14 @@ class ProductoIndex extends Component
     public function render()
     {
         $this->condiciones = array();
-        $categorias = Categoria::all();
-        $lineas = Linea::all();
+        $categorias = Categoria::orderBy('nombre', 'asc')->get();
+        $lineas = Linea::orderBy('nombre', 'asc')->get();
         $tallas = Talla::all();
-        $modelos = Modelo::all();
-        $colors = Color::all();
+        $modelos = Modelo::orderBy('nombre', 'asc')->get();
+        $colors = Color::orderBy('nombre', 'asc')->get();
         $producto_tmp = Producto::pluck('id')->first();
         //$this->productoTMP = Producto::where('id', '=', 1)->first();
-        array_push($this->condiciones, ['codigo_barras', 'LIKE', '%' . $this->searchCodigoBarras . '%']);
+        //array_push($this->condiciones, ['codigo_barras', 'LIKE', '%' . $this->searchCodigoBarras . '%']);
         //array_push($this->condiciones, ['descripcion', 'LIKE', '%' . $this->searchCodigoBarras . '%']);
 
         if(isset($this->searchLinea) && $this->searchLinea > 0){
@@ -65,6 +65,10 @@ class ProductoIndex extends Component
         }
 
         $productos = Producto::where($this->condiciones)
+                                ->where(function ($query) {
+                                    $query->where('codigo_barras', 'LIKE', '%' . $this->searchCodigoBarras . '%')
+                                        ->orWhere('codigo', 'LIKE', '%' . $this->searchCodigoBarras . '%');
+                                })
                             ->paginate(12);
 
         return view('livewire.producto.producto-index',
