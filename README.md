@@ -261,3 +261,19 @@ contrl + D reemplazar variables
 alt click para escribir varias linea
 HASTA AQUI  QUIERO VOLVER
 
+SELECT * FROM productos WHERE modelo_id = 82
+
+UPDATE modelos SET codigo = '102' WHERE id = 79
+UPDATE modelos SET codigo = '103' WHERE id = 84
+UPDATE modelos SET codigo = '104' WHERE id = 87
+UPDATE modelos SET codigo = '105' WHERE id = 100
+
+UPDATE modelos SET codigo = '107' WHERE id = 45
+UPDATE modelos SET codigo = '108' WHERE id = 80
+UPDATE modelos SET codigo = '109' WHERE id = 85
+UPDATE modelos SET codigo = '110' WHERE id = 86
+UPDATE modelos SET codigo = '111' WHERE id = 94
+
+
+
+update productos SET codigo_barras = REPLACE(codigo_barras, '001007001', '001007100') WHERE modelo_id = 109
