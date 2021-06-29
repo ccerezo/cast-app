@@ -87,6 +87,11 @@
                                 {!! Form::select('descuento', $descuentos, null,
                                                 ['class' => 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm']) !!}
                             </div>
+                            <div class="col-span-4 sm:col-span-4">
+                                {!! Form::label('color', 'Sellecione Color', ['class' => 'block text-sm font-medium text-gray-700']) !!}
+                                {!! Form::select('color_id', $colorTmp, null,
+                                                ['wire:model' =>'colorSelected', 'class' => 'mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm']) !!}
+                            </div>
                             <div class="col-span-8 pt-7 sm:col-span-8">
                                 {!! Form::radio('iva', 'si', null, ['class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} GRABA IVA
                                 {!! Form::radio('iva', 'no', true,[ 'class' => 'ml-4 py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} NO GRABA IVA
@@ -102,7 +107,7 @@
                                         {!! Form::checkbox('tallas[]', $talla->id, 'check', ['class' => 'focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded']) !!}
                                         {!! $talla->numero1 !!}
 
-
+                                        @if ($colores)
                                         @foreach ($colores as $color)
 
                                             {!! Form::macro('myLabel', function($name, $value = null)
@@ -116,6 +121,7 @@
                                             {!! Form::number('stock['.$talla->id.']['.$color->id.'][]', null, ['class' => 'focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 py-0.5 px-1 rounded-md text-center']) !!}
 
                                         @endforeach
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>

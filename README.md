@@ -269,11 +269,12 @@ UPDATE modelos SET codigo = '104' WHERE id = 87
 UPDATE modelos SET codigo = '105' WHERE id = 100
 
 UPDATE modelos SET codigo = '107' WHERE id = 45
-UPDATE modelos SET codigo = '108' WHERE id = 80
-UPDATE modelos SET codigo = '109' WHERE id = 85
-UPDATE modelos SET codigo = '110' WHERE id = 86
-UPDATE modelos SET codigo = '111' WHERE id = 94
-
-
 
 update productos SET codigo_barras = REPLACE(codigo_barras, '001007001', '001007100') WHERE modelo_id = 109
+
+115 DE DEDO LAZO EN CAPELLADA
+    CAPELLADA DEDO LAZO
+133	TACOS	OFICINA 5 Y MEDIO
+    OFICINA 5 1/2
+
+054 BRENDA  ====> 055
