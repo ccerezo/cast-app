@@ -24,7 +24,7 @@ class PDFController extends Controller
     {
         $factura = Factura::where('id', '=', $id)->first(); //002 es PAGADA
         //$customPaper = array(0,0,567.00,283.80);
-        $customPaper = array(0,0,710,490);
+        $customPaper = array(0,0,720,490);
         $facturaDetalle = FacturaDetalle::where('factura_id', '=', $id)->get();
         return PDF::loadView('reportes.factura', compact('factura', 'facturaDetalle'))
             ->setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif'])
