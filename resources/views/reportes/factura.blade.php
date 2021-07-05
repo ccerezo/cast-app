@@ -48,8 +48,8 @@
         <thead>
             <tr>
             <th class="border" style="width: 60%;">Descripción</th>
-            <th class="border" style="width: 10%;">PVP</th>
-            <th class="border" style="width: 10%;">Cant.</th>
+            <th class="border" style="width: 11%;">PVP</th>
+            <th class="border" style="width: 9%;">Cant.</th>
             <th class="border" style="width: 10%;">Desc.</th>
             <th class="border" style="width: 10%;">Importe</th>
             </tr>

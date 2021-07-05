@@ -278,3 +278,7 @@ update productos SET codigo_barras = REPLACE(codigo_barras, '001007001', '001007
     OFICINA 5 1/2
 
 054 BRENDA  ====> 055
+
+The end result was: 10CM X 20CM =
+
+$customPaper = array(0,0,567.00,283.80);
