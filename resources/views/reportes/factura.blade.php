@@ -6,7 +6,7 @@
 </head>
 <style type="text/css">
     body{
-        font-size: 16px;
+        font-size: 18px;
     }
     .container{
         width: auto;
@@ -60,7 +60,7 @@
         <tbody>
             @foreach ($facturaDetalle as $item)
                 <tr>
-                    <td style="font-size: 15px;">{{$item->producto->descripcion}} {{ ($item->descuento+0) > 0 ? ' - Desct. '.$item->descuento.'%':'' }}</td>
+                    <td>{{$item->producto->descripcion}} {{ ($item->descuento+0) > 0 ? ' - Desct. '.$item->descuento.'%':'' }}</td>
                     <td style="text-align:right;">
                         @if (strcmp($factura->tipoCliente->codigo, '01') === 0)
                             $ {{number_format($item->precio_produccion,2)}}
