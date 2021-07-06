@@ -42,6 +42,7 @@
         {{-- <p>Datos de Factura</p> --}}
         {{-- <p>Número: {{ $factura->numero }}</p> --}}
         <p>Fecha: {{ $factura->fecha }}</p>
+        <p>Número:  {{ $factura->numero }}</p>
         <p>Cajero:  {{ $factura->user->name }}</p>
         <p>Cliente:  {{ $factura->cliente->nombre }} - {{ $factura->cliente->identificacion }}</p>
         <p>Forma de Pago:  {{ $factura->forma_pago }}</p>
