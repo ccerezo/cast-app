@@ -45,6 +45,7 @@
         <p>Cajero:  {{ $factura->user->name }}</p>
         <p>Cliente:  {{ $factura->cliente->nombre }} - {{ $factura->cliente->identificacion }}</p>
         <p>Forma de Pago:  {{ $factura->forma_pago }}</p>
+        <p>Observación:  {{ $factura->observacion }}</p>
     </div>
 
     <table>
