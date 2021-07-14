@@ -89,6 +89,7 @@ php artisan make:model EstadoFactura -m
 php artisan make:model Vendedor -m
 php artisan make:model MetodoPago -m
 php artisan make:model Inventario -m
+php artisan make:model InventarioDetalle -m
 php artisan make:model Factura -m
 php artisan make:model FacturaDetalle -m
 php artisan make:model pagoFactura -m
@@ -151,6 +152,7 @@ php artisan make:livewire estadoFactura\EstadoFacturaIndex
 php artisan make:livewire vendedor\VendedorIndex
 php artisan make:livewire metodoPago\MetodoPagoIndex
 php artisan make:livewire inventario\InventarioIndex
+php artisan make:livewire inventario\InventarioDetalle
 php artisan make:livewire factura\FacturaIndex
 php artisan make:livewire factura\FacturaCreate
 php artisan make:livewire factura\FacturaEdit
