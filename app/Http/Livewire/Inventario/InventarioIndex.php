@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Inventario;
 
 use App\Models\Color;
 use App\Models\Inventario;
+use App\Models\InventarioDetalle;
+use App\Models\Producto;
 use App\Models\Talla;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -17,6 +19,8 @@ class InventarioIndex extends Component
     public $condiciones1;
     public $condiciones2;
     public $condiciones3;
+    public $entradas;
+    public $entrada_individual;
     public $bandera;
 
     public function render()
@@ -64,6 +68,31 @@ class InventarioIndex extends Component
         }
 
         return view('livewire.inventario.inventario-index', compact('inventarios','colors','tallas'));
+    }
+    public function guardarEntradas() {
+        foreach($this->entradas as $key => $entrada){
+            //$this->entrada_individual = $entrada.'-'.$key;
+            $record = Producto::find($key);
+            $record->update([
+                'stock' => ($entrada + $record->stock)
+            ]);
+            $inventario = Inventario::where('producto_id', '=', $record->id)->first();
+            $inventario->update([
+                'entradas' => $inventario->entradas + $entrada,
+                'stock' => $record->stock,
+                'ultima_entrada' => date("Y-m-d H:i:s")
+            ]);
+
+            $cliente = InventarioDetalle::create([
+                'ultima_entrada' => date("Y-m-d H:i:s"),
+                'entradas' => $entrada,
+                'precio_produccion' => $record->precio_produccion,
+                'precio_mayorista' => $record->precio_mayorista,
+                'precio_venta_publico' => $record->precio_venta_publico,
+                'stock' => $record->stock,
+                'producto_id' => $key
+            ]);
+        }
     }
     public function updatingSearchCodigoBarras()
     {

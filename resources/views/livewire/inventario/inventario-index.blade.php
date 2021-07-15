@@ -31,8 +31,15 @@
                         @endforeach
                     </select>
                 </div>
+                <button type="button" wire:click="guardarEntradas" class="text-red-600 hover:text-red-800">
+                    Guardar Entradas
+                </button>
                 @if($inventarios->count())
                     <div class="min-w-full divide-y divide-gray-200">
+                        @php
+                            print_r($entradas);
+                        @endphp
+                        {{$entrada_individual}}
                         <table class="min-w-full">
                             <thead class="bg-gray-100">
                             <tr>
@@ -81,7 +88,7 @@
                                         <div class="">
                                             <div class="flex text-sm font-medium text-gray-900">
                                                 {{$inventario->entradas}}
-                                                <input wire:model="searchCodigoBarras" type="text" class="block w-12 mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                <input wire:model="entradas.{{$inventario->producto->id}}" type="text" class="block w-12 mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                             </div>
                                         </div>
                                     </div>
