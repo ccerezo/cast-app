@@ -19,9 +19,11 @@ class InventarioIndex extends Component
     public $condiciones1;
     public $condiciones2;
     public $condiciones3;
-    public $entradas;
-    public $entrada_individual;
+    public $entradas = array();
+    public $ingresar_entradas = false;
+    public $inventarioDetalle;
     public $bandera;
+    public $openModal = false;
 
     public function render()
     {
@@ -69,30 +71,43 @@ class InventarioIndex extends Component
 
         return view('livewire.inventario.inventario-index', compact('inventarios','colors','tallas'));
     }
+    public function openIngresarEntradas(){
+        $this->ingresar_entradas = true;
+    }
+    public function openEntradasSalidas(Producto $producto){
+        $this->inventarioDetalle = InventarioDetalle::where('producto_id', '=', $producto->id)->get();
+        $this->openModal = true;
+    }
     public function guardarEntradas() {
-        foreach($this->entradas as $key => $entrada){
-            //$this->entrada_individual = $entrada.'-'.$key;
-            $record = Producto::find($key);
-            $record->update([
-                'stock' => ($entrada + $record->stock)
-            ]);
-            $inventario = Inventario::where('producto_id', '=', $record->id)->first();
-            $inventario->update([
-                'entradas' => $inventario->entradas + $entrada,
-                'stock' => $record->stock,
-                'ultima_entrada' => date("Y-m-d H:i:s")
-            ]);
+        if(count($this->entradas) > 0){
+            foreach($this->entradas as $key => $entrada){
+                if (is_numeric($entrada)) {
+                    $record = Producto::find($key);
+                    $record->update([
+                        'stock' => ($entrada + $record->stock)
+                    ]);
+                    $inventario = Inventario::where('producto_id', '=', $record->id)->first();
+                    $inventario->update([
+                        'entradas' => $inventario->entradas + $entrada,
+                        'stock' => $record->stock,
+                        'ultima_entrada' => date("Y-m-d H:i:s")
+                    ]);
 
-            $cliente = InventarioDetalle::create([
-                'ultima_entrada' => date("Y-m-d H:i:s"),
-                'entradas' => $entrada,
-                'precio_produccion' => $record->precio_produccion,
-                'precio_mayorista' => $record->precio_mayorista,
-                'precio_venta_publico' => $record->precio_venta_publico,
-                'stock' => $record->stock,
-                'producto_id' => $key
-            ]);
+                    $cliente = InventarioDetalle::create([
+                        'ultima_entrada' => date("Y-m-d H:i:s"),
+                        'entradas' => $entrada,
+                        'precio_produccion' => $record->precio_produccion,
+                        'precio_mayorista' => $record->precio_mayorista,
+                        'precio_venta_publico' => $record->precio_venta_publico,
+                        'stock' => $record->stock,
+                        'producto_id' => $key
+                    ]);
+                }
+                //$this->entrada_individual = $entrada.'-'.$key;
+            }
         }
+
+        $this->reset(['entradas','ingresar_entradas']);
     }
     public function updatingSearchCodigoBarras()
     {
@@ -103,6 +118,10 @@ class InventarioIndex extends Component
         $this->resetPage();
     }
     public function updatingSearchTalla()
+    {
+        $this->resetPage();
+    }
+    public function updatingEntradas()
     {
         $this->resetPage();
     }

@@ -31,23 +31,28 @@
                         @endforeach
                     </select>
                 </div>
-                <button type="button" wire:click="guardarEntradas" class="text-red-600 hover:text-red-800">
-                    Guardar Entradas
-                </button>
                 @if($inventarios->count())
                     <div class="min-w-full divide-y divide-gray-200">
-                        @php
+                        {{-- @php
                             print_r($entradas);
-                        @endphp
-                        {{$entrada_individual}}
+                        @endphp --}}
                         <table class="min-w-full">
                             <thead class="bg-gray-100">
                             <tr>
                                 <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                     Producto
                                 </th>
-                                <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                                <th scope="col" class="flex px-2 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                     Entradas
+                                    @if ($ingresar_entradas)
+                                        <svg xmlns="http://www.w3.org/2000/svg" wire:click="guardarEntradas" width="24" height="24" class="text-green-700 cursor-pointer" viewBox="0 0 24 24" fill="currentColor"><path fill="none" d="M9 14H15V19H9zM11 5H13V7H11z"></path><path fill="none" d="M7,14c0-1.103,0.897-2,2-2h6c1.103,0,2,0.897,2,2v5h2.001L19,8.414L15.586,5H15v4h-1h-1h-2H9H7V5H5v14h2V14z"></path><path d="M5,21h14c1.103,0,2-0.897,2-2V8c0-0.265-0.105-0.52-0.293-0.707l-4-4C16.52,3.105,16.266,3,16,3H5C3.897,3,3,3.897,3,5v14 C3,20.103,3.897,21,5,21z M15,19H9v-5h6V19z M13,7h-2V5h2V7z M5,5h2v4h2h2h2h1h1V5h0.586L19,8.414L19.001,19H17v-5 c0-1.103-0.897-2-2-2H9c-1.103,0-2,0.897-2,2v5H5V5z"></path></svg>
+                                    @else
+                                        <svg wire:click="openIngresarEntradas" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-700 cursor-pointer" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    @endif
+
+
                                 </th>
                                 <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                     Ultima Entrada
@@ -83,12 +88,15 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-4 py-1 whitespace-nowrap">
+                                <td class="px-2 py-1 whitespace-nowrap">
                                     <div class="flex items-center justify-center">
                                         <div class="">
                                             <div class="flex text-sm font-medium text-gray-900">
-                                                {{$inventario->entradas}}
-                                                <input wire:model="entradas.{{$inventario->producto->id}}" type="text" class="block w-12 mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                @if ($ingresar_entradas)
+                                                    <input wire:model="entradas.{{$inventario->producto->id}}" type="number" class="block w-20 mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                @else
+                                                    {{$inventario->entradas}}
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -97,7 +105,7 @@
                                     <div class="flex items-center">
                                         <div class="ml-2">
                                             <div class="text-sm font-medium text-gray-900">
-                                                {{\Carbon\Carbon::parse($inventario->ultima_entrada)->locale('es_ES')->isoFormat('YYYY-MM-D h:mm')}}
+                                                {{\Carbon\Carbon::parse($inventario->ultima_entrada)->locale('es_ES')->isoFormat('YYYY-MM-DD hh:mm')}}
                                             </div>
                                         </div>
                                     </div>
@@ -116,7 +124,7 @@
                                         <div class="ml-4">
                                             <div class="text-sm font-medium text-gray-900">
                                                 @if ($inventario->ultima_salida)
-                                                {{\Carbon\Carbon::parse($inventario->ultima_salida)->locale('es_ES')->isoFormat('YYYY-MM-D h:mm')}}
+                                                {{\Carbon\Carbon::parse($inventario->ultima_salida)->locale('es_ES')->isoFormat('YYYY-MM-DD hh:mm')}}
                                                 @endif
                                             </div>
                                         </div>
@@ -133,7 +141,12 @@
                                     </div>
                                 </td>
                                 <td class="px-4 py-1 text-sm font-medium text-right whitespace-nowrap">
-                                    <a href="{{route('inventarios.edit', $inventario)}}" class="mr-3 text-indigo-600 hover:text-indigo-800">Editar</a>
+                                    {{-- <a href="{{route('inventarios.edit', $inventario)}}" class="mr-3 text-indigo-600 hover:text-indigo-800">Editar</a> --}}
+                                    <button wire:click="openEntradasSalidas({{$inventario->producto}})" class="w-5 h-5 text-blue-400 bg-transparent modal-open hover:text-blue-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
+                                        </svg>
+                                    </button>
                                 </td>
                                 </tr>
                             @endforeach
@@ -151,4 +164,91 @@
         </div>
         </div>
     </div>
+    <x-jet-dialog-modal wire:model="openModal">
+        <x-slot name="title">
+            Entradas y Salidas
+        </x-slot>
+        <x-slot name="content">
+            @if ($inventarioDetalle)
+            <div class="min-w-full divide-y divide-gray-200">
+                <table class="min-w-full">
+                    <thead class="bg-gray-100">
+                    <tr>
+                        <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                            Fecha
+                        </th>
+                        <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase">
+                            Entradas
+                        </th>
+                        <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                            Salidas
+                        </th>
+                        <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                            Stock
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach ($inventarioDetalle as $item)
+                        <tr>
+                        <td class="px-4 py-1 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="ml-2">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        @if ($item->ultima_entrada)
+                                            {{\Carbon\Carbon::parse($item->ultima_entrada)->locale('es_ES')->isoFormat('YYYY-MM-DD hh:mm')}}
+                                        @else
+                                            {{\Carbon\Carbon::parse($item->ultima_salida)->locale('es_ES')->isoFormat('YYYY-MM-DD hh:mm')}}
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-4 py-1 whitespace-nowrap">
+                            <div class="flex items-center justify-center">
+                                <div class="text-sm font-medium text-gray-900">
+                                    {{$item->entradas}}
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-700" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                  </svg>
+                            </div>
+                        </td>
+
+                        <td class="px-4 py-1 whitespace-nowrap">
+                            <div class="flex items-center justify-center">
+                                <div class="">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        {{$item->salidas}}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-4 py-1 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="ml-4">
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
+                                        {{$item->stock >= 5 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}} ">
+                                        {{$item->stock}}
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+                {{-- <div class="px-6 py-2 bg-gray-100 border-t border-gray-200">
+                    {{ $inventarioDetalle->links() }}
+                </div> --}}
+            </div>
+            @endif
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$set('openModal', false)" wire:loading.attr="disabled">
+                {{ __('Cerrar') }}
+            </x-jet-secondary-button>
+        </x-slot>
+    </x-jet-dialog-modal>
 </div>
