@@ -8,6 +8,7 @@ use App\Models\EstadoFactura;
 use App\Models\Factura;
 use App\Models\FacturaDetalle;
 use App\Models\Inventario;
+use App\Models\InventarioDetalle;
 use App\Models\pagoFactura;
 use App\Models\Producto;
 use App\Models\User;
@@ -88,6 +89,15 @@ class FacturaController extends Controller
                 'descuento' => $producto->descuento,
                 'iva' => $producto->iva,
                 'factura_id' => $venta->id,
+                'producto_id' => $key
+            ]);
+            $detalle = InventarioDetalle::create([
+                'ultima_salida' => date("Y-m-d H:i:s"),
+                'salidas' => $valor,
+                'precio_produccion' => $producto->precio_produccion,
+                'precio_mayorista' => $producto->precio_mayorista,
+                'precio_venta_publico' => $producto->precio_venta_publico,
+                'stock' => ($producto->stock - $valor),
                 'producto_id' => $key
             ]);
         }
@@ -180,6 +190,7 @@ class FacturaController extends Controller
             if($detalle) {
                 $producto = Producto::where('id', '=', $key)->first();
                 $inventario = Inventario::where('producto_id', '=', $key)->first();
+                $inventario_detalle = InventarioDetalle::where('producto_id', '=', $key)->first();
 
                 if($detalle->cantidad > $valor) {
 
@@ -194,9 +205,29 @@ class FacturaController extends Controller
                     $detalle->update([
                         'cantidad' => $valor
                     ]);
+                    $inventario_detalle->update([
+                        'salidas' => $inventario_detalle->salidas - ($inventario_detalle->salidas - $valor),
+                        'stock' => $producto->stock
+                    ]);
+                } else {
+                    if($valor > $detalle->cantidad) {
+                        $producto->update([
+                            'stock' => $producto->stock - ($valor - $detalle->cantidad)
+                        ]);
+
+                        $inventario->update([
+                            'salidas' => $inventario->salidas + ($valor - $detalle->cantidad),
+                            'stock' => $inventario->stock - ($valor - $detalle->cantidad)
+                        ]);
+                        $detalle->update([
+                            'cantidad' => $valor
+                        ]);
+                        $inventario_detalle->update([
+                            'salidas' => $inventario_detalle->salidas + ($valor - $inventario_detalle->salidas),
+                            'stock' => $producto->stock
+                        ]);
+                    }
                 }
-
-
 
             } else {
                 $producto = Producto::find($key);
@@ -209,6 +240,16 @@ class FacturaController extends Controller
                     'iva' => 'no',
                     'factura_id' => $factura->id,
                     'producto_id' => $producto->id
+                ]);
+                $producto = Producto::find($key);
+                $detalle = InventarioDetalle::create([
+                    'ultima_salida' => date("Y-m-d H:i:s"),
+                    'salidas' => $valor,
+                    'precio_produccion' => $producto->precio_produccion,
+                    'precio_mayorista' => $producto->precio_mayorista,
+                    'precio_venta_publico' => $producto->precio_venta_publico,
+                    'stock' => $producto->stock,
+                    'producto_id' => $key
                 ]);
             }
 
@@ -225,7 +266,7 @@ class FacturaController extends Controller
 
             $producto = Producto::where('id', '=', $d->producto_id)->first();
             $inventario = Inventario::where('producto_id', '=', $d->producto_id)->first();
-
+            $inventario_detalle = InventarioDetalle::where('producto_id', '=', $d->producto_id)->where('created_at','>=',$d->created_at)->first();
             $producto->update([
                 'stock' => $producto->stock + ($d->cantidad)
             ]);
@@ -233,6 +274,10 @@ class FacturaController extends Controller
             $inventario->update([
                 'salidas' => $inventario->salidas - ($d->cantidad),
                 'stock' => $inventario->stock + ($d->cantidad)
+            ]);
+            $inventario_detalle->update([
+                'salidas' => $inventario_detalle->salidas - ($d->cantidad),
+                'stock' => $producto->stock
             ]);
 
         }
@@ -265,12 +310,17 @@ class FacturaController extends Controller
         foreach($detalles_factura as $item){
             $inventario = Inventario::where('producto_id', '=', $item->producto_id)->first();
             $producto = Producto::where('id', '=', $item->producto_id)->first();
+            $inventario_detalle = InventarioDetalle::where('producto_id', '=', $item->producto_id)->where('created_at','>=',$item->created_at)->first();
             $inventario->update([
                 'stock' => $item->cantidad + $inventario->stock,
                 'salidas' => $inventario->salidas - $item->cantidad
             ]);
             $producto->update([
                 'stock' => $item->cantidad + $producto->stock,
+            ]);
+            $inventario_detalle->update([
+                'salidas' => $inventario_detalle->salidas - ($item->cantidad),
+                'stock' => $producto->stock
             ]);
 
         }

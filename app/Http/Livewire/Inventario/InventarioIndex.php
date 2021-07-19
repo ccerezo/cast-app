@@ -20,7 +20,9 @@ class InventarioIndex extends Component
     public $condiciones2;
     public $condiciones3;
     public $entradas = array();
+    public $salidas = array();
     public $ingresar_entradas = false;
+    public $ingresar_salidas = false;
     public $inventarioDetalle;
     public $bandera;
     public $openModal = false;
@@ -74,6 +76,9 @@ class InventarioIndex extends Component
     public function openIngresarEntradas(){
         $this->ingresar_entradas = true;
     }
+    public function openIngresarSalidas(){
+        $this->ingresar_salidas = true;
+    }
     public function openEntradasSalidas(Producto $producto){
         $this->inventarioDetalle = InventarioDetalle::where('producto_id', '=', $producto->id)->get();
         $this->openModal = true;
@@ -106,8 +111,37 @@ class InventarioIndex extends Component
                 //$this->entrada_individual = $entrada.'-'.$key;
             }
         }
-
         $this->reset(['entradas','ingresar_entradas']);
+    }
+    public function guardarSalidas() {
+        if(count($this->salidas) > 0){
+            foreach($this->salidas as $key => $salida){
+                if (is_numeric($salida)) {
+                    $record = Producto::find($key);
+                    $record->update([
+                        'stock' => ($record->stock - $salida)
+                    ]);
+                    $inventario = Inventario::where('producto_id', '=', $record->id)->first();
+                    $inventario->update([
+                        'salidas' => $inventario->salidas + $salida,
+                        'stock' => $record->stock,
+                        'ultima_salida' => date("Y-m-d H:i:s")
+                    ]);
+
+                    $detalle = InventarioDetalle::create([
+                        'ultima_salida' => date("Y-m-d H:i:s"),
+                        'salidas' => $salida,
+                        'precio_produccion' => $record->precio_produccion,
+                        'precio_mayorista' => $record->precio_mayorista,
+                        'precio_venta_publico' => $record->precio_venta_publico,
+                        'stock' => $record->stock,
+                        'producto_id' => $key
+                    ]);
+                }
+                //$this->entrada_individual = $entrada.'-'.$key;
+            }
+        }
+        $this->reset(['salidas','ingresar_salidas']);
     }
     public function updatingSearchCodigoBarras()
     {

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Producto;
 use App\Models\Categoria;
 use App\Models\Color;
 use App\Models\Inventario;
+use App\Models\InventarioDetalle;
 use App\Models\Linea;
 use App\Models\Modelo;
 use App\Models\Producto;
@@ -140,6 +141,15 @@ class ProductoEdit extends Component
             'entradas' => $inventario->entradas + $this->stock[$id],
             'stock' => $record->stock,
             'ultima_entrada' => date("Y-m-d H:i:s")
+        ]);
+        $cliente = InventarioDetalle::create([
+            'ultima_entrada' => date("Y-m-d H:i:s"),
+            'entradas' => $this->stock[$id],
+            'precio_produccion' => $record->precio_produccion,
+            'precio_mayorista' => $record->precio_mayorista,
+            'precio_venta_publico' => $record->precio_venta_publico,
+            'stock' => $record->stock,
+            'producto_id' => $id
         ]);
 
         $this->stock[$id] = '';
