@@ -26,6 +26,8 @@ class InventarioIndex extends Component
     public $inventarioDetalle;
     public $bandera;
     public $openModal = false;
+    public $openGuardarEntradas = false;
+    public $elaboradoPor;
 
     public function render()
     {
@@ -83,6 +85,13 @@ class InventarioIndex extends Component
         $this->inventarioDetalle = InventarioDetalle::where('producto_id', '=', $producto->id)->get();
         $this->openModal = true;
     }
+    public function openAlertEntrada(Producto $producto){
+        if(count($this->entradas) > 0){
+            $this->openGuardarEntradas = true;
+        } else {
+            $this->reset(['entradas','ingresar_entradas']);
+        }
+    }
     public function guardarEntradas() {
         if(count($this->entradas) > 0){
             foreach($this->entradas as $key => $entrada){
@@ -105,13 +114,15 @@ class InventarioIndex extends Component
                         'precio_mayorista' => $record->precio_mayorista,
                         'precio_venta_publico' => $record->precio_venta_publico,
                         'stock' => $record->stock,
-                        'producto_id' => $key
+                        'producto_id' => $key,
+                        'descripcion' => $this->elaboradoPor
                     ]);
                 }
                 //$this->entrada_individual = $entrada.'-'.$key;
             }
+            session()->flash('message', 'Post successfully updated.');
         }
-        $this->reset(['entradas','ingresar_entradas']);
+        $this->reset(['entradas','ingresar_entradas','openGuardarEntradas']);
     }
     public function guardarSalidas() {
         if(count($this->salidas) > 0){
