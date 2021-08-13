@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Factura;
 use App\Models\FacturaDetalle;
+use App\Models\Inventario;
 use App\Models\pagoFactura;
+use App\Models\Producto;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 
@@ -136,5 +138,44 @@ class PDFController extends Controller
                         ->get();
         return PDF::loadView('reportes.reporte-mas-vendido', compact('productos'))
                     ->stream('archivo-top-productos.pdf');
+    }
+    public function reporteInventarioFiltradoPDF($codigo, $color) {
+
+        $this->bandera = false;
+        $this->condiciones3 = array();
+        $this->searchCodigoBarras = $codigo;
+        if(isset($codigo)){
+            $this->bandera = true;
+        }
+
+        // if(isset($this->searchTalla) && $this->searchTalla > 0){
+        //     array_push($this->condiciones3, ['productos.talla_id', '=', $this->searchTalla]);
+        // }
+
+        if(isset($color) && $color > 0){
+            array_push($this->condiciones3, ['productos.color_id', '=', $color]);
+        }
+        if($this->bandera){
+            $inventarios = Inventario::whereIn('producto_id', function ($query) {
+                $query->select('id')
+                    ->from('productos')
+                    ->where($this->condiciones3)
+                    ->where(function($query) {
+                        $query->where('productos.codigo_barras', 'LIKE', '%' . $this->searchCodigoBarras . '%')
+                              ->orWhere('productos.codigo', 'LIKE', '%' . $this->searchCodigoBarras . '%');
+                    })->get();
+                })
+                ->get();
+        } else {
+            $inventarios = Inventario::whereIn('producto_id', function ($query) {
+                $query->select('id')
+                    ->from('productos')
+                    ->where($this->condiciones3)
+                    ->orderByDesc('productos.id');
+                })
+                ->get();
+        }
+        return PDF::loadView('reportes.reporte-inventario-filtrado', compact('inventarios'))
+                    ->stream('inventario-filtrado.pdf');
     }
 }

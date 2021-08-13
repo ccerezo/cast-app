@@ -87,3 +87,4 @@ Route::get('pdf/ventas/mensual/{anio}/{mes}', [PDFController::class, 'reporteMen
 Route::get('pdf/ventas/por-precios/{desde}/{hasta}', [PDFController::class, 'reportePorPrecioPDF'])->name('pdf.reportePorPrecioPDF')->middleware('auth');
 Route::get('pdf/ventas/productos/{desde}/{hasta}', [PDFController::class, 'reportePorProductosPDF'])->name('pdf.reportePorProductosPDF')->middleware('auth');
 Route::get('pdf/ventas/lo-mas-vendido/{desde}/{hasta}', [PDFController::class, 'reporteLoMasVendidoPDF'])->name('pdf.reporteLoMasVendidoPDF')->middleware('auth');
+Route::get('pdf/inventario/filtrado/{codigo}/{color}', [PDFController::class, 'reporteInventarioFiltradoPDF'])->name('pdf.reporteInventarioFiltradoPDF')->middleware('auth');

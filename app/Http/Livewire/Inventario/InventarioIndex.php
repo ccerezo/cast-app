@@ -62,7 +62,7 @@ class InventarioIndex extends Component
                               ->orWhere('productos.codigo', 'LIKE', '%' . $this->searchCodigoBarras . '%');
                     })->get();
                 })
-                ->paginate(10);
+                ->paginate(20);
         } else {
             $inventarios = Inventario::whereIn('producto_id', function ($query) {
                 $query->select('id')
@@ -70,7 +70,7 @@ class InventarioIndex extends Component
                     ->where($this->condiciones3)
                     ->orderByDesc('productos.id');
                 })
-                ->paginate(10);
+                ->paginate(20);
         }
 
         return view('livewire.inventario.inventario-index', compact('inventarios','colors','tallas'));
