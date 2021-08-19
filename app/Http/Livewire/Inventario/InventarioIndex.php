@@ -36,7 +36,8 @@ class InventarioIndex extends Component
         $this->condiciones2 = array();
         $this->condiciones3 = array();
 
-        $colors = Color::all();
+        //$colors = Color::all();
+        $colors = Color::orderBy('nombre', 'asc')->get();
         $tallas = Talla::all();
 
         if(isset($this->searchCodigoBarras)){
