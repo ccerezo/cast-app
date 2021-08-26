@@ -54,9 +54,11 @@
         <thead>
             <tr>
                 <th class="border" style="width: 5%;">#</th>
-                <th class="border" style="width: 15%;">Código</th>
-                <th class="border" style="width: 70%;">Descripción</th>
+                <th class="border" style="width: 10%;">Código</th>
+                <th class="border" style="width: 50%;">Descripción</th>
+                <th class="border" style="width: 10%;">Ingresos</th>
                 <th class="border" style="width: 10%;">Stock</th>
+                <th class="border" style="width: 15%;">Elaborado</th>
             </tr>
         </thead>
         <tbody>
@@ -69,7 +71,10 @@
                     <td class="border-bottom" style="text-align:center;padding:3px auto;">{{ ++$i }}</td>
                     <td class="border-bottom" style="text-align:center;padding-right:3px;">{{ $item->producto->codigo }}</td>
                     <td class="border-bottom" style="text-align:left;padding-left:3px;">{{ $item->producto->descripcion }}</td>
+                    <td class="border-bottom" style="text-align:center;padding-left:3px;">{{ $item->entradas }}</td>
                     <td class="border-bottom" style="text-align:center;padding-right:3px;">{{ $item->stock }}</td>
+                    <td class="border-bottom" style="text-align:center;padding-right:3px;">{{ $item->descripcion }}</td>
+                    {{-- <td class="border-bottom" style="text-align:center;padding-right:3px;">{{ $item->id }}</td> --}}
                 </tr>
             @endforeach
         </tbody>

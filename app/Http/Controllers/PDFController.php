@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Factura;
 use App\Models\FacturaDetalle;
 use App\Models\Inventario;
+use App\Models\InventarioDetalle;
 use App\Models\pagoFactura;
 use App\Models\Producto;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -148,15 +149,33 @@ class PDFController extends Controller
             $this->bandera = true;
         }
 
-        // if(isset($this->searchTalla) && $this->searchTalla > 0){
-        //     array_push($this->condiciones3, ['productos.talla_id', '=', $this->searchTalla]);
-        // }
-
         if(isset($color) && $color > 0){
             array_push($this->condiciones3, ['productos.color_id', '=', $color]);
         }
+        // if($this->bandera){
+        //     $inventarios = Inventario::whereIn('producto_id', function ($query) {
+        //         $query->select('id')
+        //             ->from('productos')
+        //             ->where($this->condiciones3)
+        //             ->where(function($query) {
+        //                 $query->where('productos.codigo_barras', 'LIKE', '%' . $this->searchCodigoBarras . '%')
+        //                       ->orWhere('productos.codigo', 'LIKE', '%' . $this->searchCodigoBarras . '%');
+        //             })->get();
+        //         })
+        //         ->get();
+        // } else {
+        //     $inventarios = Inventario::whereIn('producto_id', function ($query) {
+        //         $query->select('id')
+        //             ->from('productos')
+        //             ->where($this->condiciones3)
+        //             ->orderByDesc('productos.id');
+        //         })
+        //         ->get();
+        // }
+
         if($this->bandera){
-            $inventarios = Inventario::whereIn('producto_id', function ($query) {
+            $inventarios = Inventario::Join('inventario_detalles','inventarios.producto_id','=','inventario_detalles.producto_id')
+                ->whereIn('inventarios.producto_id', function ($query) {
                 $query->select('id')
                     ->from('productos')
                     ->where($this->condiciones3)
@@ -165,6 +184,9 @@ class PDFController extends Controller
                               ->orWhere('productos.codigo', 'LIKE', '%' . $this->searchCodigoBarras . '%');
                     })->get();
                 })
+                ->selectRaw('DISTINCT inventarios.*,
+                            (select entradas from inventario_detalles where producto_id = inventarios.producto_id ORDER BY id DESC Limit 1) as entradas,
+                            (select descripcion from inventario_detalles where producto_id = inventarios.producto_id ORDER BY id DESC Limit 1) as descripcion')
                 ->get();
         } else {
             $inventarios = Inventario::whereIn('producto_id', function ($query) {
@@ -175,6 +197,7 @@ class PDFController extends Controller
                 })
                 ->get();
         }
+
         return PDF::loadView('reportes.reporte-inventario-filtrado', compact('inventarios'))
                     ->stream('inventario-filtrado.pdf');
     }
