@@ -116,6 +116,15 @@ class PDFController extends Controller
 
     public function reportePorProductosPDF($desde, $hasta) {
 
+        $total_vendidos = Factura::Join('factura_detalles','facturas.id','=','factura_detalles.factura_id')
+                        ->Join('productos','factura_detalles.producto_id','=','productos.id')
+                        ->selectRaw('factura_detalles.*, productos.descripcion, facturas.fecha,facturas.facturado_como_id,facturas.cliente_id')
+                        ->where('facturas.estado_factura_id', '<>', 2)
+                        ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->orderBy('facturas.fecha', 'DESC')
+                        ->sum('factura_detalles.cantidad');
+
+
         $productos = Factura::Join('factura_detalles','facturas.id','=','factura_detalles.factura_id')
                         ->Join('productos','factura_detalles.producto_id','=','productos.id')
                         ->selectRaw('factura_detalles.*, productos.descripcion, facturas.fecha,facturas.facturado_como_id,facturas.cliente_id')
@@ -123,7 +132,8 @@ class PDFController extends Controller
                         ->whereBetween('facturas.fecha', [$desde, $hasta])
                         ->orderBy('facturas.fecha', 'DESC')
                         ->get();
-        return PDF::loadView('reportes.reporte-por-productos', compact('productos'))
+
+        return PDF::loadView('reportes.reporte-por-productos', compact('productos','total_vendidos'))
                     ->stream('archivo-ventas-productos.pdf');
     }
 
@@ -174,6 +184,20 @@ class PDFController extends Controller
         // }
 
         if($this->bandera){
+            $ultima_entrada = Inventario::Join('inventario_detalles','inventarios.producto_id','=','inventario_detalles.producto_id')
+                ->whereIn('inventarios.producto_id', function ($query) {
+                $query->select('id')
+                    ->from('productos')
+                    ->where($this->condiciones3)
+                    ->where(function($query) {
+                        $query->where('productos.codigo_barras', 'LIKE', '%' . $this->searchCodigoBarras . '%')
+                              ->orWhere('productos.codigo', 'LIKE', '%' . $this->searchCodigoBarras . '%');
+                    })->get();
+                })
+
+                ->max('inventarios.ultima_entrada');
+
+
             $inventarios = Inventario::Join('inventario_detalles','inventarios.producto_id','=','inventario_detalles.producto_id')
                 ->whereIn('inventarios.producto_id', function ($query) {
                 $query->select('id')
@@ -185,8 +209,8 @@ class PDFController extends Controller
                     })->get();
                 })
                 ->selectRaw('DISTINCT inventarios.*,
-                            (select entradas from inventario_detalles where producto_id = inventarios.producto_id ORDER BY id DESC Limit 1) as entradas,
-                            (select descripcion from inventario_detalles where producto_id = inventarios.producto_id ORDER BY id DESC Limit 1) as descripcion')
+                            (select entradas from inventario_detalles where producto_id = inventarios.producto_id and ultima_entrada = "'.$ultima_entrada.'" ORDER BY id DESC Limit 1) as entradas,
+                            (select descripcion from inventario_detalles where producto_id = inventarios.producto_id and ultima_entrada = "'.$ultima_entrada.'" ORDER BY id DESC Limit 1) as descripcion')
                 ->get();
         } else {
             $inventarios = Inventario::whereIn('producto_id', function ($query) {

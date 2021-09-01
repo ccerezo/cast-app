@@ -41,7 +41,7 @@
 </style>
 <body>
 
-    <p class="titulo text-center">DETALLE DE PRODUCTOS VENDIDOS</p>
+    <p class="text-center titulo">DETALLE DE PRODUCTOS VENDIDOS</p>
 
     <table>
         <thead>
@@ -79,6 +79,12 @@
                 </tr>
             @endforeach
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5"></td>
+                <td class="border" style="text-align:center;">{{ number_format($total_vendidos,0) }}</td>
+            </tr>
+        </tfoot>
     </table>
 
 </body>
