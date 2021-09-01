@@ -105,6 +105,11 @@
                     </td>
                 </tr>
             @endforeach
+            <tr>
+                <td colspan="2" style="text-align: right;border:1px solid #010101;padding-right:5px">Cantidad de zapatos</td>
+                <td style="text-align: center;border:1px solid #010101">{{$cantidad_zapatos}}</td>
+                <td></td>
+            </tr>
         </tbody>
         <tfoot>
             <tr>
