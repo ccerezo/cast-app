@@ -46,7 +46,7 @@ class FacturaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'numero' => 'required',
+            'numero' => 'required|unique:facturas',
             'cliente_id' => 'required',
             'forma_pago' => 'required'
         ]);
