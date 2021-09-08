@@ -68,11 +68,16 @@ class ClienteSearch extends Component
 
     public function updatedQuery()
     {
-        $this->clienteSeleccionado = false;
-        $this->clientes = Cliente::where('nombre', 'like', '%' . $this->query . '%')
+        if($this->query) {
+            $this->clienteSeleccionado = false;
+            $this->clientes = Cliente::where('nombre', 'like', '%' . $this->query . '%')
                                 ->orWhere('identificacion', 'like', '%' . $this->query . '%')
                                 ->get()
                                 ->toArray();
+        } else {
+            $this->emit('updateDetalleCliente',  null);
+        }
+
     }
 
     public function render()

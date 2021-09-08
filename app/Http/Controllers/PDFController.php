@@ -67,13 +67,16 @@ class PDFController extends Controller
                     ->stream('archivo-mensual.pdf');
     }
 
-    public function reportePorPrecioPDF($desde, $hasta) {
+    public function reportePorPrecioPDF($desde, $hasta, $cliente_id = null) {
 
         $vendedor = Factura::leftJoin('pago_facturas','facturas.id','=','pago_facturas.factura_id')
                         ->selectRaw('facturas.id,facturas.numero,facturas.fecha,facturas.cliente_id,facturas.total,SUM(pago_facturas.monto) AS recibido')
                         ->where('facturas.facturado_como_id', '=', 1)
                         ->where('facturas.estado_factura_id', '<>', 2)
                         ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->when($cliente_id, function ($query, $cliente_id) {
+                            return $query->where('facturas.cliente_id', $cliente_id);
+                        })
                         ->groupByRaw('facturas.id,facturas.numero,facturas.fecha,facturas.cliente_id,facturas.total')
                         ->orderBy('facturas.fecha', 'DESC')
                         ->get();
@@ -81,6 +84,9 @@ class PDFController extends Controller
         $vendedor_total = Factura::where('facturas.facturado_como_id', '=', 1)
                         ->where('facturas.estado_factura_id', '<>', 2)
                         ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->when($cliente_id, function ($query, $cliente_id) {
+                            return $query->where('facturas.cliente_id', $cliente_id);
+                        })
                         ->sum('total');
 
         $mayorista = Factura::leftJoin('pago_facturas','facturas.id','=','pago_facturas.factura_id')
@@ -88,6 +94,9 @@ class PDFController extends Controller
                         ->where('facturas.facturado_como_id', '=', 2)
                         ->where('facturas.estado_factura_id', '<>', 2)
                         ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->when($cliente_id, function ($query, $cliente_id) {
+                            return $query->where('facturas.cliente_id', $cliente_id);
+                        })
                         ->groupByRaw('facturas.id,facturas.numero,facturas.fecha,facturas.cliente_id,facturas.total')
                         ->orderBy('facturas.fecha', 'DESC')
                         ->get();
@@ -95,6 +104,9 @@ class PDFController extends Controller
         $mayorista_total = Factura::where('facturas.facturado_como_id', '=', 2)
                         ->where('facturas.estado_factura_id', '<>', 2)
                         ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->when($cliente_id, function ($query, $cliente_id) {
+                            return $query->where('facturas.cliente_id', $cliente_id);
+                        })
                         ->sum('total');
 
         $final = Factura::leftJoin('pago_facturas','facturas.id','=','pago_facturas.factura_id')
@@ -102,6 +114,9 @@ class PDFController extends Controller
                         ->where('facturas.facturado_como_id', '=', 3)
                         ->where('facturas.estado_factura_id', '<>', 2)
                         ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->when($cliente_id, function ($query, $cliente_id) {
+                            return $query->where('facturas.cliente_id', $cliente_id);
+                        })
                         ->groupByRaw('facturas.id,facturas.numero,facturas.fecha,facturas.cliente_id,facturas.total')
                         ->orderBy('facturas.fecha', 'DESC')
                         ->get();
@@ -109,19 +124,25 @@ class PDFController extends Controller
         $final_total = Factura::where('facturas.facturado_como_id', '=', 3)
                         ->where('facturas.estado_factura_id', '<>', 2)
                         ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->when($cliente_id, function ($query, $cliente_id) {
+                            return $query->where('facturas.cliente_id', $cliente_id);
+                        })
                         ->sum('total');
 
         return PDF::loadView('reportes.reporte-por-precios', compact('vendedor','vendedor_total', 'mayorista','mayorista_total','final','final_total'))
                     ->stream('archivo-ventas-precios.pdf');
     }
 
-    public function reportePorProductosPDF($desde, $hasta) {
+    public function reportePorProductosPDF($desde, $hasta, $cliente_id = null) {
 
         $total_vendidos = Factura::Join('factura_detalles','facturas.id','=','factura_detalles.factura_id')
                         ->Join('productos','factura_detalles.producto_id','=','productos.id')
                         ->selectRaw('factura_detalles.*, productos.descripcion, facturas.fecha,facturas.facturado_como_id,facturas.cliente_id')
                         ->where('facturas.estado_factura_id', '<>', 2)
                         ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->when($cliente_id, function ($query, $cliente_id) {
+                            return $query->where('facturas.cliente_id', $cliente_id);
+                        })
                         ->orderBy('facturas.fecha', 'DESC')
                         ->sum('factura_detalles.cantidad');
 
@@ -131,6 +152,9 @@ class PDFController extends Controller
                         ->selectRaw('factura_detalles.*, productos.descripcion, facturas.fecha,facturas.facturado_como_id,facturas.cliente_id')
                         ->where('facturas.estado_factura_id', '<>', 2)
                         ->whereBetween('facturas.fecha', [$desde, $hasta])
+                        ->when($cliente_id, function ($query, $cliente_id) {
+                            return $query->where('facturas.cliente_id', $cliente_id);
+                        })
                         ->orderBy('facturas.fecha', 'DESC')
                         ->get();
 

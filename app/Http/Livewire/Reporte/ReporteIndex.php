@@ -12,10 +12,17 @@ class ReporteIndex extends Component
     public $openModal = false;
     public $desde;
     public $hasta;
+    public $cliente_id;
+
+    protected $listeners = ['updateDetalleCliente'];
 
     public function mount() {
         $this->desde = date('Y-m-d');
         $this->hasta = date('Y-m-d');
+    }
+    public function updateDetalleCliente($id)
+    {
+        $this->cliente_id = $id;
     }
     public function render()
     {
