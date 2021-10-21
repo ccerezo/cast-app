@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Reporte</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 </head>
 <style type="text/css">
@@ -37,7 +38,9 @@
         color: #ffffff;
         background: #ffffff;
     }
-
+    .page-break {
+        age-break-before: always;
+    }
 </style>
 <body>
 
@@ -58,8 +61,12 @@
         <tbody>
             @php
                 $i = 0;
+                $total_vendidos = 0;
             @endphp
             @foreach ($productos as $factura)
+                @php
+                    $total_vendidos = $total_vendidos + $factura->cantidad;
+                @endphp
                 <tr>
                     <td class="border-bottom" style="text-align:center;padding:3px auto;">{{ ++$i }}</td>
                     <td class="border-bottom" style="text-align:center;padding:3px auto;">{{ date('Y-m-d', strtotime($factura->fecha)) }}</td>

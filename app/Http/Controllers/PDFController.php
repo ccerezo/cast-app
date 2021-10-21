@@ -135,16 +135,14 @@ class PDFController extends Controller
 
     public function reportePorProductosPDF($desde, $hasta, $cliente_id = null) {
 
-        $total_vendidos = Factura::Join('factura_detalles','facturas.id','=','factura_detalles.factura_id')
-                        ->Join('productos','factura_detalles.producto_id','=','productos.id')
-                        ->selectRaw('factura_detalles.*, productos.descripcion, facturas.fecha,facturas.facturado_como_id,facturas.cliente_id')
-                        ->where('facturas.estado_factura_id', '<>', 2)
-                        ->whereBetween('facturas.fecha', [$desde, $hasta])
-                        ->when($cliente_id, function ($query, $cliente_id) {
-                            return $query->where('facturas.cliente_id', $cliente_id);
-                        })
-                        ->orderBy('facturas.fecha', 'DESC')
-                        ->sum('factura_detalles.cantidad');
+        // $total_vendidos = Factura::Join('factura_detalles','facturas.id','=','factura_detalles.factura_id')
+        //                 ->Join('productos','factura_detalles.producto_id','=','productos.id')
+        //                 ->where('facturas.estado_factura_id', '<>', 2)
+        //                 ->whereBetween('facturas.fecha', [$desde, $hasta])
+        //                 ->when($cliente_id, function ($query, $cliente_id) {
+        //                     return $query->where('facturas.cliente_id', $cliente_id);
+        //                 })
+        //                 ->sum('factura_detalles.cantidad');
 
 
         $productos = Factura::Join('factura_detalles','facturas.id','=','factura_detalles.factura_id')
@@ -158,8 +156,11 @@ class PDFController extends Controller
                         ->orderBy('facturas.fecha', 'DESC')
                         ->get();
 
-        return PDF::loadView('reportes.reporte-por-productos', compact('productos','total_vendidos'))
+        return PDF::loadView('reportes.reporte-por-productos', compact('productos'))
                     ->stream('archivo-ventas-productos.pdf');
+
+        // $pdf =  PDF::loadView('reportes.reporte-por-productos', compact('productos'));
+        // return $pdf->download('reporte-01.pdf');
     }
 
     public function reporteLoMasVendidoPDF($desde, $hasta) {
