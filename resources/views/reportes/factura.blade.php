@@ -27,14 +27,16 @@
         text-align:center;
         margin: 0;
     }
-    table tfoot tr td{
 
-    }
     .text-right{
         text-align: right;
     }
     .border {
         border: 1px solid #000000;
+    }
+    .page-break {
+        page-break-inside:avoid;
+        page-break-after: always;
     }
     </style>
 <body>
@@ -52,15 +54,21 @@
     <table>
         <thead>
             <tr>
-            <th class="border" style="width: 60%;">Descripción</th>
-            <th class="border" style="width: 11%;">PVP</th>
+            <th class="border" style="width: 61%;">Descripción</th>
+            <th class="border" style="width: 10%;">PVP</th>
             <th class="border" style="width: 9%;">Cant.</th>
             <th class="border" style="width: 10%;">Desc.</th>
             <th class="border" style="width: 10%;">Importe</th>
             </tr>
         </thead>
         <tbody>
+            @php
+                $i = 0;
+            @endphp
             @foreach ($facturaDetalle as $item)
+                @php
+                    $i++;
+                @endphp
                 <tr>
                     <td>{{$item->producto->descripcion}} {{ ($item->descuento+0) > 0 ? ' - Desct. '.$item->descuento.'%':'' }}</td>
                     <td style="text-align:right;">
@@ -104,6 +112,12 @@
                         @endif
                     </td>
                 </tr>
+                @if($i % 25 == 0 )
+                    <tr><td colspan="5">
+	        	    <div class="page-break" style="width: 100%"></div>
+                    </td>
+                    </tr>
+	            @endif
             @endforeach
             <tr>
                 <td colspan="2" style="text-align: right;border:1px solid #010101;padding-right:5px">Cantidad de zapatos</td>
@@ -133,6 +147,7 @@
                 <td class="text-right border" style="padding:5px 5px 5px 0px"><b>$ {{number_format($factura->total,2)}}</b></td>
             </tr>
         </tfoot>
-        </table>
+    </table>
+
 </body>
 </html>

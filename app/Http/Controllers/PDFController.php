@@ -163,6 +163,18 @@ class PDFController extends Controller
         // return $pdf->download('reporte-01.pdf');
     }
 
+    public function reporteDetalleInventarioPDF($desde, $hasta) {
+
+
+
+        $items = InventarioDetalle::whereBetween('ultima_entrada', [$desde, $hasta])
+                        ->orderBy('ultima_entrada', 'DESC')
+                        ->get();
+
+        return PDF::loadView('reportes.reporte-detalle-inventario', compact('items'))
+                    ->stream('archivo-ventas-productos.pdf');
+    }
+
     public function reporteLoMasVendidoPDF($desde, $hasta) {
 
         $productos = FacturaDetalle::Join('facturas','factura_detalles.factura_id','=','facturas.id')

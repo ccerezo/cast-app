@@ -86,5 +86,6 @@ Route::get('pdf/generateComprobantePago/{id}', [PDFController::class, 'generateC
 Route::get('pdf/ventas/mensual/{anio}/{mes}', [PDFController::class, 'reporteMensualPDF'])->name('pdf.reporteMensualPDF')->middleware('auth');
 Route::get('pdf/ventas/por-precios/{desde}/{hasta}/{cliente_id?}', [PDFController::class, 'reportePorPrecioPDF'])->name('pdf.reportePorPrecioPDF')->middleware('auth');
 Route::get('pdf/ventas/productos/{desde}/{hasta}/{cliente_id?}', [PDFController::class, 'reportePorProductosPDF'])->name('pdf.reportePorProductosPDF')->middleware('auth');
+Route::get('pdf/ventas/inventario/{desde}/{hasta}', [PDFController::class, 'reporteDetalleInventarioPDF'])->name('pdf.reporteDetalleInventarioPDF')->middleware('auth');
 Route::get('pdf/ventas/lo-mas-vendido/{desde}/{hasta}', [PDFController::class, 'reporteLoMasVendidoPDF'])->name('pdf.reporteLoMasVendidoPDF')->middleware('auth');
 Route::get('pdf/inventario/filtrado/{codigo}/{color}', [PDFController::class, 'reporteInventarioFiltradoPDF'])->name('pdf.reporteInventarioFiltradoPDF')->middleware('auth');
