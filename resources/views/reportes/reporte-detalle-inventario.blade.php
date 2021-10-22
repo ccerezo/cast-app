@@ -62,6 +62,7 @@
         <tbody>
             @php
                 $i = 0;
+                $total = 0;
             @endphp
             @foreach ($items as $item)
                 <tr>
@@ -74,12 +75,15 @@
                     <td class="border-bottom" style="text-align:center;padding-right:3px;">$ {{ number_format($item->producto->precio_mayorista,2) }}</td>
                     <td class="border-bottom" style="text-align:center;padding-right:3px;">$ {{ number_format($item->producto->precio_venta_publico,2) }}</td>
                 </tr>
+                @php
+                    $total = $total + $item->entradas;
+                @endphp
             @endforeach
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="5"></td>
-                <td class="border" style="text-align:center;">{{ number_format(0,0) }}</td>
+                <td class="border" style="text-align:center;">{{ number_format($total,0) }}</td>
             </tr>
         </tfoot>
     </table>
