@@ -29,6 +29,7 @@ class PagoFacturaIndex extends Component
     public $metodo_pago;
     public $descripcion;
     public $pagos_factura = array();
+    public $select_factura = array();
     public $total_pagos = 0;
     protected $listeners = ['updateDetalleCliente'];
 
@@ -158,6 +159,22 @@ class PagoFacturaIndex extends Component
                         ->join('clientes', 'facturas.cliente_id', '=', 'clientes.id')
                         ->where('facturas.id', '=', $factura_id)
                         ->sum('pago_facturas.monto');
+    }
+    public function facturasSeleccionadas() {
+        if(count($this->select_factura) > 0){
+            foreach($this->select_factura as $key => $sel_fact){
+                if ($sel_fact) {
+                    // $record = Producto::find($key);
+                    // $record->update([
+                    //     'stock' => ($entrada + $record->stock)
+                    // ]);
+
+                }
+                //$this->entrada_individual = $entrada.'-'.$key;
+            }
+            session()->flash('message', 'Post successfully updated.');
+        }
+        $this->reset(['entradas','ingresar_entradas','openGuardarEntradas']);
     }
     public function updatingSearchNumero()
     {

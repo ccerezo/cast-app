@@ -1,66 +1,66 @@
 <div>
-    <div class="flex justify-between border-b border-gray-300 mb-3">
-        {{-- <p class="inline-flex mt-3 pl-5 text-lg text-gray-700">Factura: #{!! Form::text('numero', null, ['wire:model' => "numeroFactura", 'class' => 'pt-0.5 border-0 pl-2 focus:ring-indigo-500 focus:border-indigo-500 text-md border-gray-300']) !!}</p> --}}
-        <p class="inline-flex mt-3 pl-5 text-lg text-gray-700">Cuentas por Cobrar</p>
+    <div class="flex justify-between mb-3 border-b border-gray-300">
+        {{-- <p class="inline-flex pl-5 mt-3 text-lg text-gray-700">Factura: #{!! Form::text('numero', null, ['wire:model' => "numeroFactura", 'class' => 'pt-0.5 border-0 pl-2 focus:ring-indigo-500 focus:border-indigo-500 text-md border-gray-300']) !!}</p> --}}
+        <p class="inline-flex pl-5 mt-3 text-lg text-gray-700">Cuentas por Cobrar</p>
     </div>
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             @if (session('info'))
-                    <div class="bg-green-400 border-l-4 border-green-900 text-gray-900 p-4" role="alert">
+                    <div class="p-4 text-gray-900 bg-green-400 border-l-4 border-green-900" role="alert">
                         <p class="font-bold">Información!</p>
                         <p>{{session('info')}}</p>
                     </div>
             @endif
 
-            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                <div class="px-2 grid grid-cols-12 gap-3 border-gray-300 rounded mb-3">
-                    <div class="col-start-1 col-span-4">
+            <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+                <div class="grid grid-cols-12 gap-3 px-2 mb-3 border-gray-300 rounded">
+                    <div class="col-span-4 col-start-1">
                         <div class="grid grid-cols-12 gap-0">
-                            <div class="col-start-1 col-span-3">
+                            <div class="col-span-3 col-start-1">
                                 {!! Form::label('l_numero', 'Número:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
                             </div>
-                            <div class="col-start-4 col-span-4">
+                            <div class="col-span-4 col-start-4">
                                 {!! Form::text('numero', null, ['wire:model' => "searchNumero", 'class' => 'mb-1 px-2 py-1 text-right focus:ring-indigo-500 focus:border-indigo-500 text-xs border-gray-300']) !!}
                                 @error('numero')
                                     <span class="mt-2 text-sm text-red-500">{{$message}}</span><br>
                                 @enderror
                             </div>
-                            <div class="col-start-1 col-span-3">
+                            <div class="col-span-3 col-start-1">
                                 {!! Form::label('l_pago', 'Forma de Pago:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
                             </div>
-                            <div class="col-start-4 col-span-9 text-xs pl-1 py-1">
+                            <div class="col-span-9 col-start-4 py-1 pl-1 text-xs">
                                 {!! Form::checkbox('forma_pago', 'CONTADO', null, ['wire:model' => "searchContado", 'class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Contado
                                 {!! Form::checkbox('forma_pago', 'CREDITO', null, ['wire:model' => "searchCredito", 'class' => 'ml-4 py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!} Crédito
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-start-5 col-span-4">
+                    <div class="col-span-4 col-start-5">
                         <div class="grid grid-cols-12 gap-0">
-                            <div class="col-start-1 col-span-2">
+                            <div class="col-span-2 col-start-1">
                                 {!! Form::label('l_cliente', 'Cliente:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
                             </div>
-                            <div class="col-start-3 col-span-9">
+                            <div class="col-span-9 col-start-3">
                                 @livewire('shared.cliente-search')
                             </div>
-                            <div class="col-start-1 col-span-3">
+                            <div class="col-span-3 col-start-1">
 
                             </div>
-                            <div class="col-start-4 col-span-5">
+                            <div class="col-span-5 col-start-4">
 
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-start-9 col-span-4">
+                    <div class="col-span-4 col-start-9">
                         <div class="grid grid-cols-12 gap-0">
 
-                            <div class="col-start-1 col-span-2 text-right">
+                            <div class="col-span-2 col-start-1 text-right">
                                 {!! Form::label('l_cta_x_cobrar', 'Por Cobrar:', ['class' => 'pt-1 text-xs text-gray-700']) !!}
                             </div>
-                            <div class="col-start-4 col-span-5 mb-1 w-full">
-                                <label class="block py-1 pr-2 text-xs text-right border border-gray-300 text-gray-700">
+                            <div class="w-full col-span-5 col-start-4 mb-1">
+                                <label class="block py-1 pr-2 text-xs text-right text-gray-700 border border-gray-300">
                                     $ {{$por_cobrar - $abonado}}
                                 </label>
                             </div>
@@ -74,31 +74,34 @@
                     <table class="min-w-full">
                         <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                            <th class="px-2">
+                                {!! Form::checkbox('forma_pago', 'CONTADO', null, ['wire:model' => "searchContado", 'class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!}
+                            </th>
+                            <th scope="col" class="px-3 py-3 text-xs font-medium tracking-wider text-left text-center text-gray-500 uppercase">
                                 Número
                             </th>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                            <th scope="col" class="px-3 py-3 text-xs font-medium tracking-wider text-left text-center text-gray-500 uppercase">
                                 F. Ingreso
                             </th>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                            <th scope="col" class="px-3 py-3 text-xs font-medium tracking-wider text-left text-center text-gray-500 uppercase">
                                 Cliente
                             </th>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                            <th scope="col" class="px-3 py-3 text-xs font-medium tracking-wider text-left text-center text-gray-500 uppercase">
                                 F. Vencimiento
                             </th>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                            <th scope="col" class="px-3 py-3 text-xs font-medium tracking-wider text-left text-center text-gray-500 uppercase">
                                 Valor
                             </th>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                            <th scope="col" class="px-3 py-3 text-xs font-medium tracking-wider text-left text-center text-gray-500 uppercase">
                                 Abonado
                             </th>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                            <th scope="col" class="px-3 py-3 text-xs font-medium tracking-wider text-left text-center text-gray-500 uppercase">
                                 Saldo
                             </th>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                            <th scope="col" class="px-3 py-3 text-xs font-medium tracking-wider text-left text-center text-gray-500 uppercase">
                                 F. Pago
                             </th>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                            <th scope="col" class="px-3 py-3 text-xs font-medium tracking-wider text-left text-center text-gray-500 uppercase">
                                 Estado
                             </th>
                             <th scope="col" class="relative px-1 py-3">
@@ -115,13 +118,16 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                         @foreach ($facturas as $factura)
                             <tr>
+                                <td class="px-2 py-3">
+                                {!! Form::checkbox('forma_pago', $factura->id, null, ['wire:model' => "select_factura.$factura->id", 'class' => 'py-1 px-1 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500']) !!}
+                            </td>
                             <td class="px-3 py-3 whitespace-nowrap">
-                                <div class="text-center text-sm font-medium text-gray-900">
+                                <div class="text-sm font-medium text-center text-gray-900">
                                     {{$factura->numero}}
                                 </div>
                             </td>
                             <td class="px-3 py-3 whitespace-nowrap">
-                                <div class="text-center text-sm font-medium text-gray-900">
+                                <div class="text-sm font-medium text-center text-gray-900">
                                     {{ date('Y-m-d', strtotime($factura->fecha)) }}
                                 </div>
                             </td>
@@ -136,7 +142,7 @@
                                 </div>
                             </td>
                             <td class="px-3 py-3 whitespace-nowrap">
-                                <div class="text-center text-sm font-medium text-gray-900">
+                                <div class="text-sm font-medium text-center text-gray-900">
                                     @if ($factura->vencimiento)
                                         <p>{{ date('Y-m-d', strtotime($factura->vencimiento)) }}</p>
                                         @php
@@ -145,7 +151,7 @@
                                         @endphp
                                         @if ($factura->estadoFactura->codigo != '01')
                                             @if ($vencimiento->diffInDays($hoy, false) > 0)
-                                            <p class="px-2 inline text-xs leading-5 font-semibold rounded-full text-yellow-800">
+                                            <p class="inline px-2 text-xs font-semibold leading-5 text-yellow-800 rounded-full">
                                                 {{$vencimiento->diffInDays($hoy, false)}} días vencidos
                                             </p>
                                             @endif
@@ -155,17 +161,17 @@
                             </td>
 
                             <td class="px-3 py-3 whitespace-nowrap">
-                                <div class="text-right text-sm font-medium text-gray-900">
+                                <div class="text-sm font-medium text-right text-gray-900">
                                     $ {{$factura->total}}
                                 </div>
                             </td>
                             <td class="px-3 py-3 whitespace-nowrap">
-                                <div class="text-right text-sm font-medium text-gray-900">
+                                <div class="text-sm font-medium text-right text-gray-900">
                                     $ {{ number_format($this->abonadoPorFactura($factura->id),2)}}
                                 </div>
                             </td>
                             <td class="px-3 py-3 whitespace-nowrap">
-                                <div class="text-right text-sm font-medium text-gray-900">
+                                <div class="text-sm font-medium text-right text-gray-900">
                                     $ {{ number_format($factura->total - $this->abonadoPorFactura($factura->id),2)}}
                                 </div>
                             </td>
@@ -173,13 +179,13 @@
                             <td class="px-3 py-3 whitespace-nowrap">
                                 @if ($factura->forma_pago == 'CONTADO')
                                     <div class="text-center">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full text-green-800">
+                                        <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 rounded-full">
                                             CONTADO
                                         </span>
                                     </div>
                                 @else
                                     <div class="text-center">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full text-yellow-800">
+                                        <span class="inline-flex px-2 text-xs font-semibold leading-5 text-yellow-800 rounded-full">
                                             CRÉDITO
                                         </span>
                                     </div>
@@ -188,16 +194,16 @@
                             <td class="px-3 py-3 whitespace-nowrap">
                                 <div class="text-center">
                                     @if ($factura->estadoFactura->codigo == '01')
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-200 text-green-800">
+                                        <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-200 rounded-full">
                                             {{$factura->estadoFactura->nombre}}
                                         </span>
                                     @else
                                         @if ($factura->estadoFactura->codigo == '03' || $factura->estadoFactura->codigo == '04')
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            <span class="inline-flex px-2 text-xs font-semibold leading-5 text-yellow-800 bg-yellow-100 rounded-full">
                                                 {{$factura->estadoFactura->nombre}}
                                             </span>
                                         @else
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-200 text-red-800">
+                                            <span class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-200 rounded-full">
                                                 {{$factura->estadoFactura->nombre}}
                                             </span>
                                         @endif
@@ -205,9 +211,9 @@
 
                                 </div>
                             </td>
-                            <td class="px-1 py-3 whitespace-nowrap text-center text-sm font-medium">
+                            <td class="px-1 py-3 text-sm font-medium text-center whitespace-nowrap">
                                 <button type="button" wire:click="registrarPago({{$factura->id}})" class="text-indigo-600 hover:text-indigo-800">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd" />
                                     </svg>
@@ -219,12 +225,12 @@
                         <!-- More items... -->
                         </tbody>
                     </table>
-                    <div class="bg-gray-100 px-6 py-2 border-t border-gray-200">
+                    <div class="px-6 py-2 bg-gray-100 border-t border-gray-200">
                         {{ $facturas->links() }}
                     </div>
                 </div>
                 @else
-                    <p class="bg-gray-100 px-6 py-2 border-t border-gray-200">No tiene cuentas por cobrar.</p>
+                    <p class="px-6 py-2 bg-gray-100 border-t border-gray-200">No tiene cuentas por cobrar.</p>
                 @endif
             </div>
         </div>
@@ -235,33 +241,33 @@
         <x-slot name="title">
             @if ($factura_tmp)
                 @if ($factura_tmp->estadoFactura->codigo != '01')
-                <p class="px-2 w-full text-gray-600 border-b border-gray-300 shadow-b">
+                <p class="w-full px-2 text-gray-600 border-b border-gray-300 shadow-b">
                     Registar Pago de Factura # {{$factura_tmp->numero}}
                 </p>
                 @else
-                <p class="px-2 w-full text-green-600 border-b border-gray-300 shadow-b">
+                <p class="w-full px-2 text-green-600 border-b border-gray-300 shadow-b">
                     Factura # {{$factura_tmp->numero}} ya está pagada
                 </p>
                 @endif
             @endif
         </x-slot>
         <x-slot name="content">
-            <div class="grid grid-cols-12 gap-0 border border-gray-300 mb-5">
+            <div class="grid grid-cols-12 gap-0 mb-5 border border-gray-300">
                 @if (count($pagos_factura))
-                <div class="col-start-1 col-span-12 divide-y divide-gray-200">
+                <div class="col-span-12 col-start-1 divide-y divide-gray-200">
                     <table class="min-w-full">
                         <thead class="bg-gray-100">
                         <tr>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                 Método de Pago
                             </th>
-                            <th scope="col" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase">
                                 Fecha
                             </th>
-                            <th scope="col" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase">
                                 Monto
                             </th>
-                            <th scope="col" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase">
                                 Descripción
                             </th>
                         </tr>
@@ -303,26 +309,26 @@
                     </table>
                 </div>
                 @else
-                    <div class="col-start-1 col-span-5">
-                        <label class="p-2 block text-xs text-gray-700">Esta Factura no tiene Pagos Registrados</label>
+                    <div class="col-span-5 col-start-1">
+                        <label class="block p-2 text-xs text-gray-700">Esta Factura no tiene Pagos Registrados</label>
                     </div>
                 @endif
             </div>
             @if ($factura_tmp)
                 @if ($factura_tmp->estadoFactura->codigo != '01')
                 <div class="grid grid-cols-12 gap-0 border border-gray-300">
-                    <div class="col-start-1 col-span-2 border-r border-gray-300">
-                        <label class="text-right pr-2 pt-2 block text-xs text-gray-700">Saldo Factura:</label>
+                    <div class="col-span-2 col-start-1 border-r border-gray-300">
+                        <label class="block pt-2 pr-2 text-xs text-right text-gray-700">Saldo Factura:</label>
                     </div>
-                    <div class="col-start-3 col-span-8 ml-2 pb-2">
-                        <label class="font-bold block w-full text-lg pl-2 pt-1 text-gray-700">$ {{number_format(($factura_tmp->total - $total_pagos),2)}}</label>
+                    <div class="col-span-8 col-start-3 pb-2 ml-2">
+                        <label class="block w-full pt-1 pl-2 text-lg font-bold text-gray-700">$ {{number_format(($factura_tmp->total - $total_pagos),2)}}</label>
                     </div>
-                    <div class="col-start-1 col-span-2 border-r border-gray-300">
-                        <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Método de Pago:</label>
+                    <div class="col-span-2 col-start-1 border-r border-gray-300">
+                        <label class="block pt-1 pr-2 text-xs text-right text-gray-700">Método de Pago:</label>
                     </div>
-                    <div class="col-start-3 col-span-10 ml-1 pb-2 ">
+                    <div class="col-span-10 col-start-3 pb-2 ml-1 ">
                         <div class="grid grid-cols-12 gap-0">
-                            <div class="col-start-1 col-span-12 pl-3 py-1 text-sm">
+                            <div class="col-span-12 col-start-1 py-1 pl-3 text-sm">
                                 @foreach($metodos as $metodo)
                                     <x-jet-input type="radio" name="metodo_pago" value="{{$metodo->id}}" wire:model.defer="metodo_pago" class="py-0.5 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"/>
                                     <span class="mr-3">{{$metodo->nombre}}</span>
@@ -331,25 +337,25 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-start-1 col-span-2 border-r border-gray-300 ml-2">
-                        <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Fecha de Pago:</label>
+                    <div class="col-span-2 col-start-1 ml-2 border-r border-gray-300">
+                        <label class="block pt-1 pr-2 text-xs text-right text-gray-700">Fecha de Pago:</label>
                     </div>
-                    <div class="col-start-3 col-span-8 ml-2 pb-2">
-                        <x-jet-input type="datetime-local" wire:model.defer="fecha" class="mr-2 py-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm border border-gray-300" />
+                    <div class="col-span-8 col-start-3 pb-2 ml-2">
+                        <x-jet-input type="datetime-local" wire:model.defer="fecha" class="px-2 py-1 mr-2 text-sm border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500" />
                         <x-jet-input-error for="fecha" />
                     </div>
-                    <div class="col-start-1 col-span-2 border-r border-gray-300 pb-5">
-                        <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Monto Recibido:</label>
+                    <div class="col-span-2 col-start-1 pb-5 border-r border-gray-300">
+                        <label class="block pt-1 pr-2 text-xs text-right text-gray-700">Monto Recibido:</label>
                     </div>
-                    <div class="col-start-3 col-span-8 ml-2">
-                        <x-jet-input type="number" wire:model.defer="monto" class="mr-2 py-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm border border-gray-300" />
+                    <div class="col-span-8 col-start-3 ml-2">
+                        <x-jet-input type="number" wire:model.defer="monto" class="px-2 py-1 mr-2 text-sm border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500" />
                         <x-jet-input-error for="monto" />
                     </div>
-                    <div class="col-start-1 col-span-2 border-r border-gray-300 pb-5">
-                        <label class="text-right pr-2 pt-1 block text-xs text-gray-700">Descripción:</label>
+                    <div class="col-span-2 col-start-1 pb-5 border-r border-gray-300">
+                        <label class="block pt-1 pr-2 text-xs text-right text-gray-700">Descripción:</label>
                     </div>
-                    <div class="col-start-3 col-span-9 ml-2">
-                        <x-jet-input type="text" wire:model.defer="descripcion" class="w-full mr-2 py-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm border border-gray-300" />
+                    <div class="col-span-9 col-start-3 ml-2">
+                        <x-jet-input type="text" wire:model.defer="descripcion" class="w-full px-2 py-1 mr-2 text-sm border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500" />
                         <x-jet-input-error for="descripcion" />
                     </div>
                 </div>
@@ -364,14 +370,14 @@
             @if ($factura_tmp)
                 @if ($factura_tmp->estadoFactura->codigo != '01')
                     <x-jet-danger-button wire:click="save" class="inline-flex items-center border border-gray-300 rounded-md shadow-sm disabled:opacity-25">
-                        <svg wire:loading wire:target="save" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg wire:loading wire:target="save" class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
                         Guardar Pago
                     </x-jet-danger-button>
                 @else
-                    <a href="{{route('pdf.generateComprobantePago', $factura_tmp->id)}}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-100 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" title="Imprimir">
+                    <a href="{{route('pdf.generateComprobantePago', $factura_tmp->id)}}" target="_blank" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-100 bg-blue-700 border border-gray-300 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" title="Imprimir">
                         Imprimir
                     </a>
                 @endif
