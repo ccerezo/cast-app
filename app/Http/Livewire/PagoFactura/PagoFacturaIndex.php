@@ -19,10 +19,12 @@ class PagoFacturaIndex extends Component
     public $searchContado;
     public $searchCredito;
     public $openModal = false;
+    public $openModalTotal = false;
     public $factura_tmp;
     public $por_cobrar;
     public $abonado;
     public $cliente_id;
+    public $cliente;
     public $condiciones = array();
     public $monto;
     public $fecha;
@@ -31,6 +33,7 @@ class PagoFacturaIndex extends Component
     public $pagos_factura = array();
     public $select_factura = array();
     public $total_pagos = 0;
+    public $total_facturas_seleccionadas = 0;
     protected $listeners = ['updateDetalleCliente'];
 
     protected $rules = [
@@ -53,6 +56,7 @@ class PagoFacturaIndex extends Component
     public function updateDetalleCliente($id)
     {
         $this->cliente_id = $id;
+        $this->cliente = Cliente::find($id);
         $this->por_cobrar =  $this->cobrarCliente();
         $this->abonado =  $this->abonadoTotalCliente();
 
@@ -63,6 +67,12 @@ class PagoFacturaIndex extends Component
         $this->factura_tmp = Factura::find($id);
         $this->pagos_factura = pagoFactura::where('factura_id', '=', $id)->get();
         $this->total_pagos = pagoFactura::where('factura_id', '=', $this->factura_tmp->id)->sum('monto');
+    }
+    public function registrarPagoFacturasSeleccionadas() {
+        $this->openModalTotal = true;
+        //$this->factura_tmp = Cliente::find($id);
+        // $this->pagos_factura = pagoFactura::where('factura_id', '=', $id)->get();
+        // $this->total_pagos = pagoFactura::where('factura_id', '=', $this->factura_tmp->id)->sum('monto');
     }
     public function save() {
         $this->validate();
@@ -101,6 +111,45 @@ class PagoFacturaIndex extends Component
         $this->por_cobrar =  $this->cobrarCliente();
         $this->abonado = $this->abonadoTotalCliente();
         $this->reset(['fecha','monto','descripcion','metodo_pago']);
+    }
+    public function saveFacturasSeleccionadas() {
+
+        $this->validate();
+        if(count($this->select_factura) > 0){
+            $this->total_facturas_seleccionadas = 0;
+            foreach($this->select_factura as $key => $sel_fact){
+                if ($sel_fact) {
+                    $record = Factura::find($key);
+                    $saldo = $record->total - $this->abonadoPorFactura($record->id);
+                    $pago = pagoFactura::create([
+                        'fecha' => $this->fecha,
+                        'monto' => $saldo,
+                        'descripcion' => 'Pago de $'.$saldo. ' del monto abono de: $'. $this->monto.' - '.$this->descripcion,
+                        'factura_id' => $record->id,
+                        'metodo_pago_id' => $this->metodo_pago
+                    ]);
+
+                    $cupo = Cupo::where('cliente_id', '=', $record->cliente_id)->first();
+                    if($cupo) {
+                        $cupo->update([
+                            'cupo_disponible' => $cupo->cupo_disponible + $saldo,
+                            'saldo' => 0,
+                        ]);
+                    }
+                    $estado_factura = EstadoFactura::where('codigo', '=', '01')->first();
+                    $record->update([
+                        'estado_factura_id' => $estado_factura->id
+                    ]);
+                }
+            }
+            $pago->monto = $this->monto;
+            $pago->descripcion = $this->descripcion;
+            session()->flash('messagePago', $pago);
+        }
+
+        $this->por_cobrar =  $this->cobrarCliente();
+        $this->abonado = $this->abonadoTotalCliente();
+        $this->reset(['fecha','monto','descripcion','metodo_pago','select_factura']);
     }
     public function render()
     {
@@ -162,19 +211,23 @@ class PagoFacturaIndex extends Component
     }
     public function facturasSeleccionadas() {
         if(count($this->select_factura) > 0){
+            $this->total_facturas_seleccionadas = 0;
             foreach($this->select_factura as $key => $sel_fact){
                 if ($sel_fact) {
-                    // $record = Producto::find($key);
+                    $record = Factura::find($key);
+                    $this->total_facturas_seleccionadas = $this->total_facturas_seleccionadas + ($record->total - $this->abonadoPorFactura($key));
                     // $record->update([
                     //     'stock' => ($entrada + $record->stock)
                     // ]);
 
+                } else {
+                    unset($this->select_factura[$key]);
                 }
                 //$this->entrada_individual = $entrada.'-'.$key;
             }
-            session()->flash('message', 'Post successfully updated.');
+            //session()->flash('message', 'Post successfully updated.');
         }
-        $this->reset(['entradas','ingresar_entradas','openGuardarEntradas']);
+        //$this->reset(['entradas','ingresar_entradas','openGuardarEntradas']);
     }
     public function updatingSearchNumero()
     {

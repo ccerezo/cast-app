@@ -221,6 +221,8 @@ php artisan make:factory ClienteFactory
 
 php artisan db:seed --class=ClienteSeeder
 
+php artisan livewire:publish --pagination
+
 addInventario
 productos
 after
