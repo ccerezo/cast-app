@@ -2,6 +2,9 @@
     <div class="flex justify-between pb-2 mb-3 border-b border-gray-300 shadow ">
         {{-- <p class="inline-flex pl-5 mt-3 text-lg text-gray-700">Factura: #{!! Form::text('numero', null, ['wire:model' => "numeroFactura", 'class' => 'pt-0.5 border-0 pl-2 focus:ring-indigo-500 focus:border-indigo-500 text-md border-gray-300']) !!}</p> --}}
         <p class="inline-flex pl-5 mt-3 text-lg text-gray-700">Ventas Mensuales</p>
+        <a href="{{route('pdf.reporteInventarioTotalPDF')}}" target="_blank" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-100 bg-blue-700 border border-gray-300 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" title="Imprimir">
+            Reporte General Inventario
+        </a>
         <x-jet-danger-button wire:click="$set('openModal',true)" class="inline-flex items-center px-4 py-2 mt-2 mr-5 text-sm font-medium text-gray-100 bg-blue-700 border border-gray-300 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
             Ver Reportes
         </x-jet-danger-button>
@@ -23,10 +26,10 @@
                     <table class="min-w-full">
                         <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-3 py-3 text-xs font-medium tracking-wider text-left text-center text-gray-500 uppercase">
+                            <th scope="col" class="px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase">
                                 Año
                             </th>
-                            <th scope="col" class="px-3 py-3 text-xs font-medium tracking-wider text-left text-center text-gray-500 uppercase">
+                            <th scope="col" class="px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase">
                                 Mes
                             </th>
                             <th scope="col" class="px-3 py-3 text-xs font-medium tracking-wider text-left text-center text-gray-500 uppercase">

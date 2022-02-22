@@ -89,3 +89,4 @@ Route::get('pdf/ventas/productos/{desde}/{hasta}/{cliente_id?}', [PDFController:
 Route::get('pdf/ventas/inventario/{desde}/{hasta}', [PDFController::class, 'reporteDetalleInventarioPDF'])->name('pdf.reporteDetalleInventarioPDF')->middleware('auth');
 Route::get('pdf/ventas/lo-mas-vendido/{desde}/{hasta}', [PDFController::class, 'reporteLoMasVendidoPDF'])->name('pdf.reporteLoMasVendidoPDF')->middleware('auth');
 Route::get('pdf/inventario/filtrado/{codigo}/{color}', [PDFController::class, 'reporteInventarioFiltradoPDF'])->name('pdf.reporteInventarioFiltradoPDF')->middleware('auth');
+Route::get('pdf/reporte-general-inventario', [PDFController::class, 'reporteInventarioTotalPDF'])->name('pdf.reporteInventarioTotalPDF')->middleware('auth');

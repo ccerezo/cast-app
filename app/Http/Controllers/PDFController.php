@@ -263,4 +263,17 @@ class PDFController extends Controller
         return PDF::loadView('reportes.reporte-inventario-filtrado', compact('inventarios'))
                     ->stream('inventario-filtrado.pdf');
     }
+
+    public function reporteInventarioTotalPDF() {
+
+        $productos_registrados = Producto::where('activo', '=', 'si')->count('productos.id');
+        $productos_en_stock = Producto::where('activo', '=', 'si')->sum('productos.stock');
+        //$productos_con_stock = Producto::where('stock', '>', 0)->count('productos.stock');
+        $precio_produccion = Producto::where('productos.stock', '>', 0)->selectRaw('SUM(productos.stock * productos.precio_produccion) as PC')->pluck('PC');
+
+        return PDF::loadView('reportes.reporte-general-inventario', compact('productos_registrados','productos_en_stock','precio_produccion'))
+                    ->setPaper('a4', 'landscape')
+                    ->stream('reporte-general-inventario.pdf');
+
+    }
 }
