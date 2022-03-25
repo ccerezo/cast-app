@@ -23,6 +23,7 @@ class ProductoIndex extends Component
     public $searchCodigoBarras;
     public $condiciones = array();
     public $productoTMP;
+    public $productoSeleccionado = [];
 
     public $openModal = false;
 
@@ -74,7 +75,11 @@ class ProductoIndex extends Component
         return view('livewire.producto.producto-index',
                     compact('productos','categorias','lineas','tallas','modelos', 'colors','producto_tmp'));
     }
-
+    public function eliminarProductos(){
+        Producto::whereIn('id', $this->productoSeleccionado)->delete();
+        session()->flash('info', 'Los productos se eliminaron correctamente.');
+        $this->reset(['productoSeleccionado']);
+    }
     public function updatingSearch()
     {
         $this->resetPage();
