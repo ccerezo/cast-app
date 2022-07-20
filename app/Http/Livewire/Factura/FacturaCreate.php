@@ -50,39 +50,45 @@ class FacturaCreate extends Component
     {
         $repetido = array_search($id, $this->seleccionados);
         if(!(is_int($repetido))){
-            array_push($this->seleccionados, $id);
-            array_push($this->cantidad, 1);
-            $productos = Producto::whereIn('id', $this->seleccionados)->get()->toArray();
-            $func = function($producto,$cantidad) {
-                $producto['cantidad'] = $cantidad;
-                if(strcmp($this->tipo_factura, '01') === 0){
-                    $producto['importe'] = $producto['precio_produccion'] * $producto['cantidad'];
-                    $producto['valor_descuento'] = $producto['importe']*($producto['descuento']/100);
-                } else {
-                    if(strcmp($this->tipo_factura, '02') === 0){
-                        $producto['importe'] = $producto['precio_mayorista'] * $producto['cantidad'];
+            $tiene_stock = Producto::find($id);
+            if($tiene_stock->stock > 0) {
+                array_push($this->seleccionados, $id);
+                array_push($this->cantidad, 1);
+                $productos = Producto::whereIn('id', $this->seleccionados)->get()->toArray();
+                $func = function($producto,$cantidad) {
+                    $producto['cantidad'] = $cantidad;
+                    if(strcmp($this->tipo_factura, '01') === 0){
+                        $producto['importe'] = $producto['precio_produccion'] * $producto['cantidad'];
                         $producto['valor_descuento'] = $producto['importe']*($producto['descuento']/100);
                     } else {
-                        if(strcmp($this->tipo_factura, '03') === 0){
-                            $producto['importe'] = $producto['precio_venta_publico'] * $producto['cantidad'];
+                        if(strcmp($this->tipo_factura, '02') === 0){
+                            $producto['importe'] = $producto['precio_mayorista'] * $producto['cantidad'];
                             $producto['valor_descuento'] = $producto['importe']*($producto['descuento']/100);
+                        } else {
+                            if(strcmp($this->tipo_factura, '03') === 0){
+                                $producto['importe'] = $producto['precio_venta_publico'] * $producto['cantidad'];
+                                $producto['valor_descuento'] = $producto['importe']*($producto['descuento']/100);
+                            }
                         }
                     }
+                    if(strcmp($producto['iva'], 'si') === 0){
+                        $producto['descripcion'] = '(I) '.$producto['descripcion'];
+                    }
+
+                    return $producto;
+                };
+
+                $this->detalle = array_map($func,$productos,$this->cantidad);
+
+                for ($i = 0; $i < count($this->seleccionados); ++$i){
+                    $this->valorFinal($this->seleccionados[$i], $i);
                 }
-                if(strcmp($producto['iva'], 'si') === 0){
-                    $producto['descripcion'] = '(I) '.$producto['descripcion'];
-                }
-
-                return $producto;
-            };
-
-            $this->detalle = array_map($func,$productos,$this->cantidad);
-
-            for ($i = 0; $i < count($this->seleccionados); ++$i){
-                $this->valorFinal($this->seleccionados[$i], $i);
+                $this->valores();
+                $this->mensaje_repetido = '';
+            } else {
+                $this->mensaje_repetido = 'Item '.$tiene_stock->descripcion.' sin stock.';
             }
-            $this->valores();
-            $this->mensaje_repetido = '';
+            
         }else {
             $this->mensaje_repetido = 'El item ya fue agregado';
         }
