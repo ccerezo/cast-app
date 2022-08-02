@@ -83,6 +83,7 @@ Route::get('reportes', [PDFController::class, 'index'])->name('reporte.index');
 Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');
 Route::get('pdf/generate/{id}', [PDFController::class, 'generatePDF'])->name('pdf.generate')->middleware('auth');
 Route::get('pdf/generateComprobantePago/{id}', [PDFController::class, 'generateComprobantePagoPDF'])->name('pdf.generateComprobantePago')->middleware('auth');
+Route::get('pdf/generateComprobantesPago/{ids}', [PDFController::class, 'generateComprobantesPagoPDF'])->name('pdf.generateComprobantesPagoPDF')->middleware('auth');
 Route::get('pdf/ventas/mensual/{anio}/{mes}', [PDFController::class, 'reporteMensualPDF'])->name('pdf.reporteMensualPDF')->middleware('auth');
 Route::get('pdf/ventas/por-precios/{desde}/{hasta}/{cliente_id?}', [PDFController::class, 'reportePorPrecioPDF'])->name('pdf.reportePorPrecioPDF')->middleware('auth');
 Route::get('pdf/ventas/productos/{desde}/{hasta}/{cliente_id?}', [PDFController::class, 'reportePorProductosPDF'])->name('pdf.reportePorProductosPDF')->middleware('auth');

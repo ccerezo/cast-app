@@ -48,6 +48,16 @@ class PDFController extends Controller
             ->stream('archivo-pago.pdf');
 
     }
+    public function generateComprobantesPagoPDF($facturas)
+    {
+        $pagadas = json_decode($facturas , true);
+        //$facturas = Factura::whereIn('id', $facturas);
+        $pagos = pagoFactura::whereIn('factura_id', $pagadas)->get();
+        //$total_pagos = pagoFactura::where('factura_id', '=', $factura->id)->sum('monto');
+        return PDF::loadView('reportes.comprobantes-pago', compact('pagos'))
+            ->stream('archivo-pago.pdf');
+
+    }
     public function reporteMensualPDF($anio, $mes) {
 
         $vendido = Factura::selectRaw('SUM(total) AS vendido, YEAR(fecha) as anio, MONTH(fecha) as mes')

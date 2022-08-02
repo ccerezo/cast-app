@@ -490,15 +490,25 @@
             <x-jet-secondary-button wire:click="$set('openModalTotal', false)" wire:loading.attr="disabled">
                 {{ __('Cerrar') }}
             </x-jet-secondary-button>
-            @if (!session('messagePago'))
-            <x-jet-danger-button wire:click="saveFacturasSeleccionadas" class="inline-flex items-center border border-gray-300 rounded-md shadow-sm disabled:opacity-25">
-                <svg wire:loading wire:target="saveFacturasSeleccionadas" class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Guardar Pago
-            </x-jet-danger-button>
+
+            @if (count($facturas_imprimir) == 0)
+                <x-jet-danger-button wire:click="saveFacturasSeleccionadas" class="inline-flex items-center border border-gray-300 rounded-md shadow-sm disabled:opacity-25">
+                    <svg wire:loading wire:target="saveFacturasSeleccionadas" class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Guardar Pago
+                </x-jet-danger-button>
+            @else
+                @php
+                    $serializeArray = trim(json_encode($facturas_imprimir))
+                @endphp
+                <a href="{{route('pdf.generateComprobantesPagoPDF', $serializeArray)}}" target="_blank" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-100 bg-blue-700 border border-gray-300 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" title="Imprimir">
+                    Imprimir
+                </a>
             @endif
+
+
         </x-slot>
     </x-jet-dialog-modal>
 </div>

@@ -32,6 +32,7 @@ class PagoFacturaIndex extends Component
     public $descripcion;
     public $pagos_factura = array();
     public $select_factura = array();
+    public $facturas_imprimir = array();
     public $total_pagos = 0;
     public $total_facturas_seleccionadas = 0;
     protected $listeners = ['updateDetalleCliente'];
@@ -115,10 +116,12 @@ class PagoFacturaIndex extends Component
     public function saveFacturasSeleccionadas() {
 
         $this->validate();
+        $this->facturas_imprimir = [];
         if(count($this->select_factura) > 0){
             $this->total_facturas_seleccionadas = 0;
             foreach($this->select_factura as $key => $sel_fact){
                 if ($sel_fact) {
+                    array_push($this->facturas_imprimir,$key);
                     $record = Factura::find($key);
                     $saldo = $record->total - $this->abonadoPorFactura($record->id);
                     $pago = pagoFactura::create([
