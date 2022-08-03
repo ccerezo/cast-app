@@ -71,6 +71,7 @@ class PagoFacturaIndex extends Component
     }
     public function registrarPagoFacturasSeleccionadas() {
         $this->openModalTotal = true;
+        $this->facturas_imprimir = [];
         //$this->factura_tmp = Cliente::find($id);
         // $this->pagos_factura = pagoFactura::where('factura_id', '=', $id)->get();
         // $this->total_pagos = pagoFactura::where('factura_id', '=', $this->factura_tmp->id)->sum('monto');
@@ -116,7 +117,7 @@ class PagoFacturaIndex extends Component
     public function saveFacturasSeleccionadas() {
 
         $this->validate();
-        $this->facturas_imprimir = [];
+
         if(count($this->select_factura) > 0){
             $this->total_facturas_seleccionadas = 0;
             foreach($this->select_factura as $key => $sel_fact){
