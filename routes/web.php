@@ -85,6 +85,7 @@ Route::get('pdf/generate/{id}', [PDFController::class, 'generatePDF'])->name('pd
 Route::get('pdf/generateComprobantePago/{id}', [PDFController::class, 'generateComprobantePagoPDF'])->name('pdf.generateComprobantePago')->middleware('auth');
 Route::get('pdf/generateComprobantesPago/{ids}', [PDFController::class, 'generateComprobantesPagoPDF'])->name('pdf.generateComprobantesPagoPDF')->middleware('auth');
 Route::get('pdf/ventas/mensual/{anio}/{mes}', [PDFController::class, 'reporteMensualPDF'])->name('pdf.reporteMensualPDF')->middleware('auth');
+Route::get('pdf/ventas/ingresos/{desde}/{hasta}/{cliente_id?}', [PDFController::class, 'reporteIngresosPDF'])->name('pdf.reporteIngresosPDF')->middleware('auth');
 Route::get('pdf/ventas/por-precios/{desde}/{hasta}/{cliente_id?}', [PDFController::class, 'reportePorPrecioPDF'])->name('pdf.reportePorPrecioPDF')->middleware('auth');
 Route::get('pdf/ventas/productos/{desde}/{hasta}/{cliente_id?}', [PDFController::class, 'reportePorProductosPDF'])->name('pdf.reportePorProductosPDF')->middleware('auth');
 Route::get('pdf/ventas/inventario/{desde}/{hasta}', [PDFController::class, 'reporteDetalleInventarioPDF'])->name('pdf.reporteDetalleInventarioPDF')->middleware('auth');

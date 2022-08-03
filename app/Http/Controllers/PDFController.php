@@ -142,7 +142,45 @@ class PDFController extends Controller
         return PDF::loadView('reportes.reporte-por-precios', compact('vendedor','vendedor_total', 'mayorista','mayorista_total','final','final_total'))
                     ->stream('archivo-ventas-precios.pdf');
     }
+    public function reporteIngresosPDF($desde, $hasta, $cliente_id = null) {
 
+        $inicio = $desde;
+        $fin = $hasta;
+
+        $pagos = pagoFactura::Join('facturas','facturas.id','=','pago_facturas.factura_id')
+                            ->where('facturas.estado_factura_id', '<>', 2)
+                            ->whereBetween('pago_facturas.fecha', [$desde, $hasta])
+                            ->get();
+
+        $total_metodos_vendedor = pagoFactura::Join('facturas','facturas.id','=','pago_facturas.factura_id')
+                            ->selectRaw('pago_facturas.metodo_pago_id, SUM(pago_facturas.monto) as total')
+                            ->where('facturas.estado_factura_id', '<>', 2)
+                            ->where('facturas.facturado_como_id', '=', 1)
+                            ->whereBetween('pago_facturas.fecha', [$desde, $hasta])
+                            ->groupBy('pago_facturas.metodo_pago_id')
+                            ->get();
+
+        $total_metodos_mayorista = pagoFactura::Join('facturas','facturas.id','=','pago_facturas.factura_id')
+                            ->selectRaw('pago_facturas.metodo_pago_id, SUM(pago_facturas.monto) as total')
+                            ->where('facturas.estado_factura_id', '<>', 2)
+                            ->where('facturas.facturado_como_id', '=', 2)
+                            ->whereBetween('pago_facturas.fecha', [$desde, $hasta])
+                            ->groupBy('pago_facturas.metodo_pago_id')
+                            ->get();
+
+        $total_metodos_pvp = pagoFactura::Join('facturas','facturas.id','=','pago_facturas.factura_id')
+                            ->selectRaw('pago_facturas.metodo_pago_id, SUM(pago_facturas.monto) as total')
+                            ->where('facturas.estado_factura_id', '<>', 2)
+                            ->where('facturas.facturado_como_id', '=', 3)
+                            ->whereBetween('pago_facturas.fecha', [$desde, $hasta])
+                            ->groupBy('pago_facturas.metodo_pago_id')
+                            ->get();
+
+
+        return PDF::loadView('reportes.ingresos', compact('pagos','total_metodos_vendedor','total_metodos_mayorista','total_metodos_pvp','inicio','fin'))
+                    ->setPaper('a4', 'landscape')
+                    ->stream('archivo-ingresos.pdf');
+    }
     public function reportePorProductosPDF($desde, $hasta, $cliente_id = null) {
 
         // $total_vendidos = Factura::Join('factura_detalles','facturas.id','=','factura_detalles.factura_id')

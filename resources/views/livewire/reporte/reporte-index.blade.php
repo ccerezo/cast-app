@@ -137,6 +137,9 @@
             <a href="{{route('pdf.reporteDetalleInventarioPDF', [$desde, $hasta])}}" target="_blank" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-100 bg-blue-700 border border-gray-300 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" title="Imprimir">
                 Inventario Detalle
             </a>
+            <a href="{{route('pdf.reporteIngresosPDF', [$desde, $hasta, $cliente_id])}}" target="_blank" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-100 bg-blue-700 border border-gray-300 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" title="Imprimir">
+                Ingresos
+            </a>
         </x-slot>
     </x-jet-dialog-modal>
 </div>
