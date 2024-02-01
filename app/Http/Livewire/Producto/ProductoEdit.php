@@ -127,8 +127,9 @@ class ProductoEdit extends Component
         if (!$this->stock[$id]) {
             $this->stock[$id] = 0;
         }
-
+        
         $record = Producto::find($id);
+        
         $record->update([
             'precio_produccion' => $this->produccion[$id],
             'precio_mayorista' => $this->mayorista[$id],
@@ -136,12 +137,25 @@ class ProductoEdit extends Component
             'descuento' => $this->descuento[$id],
             'stock' => ($this->stock[$id] + $record->stock)
         ]);
+        
         $inventario = Inventario::where('producto_id', '=', $record->id)->first();
-        $inventario->update([
-            'entradas' => $inventario->entradas + $this->stock[$id],
-            'stock' => $record->stock,
-            'ultima_entrada' => date("Y-m-d H:i:s")
-        ]);
+        if($inventario) {
+            $inventario->update([
+                'entradas' => $inventario->entradas + $this->stock[$id],
+                'stock' => $record->stock,
+                'ultima_entrada' => date("Y-m-d H:i:s")
+            ]);
+        } else {
+            Inventario::create([
+                'entradas' => $record->stock,
+                'ultima_entrada' => date("Y-m-d H:i:s"),
+                'salidas' => 0,
+                'stock' => $record->stock ,
+                'producto_id' => $id
+            ]);
+        }
+        
+                
         $cliente = InventarioDetalle::create([
             'ultima_entrada' => date("Y-m-d H:i:s"),
             'entradas' => $this->stock[$id],
